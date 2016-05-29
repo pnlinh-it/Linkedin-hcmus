@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" id="viewport" content="width=device-width, initial-scale=1">
+        <title>Phạm Ngọc Linh - 1212202</title>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+        <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.0.9/angular-material.min.css'>
+        <link rel='stylesheet prefetch' href='css/bootstrap.min.css'>
+        <link rel="stylesheet" href="css/material-icons.css">
+        <link rel="stylesheet" href="css/font-awesome.min.css">
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+    <body  >
+        <div  class="toolbardemoBasicUsage" ng-app="myApp" ng-cloak>
+            <md-toolbar  class="md-hue-2  main-nav l-pinned-top l-layer-5">
+                <nav>
+                    <h1>
+                        <a class="md-button md-ink-ripple" ng-transclude="" href="#/#" md-button>
+                            <div class="md-ripple-container"></div></a>
+                    </h1>
+
+                    <button class="main-nav-button main-nav-mobile-trigger l-right md-button md-ink-ripple" type="button" ng-transclude="" aria-label="View Menu" ng-click="showDocsNav = !showDocsNav" md-button="md-button">
+                        <span class="ng-scope">Menu </span>
+                    </button>
+                    <ul ng-class="showDocsNav ? 'visible' : ''">
+                        <li class="l-left">
+                            <a class="main-nav-button md-button md-ink-ripple" ng-transclude="" href="#" md-button="">
+                                <span class="ng-scope">Features</span>
+                                <div class="md-ripple-container"></div>
+                            </a>
+                        </li>
+                        <li class="l-left">
+                            <a class="main-nav-button md-button md-ink-ripple" ng-transclude="" href="#" md-button="">
+                                <span class="ng-scope">Profile</span>
+                                <div class="md-ripple-container"></div>
+                            </a>
+                        </li>
+                        <li class="l-left">
+                            <a class="main-nav-button md-button md-ink-ripple" ng-transclude="" href="#" md-button="">
+                                <span class="ng-scope">Connection</span>
+                                <div class="md-ripple-container"></div>
+                            </a>
+                        </li>
+                        <li class="l-left">
+                            <a class="main-nav-button md-button md-ink-ripple" ng-transclude="" href="#" md-button="">
+                                <span class="ng-scope">Job</span>
+                                <div class="md-ripple-container"></div>
+                            </a>
+                        </li>
+
+
+                        <li class="l-right nav-icon">
+                            <a style="color: white" href="/logout">
+                                <md-button  class="md-icon-button" aria-label="More">
+                                    <i class="material-icons">power_settings_new</i>
+                                    <md-tooltip>
+                                        Logout
+                                    </md-tooltip>
+
+                                </md-button>
+                            </a>
+                        </li>
+                        <li class="l-right nav-icon">
+                        <md-button class="md-icon-button" aria-label="More">
+                            <img src="imgs/person.svg"/>
+                        </md-button>
+                        </li>
+                        <li class="l-right nav-icon">
+                        <md-button class="md-icon-button" aria-label="More">
+                            <img src="imgs/message.svg"/>
+                        </md-button>
+                        </li>
+                        <li class="l-right nav-icon">
+                        <md-button class="md-icon-button" aria-label="More">
+                            <img src="imgs/search.svg"/>
+                        </md-button>
+                        </li>
+                    </ul> 
+                </nav>
+            </md-toolbar>
+            <md-content id="content">
+                <div class="wrapper" >
+                    <div class="container-fluid">
+
+
+                        <ng-view></ng-view>
+                    </div>
+
+
+
+                </div>
+            </md-content> 
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.5/angular-animate.min.js"></script> 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.5/angular-aria.min.js"></script> 
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+        <script src="component/bootstrap.min.js"></script>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.0.9/angular-material.min.js'></script>
+
+
+        <script src='https://code.angularjs.org/1.5.5/angular-route.min.js'></script>
+        <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js'></script>
+        <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
+        <script src="component/angular-translate.min.js"></script>
+
+
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate-loader-static-files/2.11.0/angular-translate-loader-static-files.min.js"></script>
+        <script src="app.js"></script>
+        <script src="service/AuthFactory.js"></script>
+        <script src='view/login/loginCtl.js'></script>
+
+    </body>
+</html>

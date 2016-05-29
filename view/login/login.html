@@ -1,0 +1,106 @@
+<div >
+    <div ng-show="loginCtl.showSignIn"  layout="column" layout-align="center center" layout-fill="layout-fill">
+        <md-card class="loginBox" >
+            <md-toolbar class="md-hue-2">
+                <div class="md-toolbar-tools">
+                    <h2 style="color: white"><span>Sign In</span></h2>
+                </div>
+            </md-toolbar>
+            <md-card-content>
+                <form name="formLogin" style="margin-top: 15px" >
+                    <md-input-container class="md-icon-float md-block">
+                        <label>Username</label>
+                        <md-icon class="material-icons">person</md-icon>
+                        <input   name="myEmail" ng-model="loginCtl.loginEmail" ng-pattern="/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/" required>
+                        <div ng-messages="formLogin.myEmail.$error" role="alert">
+                            <div ng-message="required">Please enter a value for this field.</div>
+                            <div ng-message="pattern">This field must be a valid email address.</div>
+                        </div>
+                    </md-input-container>
+
+                    <md-input-container class="md-icon-float md-block">
+                        <label>Password</label>
+                        <md-icon class="material-icons">https</md-icon>
+                        <input ng-keyup="$event.keyCode == 13 && loginCtl.login($event)"  name="name" ng-model="loginCtl.loginPassword" type="password" required>
+
+                    </md-input-container>
+                    <div layout="row" layout-align="center center" >
+                        <md-button    ng-click="loginCtl.login($event)" class="md-raised md-primary md-hue-2"  ng-disabled="!formLogin.$valid">Sign In</md-button>
+                        <div flex="flex"></div>
+                        <md-button ng-click="loginCtl.showSignIn = !loginCtl.showSignIn"  md-no-ink="md-no-ink">Create account</md-button>
+                    </div>
+
+
+
+                </form>
+            </md-card-content>
+            <div style="background: rgba(236, 236, 236, 0.29);margin-top: -15px;" layout="column" layout-align="center center" >
+                <div style="font-weight: bold;font-size: 18px; padding-top: 10px;padding-bottom: 5px; ">Login</div>
+                <div>With Your Social Media Account</div>
+                <div class="button" layout="row">
+                    <div style="margin-right: 10px;" layout="row"><a class="tw" href="#"> <i class="anc-tw"> </i> <span>Twitter</span>
+                            <div class="clear"> </div></a>
+                        <div class="clear"> </div></div>
+
+                    <div style="margin-right: 10px;" layout="row"><a class="fa" href="#"> <i class="anc-fa"> </i> <span>Facebook</span>
+                            <div class="clear"> </div></a>
+                        <div class="clear"> </div></div>
+
+                    <div style="margin-right: 10px;" layout="row"><a class="go" href="#"> <i class="anc-go"> </i> <span>Google+</span>
+                            <div class="clear"> </div></a>
+                        <div class="clear"> </div></div>
+
+                </div>
+
+            </div>
+        </md-card>
+    </div>
+    <div ng-hide="loginCtl.showSignIn"  layout="column" layout-align="center center" layout-fill="layout-fill">
+        <md-card class="loginBox" >
+            <md-toolbar class="md-hue-2">
+                <div class="md-toolbar-tools">
+                    <h2 style="color: white"><span>Sign Up</span></h2>
+                </div>
+            </md-toolbar>
+            <md-card-content>
+                <form ng-submit="loginCtl.signUp($event)" name="Form" style="margin-top: 15px" >
+                    <md-input-container class="md-icon-float md-block">
+                        <label>Username</label>
+                        <md-icon class="material-icons">person</md-icon>
+                        <input   name="myEmail" ng-model="loginCtl.email" ng-pattern="/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/" required>
+                        <div ng-messages="Form.myEmail.$error" role="alert">
+                            <div ng-message="required">Please enter a value for this field.</div>
+                            <div ng-message="pattern">This field must be a valid email address.</div>
+                        </div>
+                    </md-input-container>
+
+                    <md-input-container class="md-icon-float md-block">
+                        <label>Password</label>
+                        <md-icon class="material-icons">https</md-icon>
+                        <input  name="name" ng-model="loginCtl.password" type="password" required>
+                    </md-input-container>
+
+                    <md-input-container class="md-icon-float md-block">
+                        <label>Retype Password</label>
+                        <md-icon class="material-icons">https</md-icon>
+                        <input ng-keyup="$event.keyCode == 13 && loginCtl.signUp($event)"  name="repass" ng-model="loginCtl.rePassword" type="password" required>
+                        <div ng-messages="Form.repass.$error" role="alert">
+                            <div ng-show="loginCtl.passMatch">Password does not match</div>
+
+                        </div>
+
+
+
+                    </md-input-container>
+                    <div layout="row" layout-align="center center" >
+                        <md-button  ng-click="loginCtl.signUp($event)" class="md-raised md-primary md-hue-2"  ng-disabled="!Form.$valid">Sign Up</md-button>
+                        <div flex="flex"></div>
+                        <md-button ng-click="loginCtl.showSignIn = !loginCtl.showSignIn"  md-no-ink="md-no-ink">Sign In</md-button>
+                    </div>
+                </form>
+            </md-card-content>
+        </md-card>
+    </div>
+
+
+</div>
