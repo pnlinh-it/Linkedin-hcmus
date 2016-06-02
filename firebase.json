@@ -1,0 +1,9 @@
+{
+  "firebase": "linkedin-hcmus-b38e0",
+  "public": ".",
+  "ignore": [
+    "firebase.json",
+    "**/.*",
+    "**/node_modules/**"
+  ]
+}

@@ -42,7 +42,11 @@
 .toolbardemoBasicUsage md-toolbar md-icon.md-default-theme {
     color: #fafafa; }
 
-body{font-family: Roboto; background: #fafafa;}
+body{
+    font-family: Roboto; 
+    background: #fafafa;
+    overflow-y: hidden !important;
+}
 md-content.md-default-theme, md-content {
 
     background-color: white;
@@ -81,7 +85,7 @@ md-content.md-default-theme, md-content {
 
 .wrapper
 {
-    margin-top: 100px;
+    margin-top: 65px;
 }
 
 
@@ -205,7 +209,7 @@ a {
 .profile{
     min-width: 550px;
     background: white;
-    margin-top: 25px;
+    margin-top: 7px;
     margin-bottom: 20px;
     box-shadow: 0 1px 3px 0 rgba(0,0,0,.2),0 1px 1px 0 rgba(0,0,0,.14),0 2px 1px -1px rgba(0,0,0,.12);
 }
@@ -234,8 +238,8 @@ a {
     vertical-align: middle;
 }
 .profile-picture img{
-    width: 100%;
-    height: 100%;
+    width: 152px;
+    height:  152px;
 }
 
 .profile-overview{
@@ -250,6 +254,7 @@ a {
     font-weight: bold;
     line-height: 29px;
     color: #000;
+    text-transform: capitalize;
 }
 
 .profile-overview h2 {
@@ -257,12 +262,14 @@ a {
     font-weight: normal;
     line-height: 29px;
     color: black;
+
 }
 .profile-overview h3 {
     font-size: 18px;
     font-weight: normal;
     line-height: 23px;
     color: #666;
+    text-transform: capitalize;
 }
 .main-info-UR button {
     margin: 0 0px !important;
@@ -326,7 +333,7 @@ a {
     margin: 0 0 15px 0;
 }
 #bg-project h1::before{
-   content: '\e873'; 
+    content: '\e873'; 
 }
 .bg-item{
     margin-top: 28px;
@@ -334,7 +341,7 @@ a {
 }
 .bg-item-header{
     margin: 0px;
-     
+
 }
 .bg-item-header h1 {
     font-size: 22px;
@@ -534,7 +541,7 @@ a {
     margin: 0;
 }
 #bg-project .row{
-    
+
     margin: 0;
 }
 
@@ -543,67 +550,67 @@ a {
 }
 
 .loginBox {
-  max-width:  90%;
-  width: 500px
+    max-width:  90%;
+    width: 500px
 }
 .loginBox.md-card md-card-content {
-  padding: 0 !important;
+    padding: 0 !important;
 }
-.button {
-    padding: 20px 0px 42px 0px;
+
+
+/*Login Page*/
+
+.container-social {
+    padding: 20px 12px 25px 12px;
     border-bottom: 1px solid #ccc;
 }
 
-.button a.tw {
-    background: #1DAEE3;
-    padding: 8px 0 8px 0px;
-    float: left;
-}
-.button a {
+.btn-social{
     font-size: 15px;
     font-weight: 600;
     color: #fff;
-    margin: 0px 1.5% 0px 0px;
     border-radius: 4px;
     float: left;
     padding: 0px 0;
 }
 
-i.anc-tw {
-    background: url(../imgs/twitter.svg)no-repeat 9px 9px #1CA4D6;
+.btn-social-icon{
     width: 26px;
-    height: 19px;
+    height: 38px;
     padding: 8px 19px;
     border-radius: 4px 0px 0px 4px;
 }
-.button a span {
-    margin-top: 2px;
-    padding: 10px 25px 8px 8px;
-    border-radius: 0 5px 5px 0;
+
+#btn-github{
+    background: #444;
+}
+#btn-github i {
+    background: url(../imgs/ic-github-logo.svg)no-repeat 9px 9px #5C5757;
 }
 
-.button a.fa {
+#btn-facebook{
     background: #3B5998;
-    padding: 10px 0 8px 0px;
-    float: left;
 }
-i.anc-fa {
-    background: url(../imgs/facebook.svg)no-repeat 9px 7px #37528C;
-    width: 26px;
-    height: 19px;
-    padding: 8px 19px;
-    border-radius: 4px 0px 0px 4px;
+#btn-facebook i {
+    background: url(../imgs/ic-facebook-logo.svg)no-repeat 9px 9px #37528C;
 }
 
-.button a.go {
+#btn-google{
     background: #D34836;
-    padding: 8px 0 8px 0px;
-    float: left;
 }
-i.anc-go {
-    background: url(../imgs/google-plus.svg)no-repeat 10px 9px #C74534;
-    width: 26px;
-    height: 19px;
-    padding: 8px 19px;
-    border-radius: 4px 0px 0px 4px;
+#btn-google i {
+    background: url(../imgs/ic-google-logo.svg)no-repeat 9px 9px #C74534;
+}
+
+md-toast {
+    /*left: calc(50vw - 150px);	*/
+    margin-top:60px;
+}
+.circle-img{
+    overflow: hidden;
+    -webkit-border-radius: 80px;
+    -moz-border-radius: 25px;
+    -ms-border-radius: 25px;
+    -o-border-radius: 25px;
+    border-radius: 80px;
 }

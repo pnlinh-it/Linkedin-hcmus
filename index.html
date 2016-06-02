@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
-    <head>
+    <head >
+
         <meta charset="UTF-8">
         <meta name="viewport" id="viewport" content="width=device-width, initial-scale=1">
+        <meta name="google-signin-client_id" content="756227301628-v5pagfiq69uj64lid9ai54hfm1iv7omr.apps.googleusercontent.com">
         <title>Phạm Ngọc Linh - 1212202</title>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
         <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.0.9/angular-material.min.css'>
@@ -10,9 +12,15 @@
         <link rel="stylesheet" href="css/material-icons.css">
         <link rel="stylesheet" href="css/font-awesome.min.css">
         <link rel="stylesheet" href="css/style.css">
-    </head>
-    <body  >
-        <div  class="toolbardemoBasicUsage" ng-app="myApp" ng-cloak>
+
+
+
+
+    </head >
+    <body layout="column" ng-app="myApp"  >
+
+    <md-content>
+        <div  class="toolbardemoBasicUsage"  ng-cloak>
             <md-toolbar  class="md-hue-2  main-nav l-pinned-top l-layer-5">
                 <nav>
                     <h1>
@@ -81,7 +89,7 @@
             </md-toolbar>
             <md-content id="content">
                 <div class="wrapper" >
-                    <div class="container-fluid">
+                    <div class="container-fluid" id="main" >
 
 
                         <ng-view></ng-view>
@@ -92,27 +100,39 @@
                 </div>
             </md-content> 
         </div>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>        
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.5/angular-animate.min.js"></script> 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.5/angular-aria.min.js"></script> 
-        <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
-        <script src="component/bootstrap.min.js"></script>
-        <script src='https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.0.9/angular-material.min.js'></script>
+    </md-content>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>        
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.5/angular-animate.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.5/angular-aria.min.js"></script> 
+<!--    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>-->
+<!--    <script src="component/bootstrap.min.js"></script>-->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.0.9/angular-material.min.js'></script>
+    <script src="http://uttesh.com/ngletteravatar/static/js/ngletteravatar.js"></script>
 
 
-        <script src='https://code.angularjs.org/1.5.5/angular-route.min.js'></script>
-        <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js'></script>
-        <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
-        <script src="component/angular-translate.min.js"></script>
+
+    <script src='https://code.angularjs.org/1.5.5/angular-route.min.js'></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js'></script>
+    <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
+    <script src="component/angular-translate.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-file-upload/2.3.3/angular-file-upload.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
 
 
-        <script src="https://apis.google.com/js/platform.js" async defer></script>
 
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate-loader-static-files/2.11.0/angular-translate-loader-static-files.min.js"></script>
-        <script src="app.js"></script>
-        <script src="service/AuthFactory.js"></script>
-        <script src='view/login/loginCtl.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate-loader-static-files/2.11.0/angular-translate-loader-static-files.min.js"></script>
+    
+    <script src="app.js"></script>
+    <script src="service/AuthFactory.js"></script>
+    <script src='view/login/loginCtl.js'></script>
+    <script src="service/HomeFactory.js"></script>
+    <script src='view/home/homeCtl.js'></script>
+    <script src="service/ToastFactory.js"></script>
+    
 
-    </body>
+
+
+</body>
 </html>

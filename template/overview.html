@@ -1,0 +1,84 @@
+<md-dialog flex="50" aria-label="Edit Overviewddd"  >
+    <form  name="mF">
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2 class="dialog-title">Edit Overviewawdaw</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon class="material-icons dialog-title" >&#xE5CD;</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                <div style="text-align: center; display: block;">
+
+                    <img class="circle-img" ng-src="{{dialogData.img}}" width="152px" height="152px">
+
+                </div>
+
+                <md-input-container class="md-icon-float md-block">
+                    <!-- Use floating label instead of placeholder -->
+                    <label>Name</label>
+                    <md-icon class="material-icons">&#xE7FD;</md-icon>
+                    <input  name="name" ng-model="dialogData.name" type="text" required>
+                </md-input-container>
+
+                <md-input-container class="md-icon-float md-block">
+                    <!-- Use floating label instead of placeholder -->
+                    <label>Phone Number</label>
+                    <md-icon  class="material-icons">&#xE0CD;</md-icon>
+                    <input name="phone" ng-model="dialogData.phone" type="text" >
+                </md-input-container>
+
+                <md-input-container class="md-icon-float md-block">
+                    <!-- Use floating label instead of placeholder -->
+                    <label>Job</label>
+                    <md-icon class="material-icons">&#xE8F8;</md-icon>
+                    <input  name="job" ng-model="dialogData.job" type="text" >
+                </md-input-container>
+
+                <md-input-container class="md-icon-float md-block">
+                    <!-- Use floating label instead of placeholder -->
+                    <label>Location</label>
+                    <md-icon class="material-icons">&#xE0C8;</md-icon>
+                    <input  name="location" ng-model="dialogData.place" type="text" >
+                </md-input-container>
+
+                <md-input-container class="md-icon-float md-block">
+                    <!-- Use floating label instead of placeholder -->
+                    <label>School</label>
+                    <md-icon class="material-icons">&#xE80C;</md-icon>
+                    <input  name="school" ng-model="dialogData.school" type="text" >
+                </md-input-container>
+
+                <div layout ="row"  layout-align="center stretch">
+                    <md-input-container flex="" class="md-icon-float md-block">
+                        <!-- Use floating label instead of placeholder -->
+                        <label>Avatar</label>
+                        <md-icon class="material-icons">&#xE3F4;</md-icon>
+                        <input  name="img" ng-model="dialogData.img" >
+                    </md-input-container>
+                    <input id="upload" onchange="angular.element(this).scope().setFile(this, angular.element(this).scope().dialogData.img)" type="file" class="ng-hide">
+                    <md-button ng-hide="uploading"  ng-click="uploadClick()"  class="md-fab md-primary md-hue-2" >
+                        <md-tooltip>
+                           Upload Image
+                        </md-tooltip>
+                        <md-icon  class="material-icons">file_upload</md-icon>
+                    </md-button>
+                    <md-progress-circular md-diameter="70"  ng-show="uploading" md-mode="indeterminate"></md-progress-circular>
+                </div>
+                
+
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <md-button ng-click="cancel()" >Cancel</md-button>
+            <span flex></span>
+            <md-button ng-disabled="!mF.$valid" ng-click="onOK(dialogData)">OK</md-button>
+
+        </md-dialog-actions>
+    </form>
+</md-dialog>

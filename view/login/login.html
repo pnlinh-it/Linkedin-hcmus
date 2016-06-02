@@ -1,4 +1,6 @@
 <div >
+
+
     <div ng-show="loginCtl.showSignIn"  layout="column" layout-align="center center" layout-fill="layout-fill">
         <md-card class="loginBox" >
             <md-toolbar class="md-hue-2">
@@ -34,22 +36,38 @@
 
                 </form>
             </md-card-content>
-            <div style="background: rgba(236, 236, 236, 0.29);margin-top: -15px;" layout="column" layout-align="center center" >
-                <div style="font-weight: bold;font-size: 18px; padding-top: 10px;padding-bottom: 5px; ">Login</div>
-                <div>With Your Social Media Account</div>
-                <div class="button" layout="row">
-                    <div style="margin-right: 10px;" layout="row"><a class="tw" href="#"> <i class="anc-tw"> </i> <span>Twitter</span>
-                            <div class="clear"> </div></a>
-                        <div class="clear"> </div></div>
+            <div style="background: rgba(236, 236, 236, 0.29);margin-top: -15px;" layout="column"  layout-align="space-around stretch" >
+                <div  style="font-weight: bold;font-size: 18px; padding-top: 10px;padding-bottom: 5px; text-align: center ">Login</div>
+                <div style="text-align: center;margin-bottom: 10px;" >With Your Social Media Account</div>
 
-                    <div style="margin-right: 10px;" layout="row"><a class="fa" href="#"> <i class="anc-fa"> </i> <span>Facebook</span>
-                            <div class="clear"> </div></a>
-                        <div class="clear"> </div></div>
+                <div class="button md-padding"  layout="row" layout-xs="column" layout-align="space-around stretch"  >
+                    <!--flex-xs ="50"-->
+                    <div  style="margin: 0 0 10px 0"  layout="row" flex="30" flex-xs="100" layout-align="center stretch"  >
+                        <div flex="0"  flex-xs="20" ></div>
+                        <div ng-click="loginCtl.loginWithGithub($event)" layout="row" flex="100"  flex-xs="60" id="btn-github" class="btn-social" >
+                            <i class="btn-social-icon"></i>
+                            <div layout="row"layout-align="start center" ><span>&nbsp;&nbsp;&nbsp;&nbsp; Github</span></div>
+                        </div>
+                        <div flex="0" flex-xs="20" ></div>
+                    </div>
 
-                    <div style="margin-right: 10px;" layout="row"><a class="go" href="#"> <i class="anc-go"> </i> <span>Google+</span>
-                            <div class="clear"> </div></a>
-                        <div class="clear"> </div></div>
+                    <div style="margin: 0 0 10px 0"  layout="row" flex="30" flex-xs="100" layout-align="center stretch"  >
+                        <div flex="0"  flex-xs="20" ></div>
+                        <div ng-click="loginCtl.loginWithFacbook($event)"  layout="row" flex="100"  flex-xs="60" id="btn-facebook" class="btn-social" >
+                            <i class="btn-social-icon"></i>
+                            <div layout="row"layout-align="start center" ><span>&nbsp;&nbsp;&nbsp;&nbsp;Facebook</span></div>
+                        </div>
+                        <div flex="0" flex-xs="20" ></div>
+                    </div>
 
+                    <div style="margin: 0 0 10px 0"  layout="row" flex="30" flex-xs="100" layout-align="center stretch"  >
+                        <div flex="0"  flex-xs="20" ></div>
+                        <div ng-click="" layout="row" flex="100"  flex-xs="60" id="btn-google" class="btn-social" >
+                            <i class="btn-social-icon"></i>
+                            <div layout="row"layout-align="start center" ><span>&nbsp;&nbsp;&nbsp;&nbsp;Google</span></div>
+                        </div>
+                        <div flex="0" flex-xs="20" ></div>
+                    </div>
                 </div>
 
             </div>
@@ -64,9 +82,19 @@
             </md-toolbar>
             <md-card-content>
                 <form ng-submit="loginCtl.signUp($event)" name="Form" style="margin-top: 15px" >
+
                     <md-input-container class="md-icon-float md-block">
-                        <label>Username</label>
+                        <label>Fullname</label>
                         <md-icon class="material-icons">person</md-icon>
+                        <input   name="fullname" ng-model="loginCtl.fullname" minlength="4"  required>
+                        <div ng-messages="Form.fullname.$error" role="alert">
+                            <div ng-message="minlength">That's too short!</div>
+                        </div>
+                    </md-input-container>
+
+                    <md-input-container class="md-icon-float md-block">
+                        <label>Email</label>
+                        <md-icon class="material-icons">email</md-icon>
                         <input   name="myEmail" ng-model="loginCtl.email" ng-pattern="/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/" required>
                         <div ng-messages="Form.myEmail.$error" role="alert">
                             <div ng-message="required">Please enter a value for this field.</div>
@@ -77,16 +105,19 @@
                     <md-input-container class="md-icon-float md-block">
                         <label>Password</label>
                         <md-icon class="material-icons">https</md-icon>
-                        <input  name="name" ng-model="loginCtl.password" type="password" required>
+                        <input  name="pass" ng-model="loginCtl.password" type="password" minlength="6"   required>
+                          <div ng-messages="Form.pass.$error" role="alert">
+                            <div ng-message="minlength">That's too short!</div>
+                        </div>
                     </md-input-container>
 
                     <md-input-container class="md-icon-float md-block">
                         <label>Retype Password</label>
                         <md-icon class="material-icons">https</md-icon>
-                        <input ng-keyup="$event.keyCode == 13 && loginCtl.signUp($event)"  name="repass" ng-model="loginCtl.rePassword" type="password" required>
+                        <input ng-keyup="$event.keyCode == 13 && loginCtl.signUp($event)"  name="repass" ng-model="loginCtl.rePassword" type="password" minlength="6"   required>
                         <div ng-messages="Form.repass.$error" role="alert">
-                            <div ng-show="loginCtl.passMatch">Password does not match</div>
-
+                            <div ng-hide="loginCtl.passMatch">Password does not match</div>
+                            <div ng-message="minlength">That's too short!</div>
                         </div>
 
 

@@ -1,0 +1,391 @@
+<div class="col-md-8"   >
+
+    <div class="profile" >
+
+        <div class="profile-card ">
+            <div class="profile-picture ">
+                <div ng-if="!homeCtl.showAvatar" class="circle-img">
+                    <img  ng-src=" {{homeCtl.data.overview.img}}">                    
+                </div>
+                <div ng-if="homeCtl.showAvatar">
+                    <ng-letter-avatar dynamic="true"  fontSize="60"  shape="round" data="{{homeCtl.name}}" height="152" charCount="2" width="152">                        
+                    </ng-letter-avatar>
+                </div>
+            </div>
+            <div class="profile-overview ">
+                <div id="name-container">
+                    <h1 edit-hover="visible">{{homeCtl.data.overview.name}} 
+                        <i ng-click="homeCtl.showEdit($event, 'overview.html', homeCtl.data.overview)" class="material-icons non-visible">
+                            mode_edit  
+                            <md-tooltip>Edit Overview</md-tooltip>
+                        </i>
+                    </h1>
+
+                </div>
+                <h2>{{homeCtl.data.overview.email}}</h2>
+                <h2>{{homeCtl.data.overview.job}}</h2>
+                <h3>{{homeCtl.data.overview.school}}</h3>
+                <div layout="row">
+                    <h3>{{homeCtl.data.overview.place}} </h3>
+                    <h3>&nbsp;&nbsp;{{homeCtl.showLine}}&nbsp;&nbsp;</h3>
+                    <h3>{{ homeCtl.data.overview.phone}}</h3>
+                </div>
+
+
+
+
+            </div>
+            <div class="main-fab">
+                <md-button class="md-fab md-primary md-hue-2">
+                    <md-tooltip>
+                        Add Friend
+                    </md-tooltip>
+                    <md-icon class="material-icons">&#xE7FE;</md-icon>
+
+                </md-button>
+            </div>
+            <div class="main-info-UR" >
+                <md-button class="md-icon-button" aria-label="More">
+
+                    <md-icon class="material-icons " ng-class="md - 24">&#xE0BE;</md-icon>
+                </md-button>
+                <md-menu>
+                    <md-button class="md-icon-button" ng-click="$mdOpenMenu()" aria-label="More">
+                        <md-icon class="material-icons " ng-class="md - 24">&#xE5D4;</md-icon>
+                    </md-button>
+                    <md-menu-content>
+                        <md-menu-item>
+                            <md-button ui-sref='settings'>Edit Profile</md-button>
+                        </md-menu-item>
+                        <md-menu-divider></md-menu-divider>
+                        <md-menu-item>
+                            <md-button >Exit</md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </div>
+            <div class="main-info-LR" >
+                <span>{{myCvCtl.cvData.info.follower}}</span><div>followers</div>
+            </div>
+        </div>
+
+        <md-divider ng-if="!$last"></md-divider>
+
+        <div class="tab-container">
+            <md-tabs md-dynamic-height md-border-bottom >
+                <md-tab  label="Background">
+                    <md-content  class="md-padding">
+                        <div ng-if="!angular.isUndefined(homeCtl.data.summary)" class="bg-item">
+                            <div id="bg-summary">
+                                <div class="bg-item-header" ng-init="editShow = false">
+                                    <h1 edit-hover="visible">Summary
+                                        <div class="non-visible">
+                                            <i ng-click="myCvCtl.showEdit($event, 'summary.html', myCvCtl.cvData.summaryList, false)" class="material-icons md-24">
+                                                mode_edit
+                                                <md-tooltip>Edit Summary</md-tooltip>
+                                            </i>
+                                        </div>
+                                    </h1>
+                                </div>
+                                <div class="bg-item-body">
+
+                                    <p ng-repeat="item in myCvCtl.cvData.summaryList">{{item.text}}</p>
+                                    <md-divider ng-if="!$last"></md-divider>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-item">
+                            <div id="bg-experience">
+                                <div class="bg-item-header">
+                                    <h1 edit-hover="visible">Experience
+                                        <i ng-click="myCvCtl.showEdit($event, 'experience.html', myCvCtl.cvData.experienceList, true)" class="material-icons md-24 non-visible">
+                                            add
+                                            <md-tooltip>Add New Experience</md-tooltip>
+                                        </i>
+                                    </h1>
+                                </div>
+                                <div class="bg-item-body clear" >
+
+                                    <div class="bg-item-body-container" ng-repeat="item in myCvCtl.cvData.experienceList" >
+                                        <div class="bg-item-body-header">
+                                            <div>
+                                                <h2 class="upper"  edit-hover="visible">{{item.job}} 
+                                                    <div class="non-visible">
+                                                        <i ng-click="myCvCtl.showEdit($event, 'experience.html', item, false)" class="material-icons  md-18">
+                                                            mode_edit
+                                                            <md-tooltip>Edit {{item.job}}</md-tooltip>
+                                                        </i>
+                                                        <i ng-click="myCvCtl.cvData.experienceList.$remove(item)" class="material-icons md-18">
+                                                            delete
+                                                            <md-tooltip>Delete {{item.job}}</md-tooltip>
+                                                        </i>
+                                                    </div>
+                                                </h2>
+                                                <h3>{{item.where}}</h3>
+                                                <h3>{{item.time}}</h3>
+
+                                            </div>
+                                            <img ng-src="{{item.logo}}">
+
+                                        </div>
+                                        <p>{{item.summary}}</p>
+
+                                        <div ng-if="item.media.length > 0" style="overflow: hidden;padding-bottom: 5px;" >
+                                            <div  ng-repeat="med in item.media" class="media-data-fix" ng-if="med.img != '' && med.caption != ''">
+                                                <div class="media-data-container" >
+                                                    <a href="#">
+                                                        <div class="media-image thumbnail" style="background-image: url({{med.img}});">
+                                                            <img class="thumbnail" src="{{med.img}}"/>
+                                                        </div>
+                                                        <div class="media-desc"><p class="description">{{med.caption}}</p></div>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <md-divider ng-if="!$last"></md-divider>
+                            </div>
+                        </div>
+                        <div class="bg-item">
+                            <div id="bg-project">
+                                <div class="bg-item-header">
+                                    <h1 edit-hover="visible">Project
+                                        <div class="non-visible">
+                                            <i  ng-click="myCvCtl.showEdit($event, 'project.html', myCvCtl.cvData.projectList, true)" class="material-icons md-24 ">
+                                                add
+                                                <md-tooltip>Add new Project</md-tooltip>
+                                            </i>
+                                        </div>
+                                    </h1>
+                                </div>
+                                <div class="bg-item-body clear" >
+
+                                    <div class="bg-item-body-container"  ng-repeat="item in myCvCtl.cvData.projectList">
+                                        <div class="bg-item-body-header ">
+                                            <div >
+                                                <h2  edit-hover="visible">{{item.name}}
+                                                    <div class="non-visible">
+                                                        <i  ng-click="myCvCtl.cvData.showEdit($event, 'project.html', item, false)" class="material-icons md-18 ">
+                                                            mode_edit
+                                                            <md-tooltip>Edit {{item.name}}</md-tooltip>
+                                                        </i>
+                                                        <i  ng-click="myCvCtl.cvData.projectList.$remove(item)" class="material-icons md-18 ">
+                                                            delete
+                                                            <md-tooltip>Delete {{item.name}}</md-tooltip>
+                                                        </i>
+                                                    </div>
+                                                </h2>
+                                                <h3>{{item.time}}</h3>
+
+
+                                            </div>
+
+
+                                        </div>
+                                        <p>{{item.desc}}</p>
+                                        <p> <i>{{item.member.length}} team members, including:</i></p>
+                                        <div style="overflow: hidden;  padding: 0px 15px;" class="row" >
+                                            <div class=" col-xs-6 col-sm-4" ng-repeat="mem in item.member">
+
+                                                <div  layout="row" >
+                                                    <img style="align-items: center; margin: auto 10px auto 0;" ng-src="{{mem.img}}" height="50px" width="50px">
+                                                    <div layout="column" style="margin: auto 0;" >
+                                                        <div style="line-height: 16px; font-size: 16px; font-weight: bold">{{mem.name}}</div>
+                                                        <div style="line-height: 16px; font-size: 15px;">{{mem.job}}</div>
+                                                    </div>
+                                                </div> 
+                                            </div>
+
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                                <md-divider ng-if="!$last"></md-divider>
+                            </div>
+                        </div>
+
+                        <div class="bg-item">
+                            <div id="bg-skill" >
+                                <div class="bg-item-header">
+
+                                    <h1 >Skill
+                                    </h1>
+                                </div>
+                                <div class="bg-item-body clear">
+                                    <p  edit-hover="visible">Top Skill
+                                        <span class="non-visible">
+                                            <i  ng-click="myCvCtl.showEdit($event, 'skill.html', myCvCtl.cvData.skillList.skill, false)" class="material-icons md-18 ">
+                                                mode_edit
+                                                <md-tooltip>Edit Top Skill</md-tooltip>
+                                            </i>
+                                        </span>
+                                    </p>
+
+                                    <div ng-repeat="item in myCvCtl.cvData.skillList.skill" class="skill-btn-container l-left">
+                                        <div class="skill-btn-left">{{item.count}}</div>
+                                        <div class="skill-btn-right">{{item.desc}}</div>
+                                    </div>
+                                </div>
+                                <div class="bg-item-body clear" >
+                                    <p edit-hover="visible">Jeff also knows about...
+                                        <i  ng-click="myCvCtl.showEdit($event, 'skill.html', myCvCtl.cvData.skillList.know)" class="material-icons md-18 non-visible">mode_edit</i>
+                                    </p>
+                                    <div ng-repeat="item in myCvCtl.cvData.skillList.know" class="skill-btn-container l-left">
+                                        <div class="skill-btn-left">{{item.count}}</div>
+                                        <div class="skill-btn-right">{{item.desc}}</div>
+                                    </div>  
+                                </div>
+                                <p><br/></p>
+                                <md-divider ng-if="!$last"></md-divider>
+                            </div>
+                        </div>
+
+                        <div class="bg-item">
+                            <div id="bg-education">
+                                <div class="bg-item-header">
+                                    <h1 edit-hover="visible">Education
+                                        <i  ng-click="myCvCtl.showEdit($event, 'education.html', myCvCtl.cvData.educationList, true)" class="material-icons md-24 non-visible">
+                                            add
+                                            <md-tooltip>Add new Project</md-tooltip>
+                                        </i>
+                                    </h1>
+                                </div>
+                                <div class="bg-item-body clear" ng-repeat="item in myCvCtl.cvData.educationList">
+
+                                    <div class="bg-item-body-container" >
+                                        <div class="bg-item-body-header ">
+                                            <div >
+                                                <h2  edit-hover="visible">
+                                                    {{item.name}}
+                                                    <div class="non-visible">
+                                                        <i  ng-click="myCvCtl.showEdit($event, 'education.html', item)" class="material-icons md-18 ">
+                                                            mode_edit
+                                                            <md-tooltip>Edit {{item.name}}</md-tooltip>
+                                                        </i>
+                                                        <i  ng-click="myCvCtl.cvData.educationList.$remove(item)" class="material-icons md-18 ">
+                                                            delete
+                                                            <md-tooltip>Delete {{item.name}}</md-tooltip>
+                                                        </i>
+                                                    </div>
+                                                </h2>
+                                                <h3>{{item.subject}}</h3>
+                                                <h3>{{item.time}}</h3>
+
+                                            </div>
+                                            <img ng-src="{{item.img}}">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <md-divider ng-if="!$last"></md-divider>
+                            </div>
+                        </div>
+
+                        <div class="bg-item">
+                            <div id="bg-volunteer">
+                                <div class="bg-item-header">
+                                    <h1>Volunteer Experience & Causes</h1>
+                                </div>
+                                <div class="bg-item-body clear">
+                                    <p edit-hover="visible">
+                                        Causes Jeff cares about:
+                                        <i  ng-click="myCvCtl.showEdit($event, 'volunteer.html', myCvCtl.cvData.volunteerList.about)" class="material-icons md-18 non-visible">
+                                            mode_edit
+                                            <md-tooltip>Edit</md-tooltip>
+                                        </i>
+                                    </p>
+                                    <ul>
+                                        <li ng-repeat="item in myCvCtl.cvData.volunteerList.about">{{item.text}}</li>
+                                    </ul> 
+
+                                </div>
+                                <div class="bg-item-body">
+                                    <p edit-hover="visible">
+                                        Organizations Jeff supports:
+                                        <i ng-click="myCvCtl.showEdit($event, 'volunteer.html', myCvCtl.cvData.volunteerList.support)" class="material-icons md-18 non-visible">
+                                            mode_edit
+                                            <md-tooltip>Edit</md-tooltip>
+                                        </i>   
+                                    </p>
+                                    <ul>
+                                        <li ng-repeat="item in myCvCtl.cvData.volunteerList.support"><a href="#" >{{item.text}}</a></li>
+                                    </ul> 
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </md-content>
+                </md-tab>
+                <md-tab label="Connections">
+                    <md-content class="md-padding">
+                        <h1 class="md-display-2">Tab Two</h1>
+
+
+
+                        <div layout="row">
+                            <img ng-src="imgs/exp_logo.png" height="100px" width="100px">
+                            <div layout="column">
+                                <h1>Title</h1>
+                                <h2>SubTitle</h2>
+                            </div>
+                        </div>
+
+
+
+                    </md-content>
+                </md-tab>
+                <md-tab label="Recomendations">
+                    <md-content class="md-padding">
+                        <h1 class="md-display-2">Recomendations</h1>
+
+                    </md-content>
+                </md-tab>
+                <md-tab label="Groups">
+                    <md-content class="md-padding">
+                        <h1 class="md-display-2">Groups</h1>
+
+                    </md-content>
+                </md-tab>
+                <md-tab label="Following">
+                    <md-content class="md-padding">
+                        <h1 class="md-display-2">Following</h1>
+
+                    </md-content>
+                </md-tab>
+                <md-tab label="Recent Actitity">
+                    <md-content class="md-padding">
+                        <h1 class="md-display-2">Recent Actitity</h1>
+
+                    </md-content>
+                </md-tab>
+            </md-tabs>
+        </div>
+    </div>
+</div>
+<div class="col-md-4" >
+
+    <md-card>
+        <md-card-title>
+            <span class="right-card-head">People also viewed</span>
+        </md-card-title>
+        <md-card-content>
+            <md-list >
+                <md-list-item class="md-3-line" ng-repeat="item in myCvCtl.cvData.alsoList" ng-click="null">
+                    <img ng-src="{{item.img}}" class="md-avatar">
+                    <div class="md-list-item-text" layout="column">
+                        <h3>{{item.name}}</h3>
+                        <h4>{{item.job}}</h4>
+                    </div>
+                    <md-divider md-inset ng-if="!$last"></md-divider>
+                </md-list-item>
+            </md-list>
+        </md-card-content>
+
+    </md-card>
+</div>
