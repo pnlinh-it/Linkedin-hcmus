@@ -6,6 +6,9 @@ angular.module('myApp').factory('HomeFactory', ['CONFIG', '$q', '$rootScope', fu
         HomeFactory.data.summary = [{}];
         HomeFactory.data.experience = {};
         HomeFactory.data.project = {};
+        HomeFactory.data.skill = {};
+        HomeFactory.education = {};
+        HomeFactory.volunteer = {};
 
 
         firebase.initializeApp(CONFIG, "home");
@@ -58,7 +61,7 @@ angular.module('myApp').factory('HomeFactory', ['CONFIG', '$q', '$rootScope', fu
             var defer = $q.defer();
             if (curUser)
             {
-                
+
                 database.ref('users/' + curUser.uid + '/' + key).set(data);
                 defer.resolve();
             } else
@@ -85,7 +88,7 @@ angular.module('myApp').factory('HomeFactory', ['CONFIG', '$q', '$rootScope', fu
             if (curUser)
             {
                 database.ref('users/' + curUser.uid + '/' + key).remove();
-               defer.resolve();
+                defer.resolve();
             } else
                 defer.reject();
             return defer.promise;

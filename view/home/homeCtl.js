@@ -21,7 +21,9 @@ myApp.controller('homeCtl', function ($scope, $mdDialog, HomeFactory, ToastFacto
         'summary': false,
         'experience': false,
         'project': false,
-        'skill': false
+        'skill': false,
+        'education': false,
+        'volunteer': false
     };
 
     HomeFactory.getData('overview').then(function (result)
@@ -54,6 +56,24 @@ myApp.controller('homeCtl', function ($scope, $mdDialog, HomeFactory, ToastFacto
         if (checkOK(result)) {
             self.data.project = result;
             self.listUn.project = true;
+        }
+    });
+    HomeFactory.getData('skill').then(function (result) {
+        if (checkOK(result)) {
+            self.data.skill = result;
+            self.listUn.skill = true;
+        }
+    });
+    HomeFactory.getData('education').then(function (result) {
+        if (checkOK(result)) {
+            self.data.education = result;
+            self.listUn.education = true;
+        }
+    });
+     HomeFactory.getData('volunteer').then(function (result) {
+        if (checkOK(result)) {
+            self.data.volunteer = result;
+            self.listUn.volunteer = true;
         }
     });
 
@@ -316,4 +336,8 @@ function getkey(key) {
         return result;
     } else
         return null;
+}
+
+function getLength(obj) {
+    return Object.keys(obj).length;
 }

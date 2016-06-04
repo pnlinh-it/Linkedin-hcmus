@@ -65,11 +65,17 @@
                             <md-button ng-click="homeCtl.showEdit($event, 'project.html', homeCtl.data.project, true, true, 'project')" ui-sref='settings'>Add Project</md-button>
                         </md-menu-item>
                         <md-menu-item>
-                            <md-button ui-sref='settings'>Edit Profile</md-button>
+                            <md-button ng-click="homeCtl.showEdit($event, 'skill.html', homeCtl.data.project, false, true, 'skill')" ui-sref='settings'>Add Skill</md-button>
+                        </md-menu-item>
+                        <md-menu-item>
+                            <md-button ng-click="homeCtl.showEdit($event, 'education.html', homeCtl.data.education, true, true, 'education')" ui-sref='settings'>Add Education</md-button>
+                        </md-menu-item>
+                         <md-menu-item>
+                            <md-button ng-click="homeCtl.showEdit($event, 'volunteer.html', homeCtl.data.volunteer, false, true, 'volunteer')" ui-sref='settings'>Add Volunteer</md-button>
                         </md-menu-item>
                         <md-menu-divider></md-menu-divider>
                         <md-menu-item>
-                            <md-button >Exit</md-button>
+                            <md-button >Close</md-button>
                         </md-menu-item>
                     </md-menu-content>
                 </md-menu>
@@ -87,11 +93,9 @@
                     <md-content  class="md-padding">
 
 
-
-                        <!--    summary     -->
                         <div ng-show="homeCtl.listUn.summary" class="bg-item">
                             <div id="bg-summary">
-                                <div class="bg-item-header" ng-init="editShow = false">
+                                <div class="bg-item-header" >
                                     <h1 edit-hover="visible">Summary
                                         <div class="non-visible">
                                             <i ng-click="homeCtl.showEdit($event, 'summary.html', homeCtl.data.summary, false, true, 'summary')"  class="material-icons md-24">
@@ -108,8 +112,6 @@
                                 </div>
                             </div>
                         </div>
-
-
 
                         <!--    Experience   -->
                         <div ng-show="homeCtl.listUn.experience" class="bg-item">
@@ -172,9 +174,6 @@
                             </div>
                         </div>
 
-
-
-
                         <!--        Project      -->
                         <div ng-show="homeCtl.listUn.project"  class="bg-item">
                             <div id="bg-project">
@@ -193,7 +192,7 @@
                                     <div class="bg-item-body-container"  ng-repeat="(key, item) in homeCtl.data.project">
                                         <div class="bg-item-body-header ">
                                             <div >
-                                                <h2  edit-hover="visible">{{item.name}}
+                                                <h2  edit-hover="visible">{{item.name}} 
                                                     <div class="non-visible">
                                                         <i ng-click="homeCtl.showEdit($event, 'project.html', item, false, false, 'project/' + key)"  class="material-icons  md-18">
                                                             mode_edit
@@ -217,9 +216,10 @@
 
                                         </div>
                                         <p>{{item.desc}}</p>
-                                        <p> <i ng-if="item.member !== null && !angular.isUndefined(item.member)" >{{Object.keys(item.member).length}} team members, including:</i></p>
+
+                                        <div ng-show="item.member !== null && !item.member === undefined"> <p> <i >{{item.member}} members, including:</i></p></div>
                                         <div style="overflow: hidden;  padding: 0px 15px;" class="row" >
-                                            <div ng-if="mem !== null" class=" col-xs-6 col-sm-4" ng-repeat="(key2,mem) in item.member">
+                                            <div ng-if="mem !== null"  class=" col-xs-6 col-sm-4" ng-repeat="(key2,mem) in item.member">
 
                                                 <div  layout="row" >
                                                     <img ng-click="homeCtl.showEdit($event, 'add-member.html', mem, false, false, 'project/' + key + '/member/' + key2)" class="circle-img" style="align-items: center; margin: auto 10px auto 0;" ng-src="{{mem.img}}" height="50px" width="50px">
@@ -240,53 +240,50 @@
                             </div>
                         </div>
 
-                        <div class="bg-item">
-                            <div id="bg-skill" >
-                                <div class="bg-item-header">
 
-                                    <h1 >Skill
+
+                        <div ng-show="homeCtl.listUn.skill" class="bg-item">
+                            <div id="bg-skill" >
+                                <div class="bg-item-header" >
+                                    <h1 edit-hover="visible">Skill
+                                        <div class="non-visible">
+                                            <i ng-click="homeCtl.showEdit($event, 'skill.html', homeCtl.data.skill, false, true, 'skill')"  class="material-icons md-24">
+                                                mode_edit
+                                                <md-tooltip>Edit Skill</md-tooltip>
+                                            </i>
+                                        </div>
                                     </h1>
                                 </div>
                                 <div class="bg-item-body clear">
-                                    <p  edit-hover="visible">Top Skill
-                                        <span class="non-visible">
-                                            <i  ng-click="myCvCtl.showEdit($event, 'skill.html', myCvCtl.cvData.skillList.skill, false)" class="material-icons md-18 ">
-                                                mode_edit
-                                                <md-tooltip>Edit Top Skill</md-tooltip>
-                                            </i>
-                                        </span>
-                                    </p>
-
-                                    <div ng-repeat="item in myCvCtl.cvData.skillList.skill" class="skill-btn-container l-left">
+                                    <div ng-repeat="item in homeCtl.data.skill" class="skill-btn-container l-left">
                                         <div class="skill-btn-left">{{item.count}}</div>
                                         <div class="skill-btn-right">{{item.desc}}</div>
                                     </div>
                                 </div>
-                                <div class="bg-item-body clear" >
-                                    <p edit-hover="visible">Jeff also knows about...
-                                        <i  ng-click="myCvCtl.showEdit($event, 'skill.html', myCvCtl.cvData.skillList.know)" class="material-icons md-18 non-visible">mode_edit</i>
-                                    </p>
-                                    <div ng-repeat="item in myCvCtl.cvData.skillList.know" class="skill-btn-container l-left">
-                                        <div class="skill-btn-left">{{item.count}}</div>
-                                        <div class="skill-btn-right">{{item.desc}}</div>
-                                    </div>  
-                                </div>
+
                                 <p><br/></p>
                                 <md-divider ng-if="!$last"></md-divider>
                             </div>
                         </div>
 
-                        <div class="bg-item">
+
+
+
+
+
+                        <div class="bg-item" ng-show="homeCtl.listUn.education">
                             <div id="bg-education">
                                 <div class="bg-item-header">
                                     <h1 edit-hover="visible">Education
-                                        <i  ng-click="myCvCtl.showEdit($event, 'education.html', myCvCtl.cvData.educationList, true)" class="material-icons md-24 non-visible">
+
+                                        <i ng-click="homeCtl.showEdit($event, 'education.html', homeCtl.data.education, true, true, 'education')" class="material-icons md-24 non-visible">
                                             add
-                                            <md-tooltip>Add new Project</md-tooltip>
+                                            <md-tooltip>Add New Education</md-tooltip>
                                         </i>
+
                                     </h1>
                                 </div>
-                                <div class="bg-item-body clear" ng-repeat="item in myCvCtl.cvData.educationList">
+                                <div class="bg-item-body clear" ng-repeat="(key, item)  in homeCtl.data.education">
 
                                     <div class="bg-item-body-container" >
                                         <div class="bg-item-body-header ">
@@ -294,11 +291,11 @@
                                                 <h2  edit-hover="visible">
                                                     {{item.name}}
                                                     <div class="non-visible">
-                                                        <i  ng-click="myCvCtl.showEdit($event, 'education.html', item)" class="material-icons md-18 ">
+                                                        <i ng-click="homeCtl.showEdit($event, 'education.html', item, false, false, 'education/' + key)"  class="material-icons  md-18">
                                                             mode_edit
                                                             <md-tooltip>Edit {{item.name}}</md-tooltip>
                                                         </i>
-                                                        <i  ng-click="myCvCtl.cvData.educationList.$remove(item)" class="material-icons md-18 ">
+                                                        <i ng-click="homeCtl.deleteData('education/' + key)" class="material-icons md-18">
                                                             delete
                                                             <md-tooltip>Delete {{item.name}}</md-tooltip>
                                                         </i>
@@ -317,34 +314,21 @@
                             </div>
                         </div>
 
-                        <div class="bg-item">
+                        <div ng-show="homeCtl.listUn.volunteer"  class="bg-item">
                             <div id="bg-volunteer">
-                                <div class="bg-item-header">
-                                    <h1>Volunteer Experience & Causes</h1>
+                                <div class="bg-item-header" >
+                                    <h1 edit-hover="visible">Volunteer
+                                        <div class="non-visible">
+                                            <i ng-click="homeCtl.showEdit($event, 'volunteer.html', homeCtl.data.volunteer, false, true, 'volunteer')"  class="material-icons md-24">
+                                                mode_edit
+                                                <md-tooltip>Edit Volunteer</md-tooltip>
+                                            </i>
+                                        </div>
+                                    </h1>
                                 </div>
                                 <div class="bg-item-body clear">
-                                    <p edit-hover="visible">
-                                        Causes Jeff cares about:
-                                        <i  ng-click="myCvCtl.showEdit($event, 'volunteer.html', myCvCtl.cvData.volunteerList.about)" class="material-icons md-18 non-visible">
-                                            mode_edit
-                                            <md-tooltip>Edit</md-tooltip>
-                                        </i>
-                                    </p>
                                     <ul>
-                                        <li ng-repeat="item in myCvCtl.cvData.volunteerList.about">{{item.text}}</li>
-                                    </ul> 
-
-                                </div>
-                                <div class="bg-item-body">
-                                    <p edit-hover="visible">
-                                        Organizations Jeff supports:
-                                        <i ng-click="myCvCtl.showEdit($event, 'volunteer.html', myCvCtl.cvData.volunteerList.support)" class="material-icons md-18 non-visible">
-                                            mode_edit
-                                            <md-tooltip>Edit</md-tooltip>
-                                        </i>   
-                                    </p>
-                                    <ul>
-                                        <li ng-repeat="item in myCvCtl.cvData.volunteerList.support"><a href="#" >{{item.text}}</a></li>
+                                        <li ng-repeat="item in homeCtl.data.volunteer">{{item.text}}</li>
                                     </ul> 
 
                                 </div>

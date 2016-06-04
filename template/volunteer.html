@@ -1,0 +1,43 @@
+<md-dialog flex="50" aria-label="Edit Volunteer"  >
+    <form  name="mF">
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2 class="dialog-title">Edit Volunteer</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon class="material-icons dialog-title" >&#xE5CD;</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                <div layout="row" ng-repeat="item in dialogData">
+                    <md-input-container flex="" class="md-icon-float md-block" >
+                        <!-- Use floating label instead of placeholder -->
+                        <label>Volunteer - {{$index + 1}}</label>
+                        <md-icon class="material-icons">&#xE87E;</md-icon>
+                        <input  name="name" ng-model="item.text" type="text" required>
+                    </md-input-container>
+
+                    <md-button class="md-icon-button" aria-label="More" ng-click="dialogData.splice($index, 1)">
+                        <md-icon class="material-icons " ng-class="md - 24">delete</md-icon>
+                    </md-button>
+                </div>
+
+
+
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <md-button ng-click="cancel()" >Cancel</md-button>
+            <span flex></span>
+		 <md-button ng-click="check(dialogData) ? (dialogData = [{}]) : dialogData.push({})" >Add A Volunteer</md-button>
+			<span flex></span>
+            <md-button ng-disabled="!mF.$valid" ng-click="onOK(dialogData)">OK</md-button>
+			
+
+        </md-dialog-actions>
+    </form>
+</md-dialog>
