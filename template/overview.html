@@ -53,23 +53,23 @@
                     <input  name="school" ng-model="dialogData.school" type="text" >
                 </md-input-container>
 
-                <div layout ="row"  layout-align="center stretch">
+                <div ng-init ="avatarUploading = false" layout ="row"  layout-align="center stretch">
                     <md-input-container flex="" class="md-icon-float md-block">
                         <!-- Use floating label instead of placeholder -->
                         <label>Avatar</label>
                         <md-icon class="material-icons">&#xE3F4;</md-icon>
                         <input  name="img" ng-model="dialogData.img" >
                     </md-input-container>
-                    <input id="upload" onchange="angular.element(this).scope().setFile(this, angular.element(this).scope().dialogData.img)" type="file" class="ng-hide">
-                    <md-button ng-hide="uploading"  ng-click="uploadClick()"  class="md-fab md-primary md-hue-2" >
+                    <input id="upload" onchange="angular.element(this).scope().setFile(this, 'img', 'avatarUploading', 'overview')" type="file" class="ng-hide">
+                    <md-button ng-hide="avatarUploading"  ng-click="uploadClick('upload')"  class="md-fab md-primary md-hue-2" >
                         <md-tooltip>
-                           Upload Image
+                            Upload Image
                         </md-tooltip>
-                        <md-icon  class="material-icons">file_upload</md-icon>
+                        <md-icon   class="material-icons">file_upload</md-icon>
                     </md-button>
-                    <md-progress-circular md-diameter="70"  ng-show="uploading" md-mode="indeterminate"></md-progress-circular>
+                    <md-progress-circular md-diameter="70"  ng-show="avatarUploading" md-mode="indeterminate"></md-progress-circular>
                 </div>
-                
+
 
             </div>
         </md-dialog-content>

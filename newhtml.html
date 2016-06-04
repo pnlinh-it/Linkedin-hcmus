@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body ng-app="ServiceNotification">
+        <div style="border-style:dotted" ng-controller="TimerCtrl1 as vm">
+
+
+            Last Updated: {{vm.data.lastUpdated}}<br/>
+            Last Updated: {{vm.data.calls}}<br/>
+        </div>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+        <script type="text/javascript">
+                var app = angular.module("ServiceNotification", []);
+                app.controller('TimerCtrl1', function ($scope, Timer) {
+
+                    var self = this;
+                    self.data = Timer.data;
+
+
+
+                });
+
+                app.factory("Timer", function ($timeout) {
+                    var service = {};
+                    service.data = {lastUpdated: new Date(), calls: 0};
+                    service.updateTimer = function () {
+                        service.data.lastUpdated = new Date();
+                        service.data.calls += 1;
+                        console.log("updateTimer: " + service.data.lastUpdated);
+                        $timeout(service.updateTimer, 500);
+                    };
+                    service.updateTimer();
+                    return service;
+                });
+        </script>
+    </body>
+</html>

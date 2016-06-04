@@ -1,0 +1,37 @@
+<md-dialog flex="50" aria-label="Edit Summary"  >
+    <form  name="mF">
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2 class="dialog-title">{{(isAdd?'Add':'Edit')}} Summary</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon class="material-icons dialog-title" >&#xE5CD;</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                <div layout ="row"  ng-repeat="summary in dialogData" >
+                    <md-input-container flex="" md-detect-hidden  class="md-icon-float md-block">
+                        <label>Summary - {{($index + 1)}}</label>
+                        <md-icon class="material-icons">assignment</md-icon>
+                        <textarea ng-model="summary.text"  rows="3" required  md-select-on-focus></textarea>
+                    </md-input-container>
+                    <md-button class="md-icon-button" aria-label="More" ng-click="dialogData.splice($index, 1)">
+                        <md-icon class="material-icons " ng-class="md - 24">delete</md-icon>
+                    </md-button>
+                </div>
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <md-button ng-click="cancel()" >Cancel</md-button>
+            <span flex></span>
+              <md-button ng-click="dialogData.push({})" >Add A Summary</md-button>
+              <span flex></span>
+            <md-button ng-disabled="mF.$invalid" ng-click="onOK(dialogData)">OK</md-button>
+
+        </md-dialog-actions>
+    </form>
+</md-dialog>

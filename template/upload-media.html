@@ -1,0 +1,59 @@
+<md-dialog flex="50" aria-label="Upload Media"  >
+    <form  name="mF">
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2 class="dialog-title">Upload Media</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon class="material-icons dialog-title" >&#xE5CD;</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                <div style="text-align: center; display: block;">
+
+                    <img  ng-src="{{dialogData.img}}"  height="200px">
+
+                </div>
+                <div ng-init="mediaUp = false"   layout="row">
+                    <md-input-container flex="" class="md-icon-float md-block ">
+                        <label>Caption</label>
+                        <md-icon class="material-icons">&#xE8F8;</md-icon>
+                        <input  name="job" ng-model="dialogData.caption" type="text"required >
+                    </md-input-container>
+
+                    <md-input-container flex=""  class="md-icon-float md-block ">
+                        <label>Image</label>
+                        <md-icon  class="material-icons">&#xE3F4;</md-icon>
+                        <input  ng-model="dialogData.img" type="text"required >
+                    </md-input-container>
+
+
+                    <input id="mediaup" onchange="angular.element(this).scope().setFile(this, 'img', 'mediaUp', 'experience')" type="file" class="ng-hide">
+                    <md-button ng-hide="mediaUp" style="margin-top: 20px;"  
+                               ng-click="uploadClick('mediaup')"  class="md-fab md-primary md-hue-2" >
+                        <md-tooltip>
+                            Upload Image
+                        </md-tooltip>
+                        <md-icon  class="material-icons">file_upload</md-icon>
+                    </md-button>
+                    <md-progress-circular md-diameter="70" ng-show="mediaUp"   md-mode="indeterminate"></md-progress-circular>
+
+                </div>
+
+
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <md-button ng-click="cancel()" >Cancel</md-button>
+            <span flex></span>
+            <md-button ng-hide="isAdd" ng-click="delete(dialogData)" >Delete</md-button>
+             <span flex></span>
+            <md-button ng-disabled="!mF.$valid" ng-click="onOK(dialogData)">OK</md-button>
+
+        </md-dialog-actions>
+    </form>
+</md-dialog>

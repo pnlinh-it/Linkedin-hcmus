@@ -1,0 +1,85 @@
+<md-dialog flex="70" aria-label="Edit Experience"  >
+    <form  name="mF">
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2 class="dialog-title">{{(isAdd?'Add':'Edit')}} Experience</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon class="material-icons dialog-title" >&#xE5CD;</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content>
+
+            <div class="md-dialog-content">
+
+                <div  layout-gt-sm="row">
+                    <md-input-container flex-gt-sm="" class="md-icon-float md-block ">
+                        <label>Job</label>
+                        <md-icon class="material-icons">&#xE8F8;</md-icon>
+                        <input  ng-model="dialogData.job" type="text" required>
+                    </md-input-container>
+
+                    <md-input-container flex-gt-sm="" class="md-icon-float md-block ">
+                        <label>Where</label>
+                        <md-icon  class="material-icons">&#xE0C8;</md-icon>
+                        <input  ng-model="dialogData.where" type="text" required>
+                    </md-input-container>
+
+                    <md-input-container flex-gt-sm="" class="md-icon-float md-block ">
+                        <label>Time</label>
+                        <md-icon class="material-icons">&#xE192;</md-icon>
+                        <input  name="job" ng-model="dialogData.time" type="text" required>
+                    </md-input-container>
+
+                </div>
+                <!--                LOGO            -->
+
+                <div layout="row" layout-align="center stretch" ng-init="logoUploading = false">
+
+                    
+                    
+                    <md-input-container flex="" class="md-icon-float md-block ">
+                        <label>Logo</label>
+                        <md-icon class="material-icons">&#xE3F4;</md-icon>
+                        <input  name="job" ng-model="dialogData.logo" type="text" ng-model-options="{updateOn: 'blur'}" required>
+                    </md-input-container>
+                    <img class="dialog-logo" ng-src="{{dialogData.logo}}" width="60px" height="60px">
+
+                    <input id="upload" onchange="angular.element(this).scope().setFile(this, 'logo', 'logoUploading', 'experience')" type="file" class="ng-hide">
+                    <md-button style="margin-top: 20px;" ng-hide="logoUploading"  ng-click="uploadClick('upload')"  class="md-fab md-primary md-hue-2" >
+                        <md-tooltip>
+                            Upload Image
+                        </md-tooltip>
+                        <md-icon  class="material-icons">file_upload</md-icon>
+                    </md-button>
+                    <md-progress-circular md-diameter="70"  ng-show="logoUploading" md-mode="indeterminate"></md-progress-circular>
+
+                </div>
+
+
+
+
+
+                <md-input-container  md-detect-hidden  class="md-icon-float md-block">
+                    <label>Summary</label>
+                    <md-icon class="material-icons">assignment</md-icon>
+                    <textarea ng-model="dialogData.summary"  rows="3" required  md-select-on-focus></textarea>
+                </md-input-container>
+
+                
+
+               
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <md-button ng-click="cancel()" >Cancel</md-button>
+           
+            <span flex></span>
+            <md-button ng-disabled="!mF.$valid" ng-click="onOK(dialogData)">OK</md-button>
+
+        </md-dialog-actions>
+    </form>
+</md-dialog>

@@ -1,33 +1,90 @@
 var myApp = angular.module('myApp');
-myApp.controller('homeCtl', function ($mdDialog, HomeFactory) {
+myApp.controller('homeCtl', function ($scope, $mdDialog, HomeFactory, ToastFactory, $timeout) {
 
 
+
+
+
+    console.log("start page");
     var self = this;
 
-    self.data = {};
+    self.data = HomeFactory.data;
+
+
+
     self.showAvatar = false;
     self.name = 's';
     self.showLine = "";
 
 
-    self.data = HomeFactory.getData().then(function (data)
+    self.listUn = {
+        'summary': false,
+        'experience': false,
+        'project': false,
+        'skill': false
+    };
+
+    HomeFactory.getData('overview').then(function (result)
     {
-        console.log(data);
-        var overview = data.overview;
-        self.data = data;
-        if (checkUn(overview.img))
+        self.data.overview = result;
+        if (self.checkUn(self.data.overview.img))
             self.showAvatar = true;
-        if (!checkUn(overview.place) && !checkUn(overview.phone))
+        if (!self.checkUn(self.data.overview.place) && !self.checkUn(self.data.overview.phone))
             self.showLine = "|";
         self.name = getName(self.data.overview.name).trim();
-
     });
 
+    HomeFactory.getData('summary').then(function (result) {
+
+        if (checkOK(result)) {
+            self.data.summary = result;
+            self.listUn.summary = true;
+        }
+    });
+
+    HomeFactory.getData('experience').then(function (result) {
+
+        if (checkOK(result)) {
+            self.data.experience = result;
+            self.listUn.experience = true;
+        }
+    });
+    HomeFactory.getData('project').then(function (result) {
+
+        if (checkOK(result)) {
+            self.data.project = result;
+            self.listUn.project = true;
+        }
+    });
+
+//    $scope.$on('eventFired', function (event, data) {
+//
+//
+//        $timeout(function () {
+//            self.data.summary = data;
+//        }, 1);
+//
+//        if (checkOK(data)) {
+//            self.listUn.summary = true;
+//        } else {
+//            self.listUn.summary = false;
+//        }
+//
+//    });
 
 
 
+    console.log("after getData ");
+    self.checkUn = function (value) {
+        return angular.isUndefined(value);
+    }
 
-    self.showEdit = function (ev, template, data, isAdd) {
+    self.checkSummary = function () {
+        return self.checkUn(self.data.summary)
+    }
+
+
+    self.showEdit = function (ev, template, data, isAdd, isArray, key) {
         var templatePath = "template/" + template;
         var parentEl = angular.element(document.body);
         $mdDialog.show({
@@ -37,83 +94,168 @@ myApp.controller('homeCtl', function ($mdDialog, HomeFactory) {
             locals: {
                 data: data,
                 isAdd: isAdd,
-                HomeFactory: HomeFactory
-
+                isArray: isArray,
+                key: key
             },
             targetEvent: ev,
-        }).then(function (data) {
-            console.log(data);
+        }).then(function (result) {
+            var data = result.data;
+            var key = result.key;
+            var isAdd = result.isAdd;
 
+            if (isAdd) {
+                HomeFactory.addData(data, key).then(function (newKey) {
+
+
+
+
+
+                    if (key.indexOf('/') > 0) {
+                        var k = key.split('/');
+                        if (k.length == 3)
+                        {
+                            if (self.checkUn(HomeFactory.data[k[0]][k[1]][k[2]]))
+                                HomeFactory.data[k[0]][k[1]][k[2]] = {};
+                            HomeFactory.data[k[0]][k[1]][k[2]][newKey] = data;
+                        }
+
+                    } else
+                        HomeFactory.data[key][newKey] = data;
+                    ToastFactory.show("Add Complete");
+
+
+                });
+            } else {
+
+                HomeFactory.updateOverview(data, key).then(function () {
+                    ToastFactory.show("Save Complete");
+                });
+            }
+            if (checkOK(data))
+                self.listUn[key] = true;
+            else
+                self.listUn[key] = false;
         }, function () {
-
+            console.log(self.data.experience);
         });
     };
+
+    self.deleteData = function (key) {
+        HomeFactory.deleteData(key).then(function () {
+            ToastFactory.show("Delete Complete");
+            var k = getkey(key);
+            if (k !== null)
+            {
+                delete HomeFactory.data[k.key01][k.key02];
+
+                if (!checkOK(HomeFactory.data[k.key01]))
+                    self.listUn[k.key01] = false;
+            }
+
+        });
+
+    }
 
 
 });
-myApp.controller('DialogController', function ($scope, $mdDialog, data, isAdd, HomeFactory, ToastFactory, $timeout) {
+myApp.controller('DialogController',
+        function ($scope, $mdDialog, HomeFactory, $timeout,
+                data, isAdd, isArray, key) {
+
+            $scope.isAdd = isAdd;
+            $scope.isArray = isArray;
+            $scope.uploading = false;
+            $scope.medUp = [];
+            if (isAdd)
+
+            {
+                $scope.dialogData = {};
+
+            } else
+            {
+                if (!checkOK(data))
+                {
+                    if (isArray)
+                        data = [{}];
+                    else
+                        data = {};
+                }
+                $scope.dialogData = angular.copy(data);
+            }
 
 
-    $scope.isAdd = isAdd;
-    $scope.uploading = false;
-    if (isAdd)
-    {
-        $scope.dialogData = {};
-    } else
-        $scope.dialogData = angular.copy(data);
-    $scope.hide = function () {
-        $mdDialog.hide();
-    };
-    $scope.cancel = function () {
-        $mdDialog.cancel();
-    };
-    $scope.check = function (test) {
-        return angular.isUndefined(test);
-    };
-    $scope.onOK = function (dataReturn) {
+            $scope.hide = function () {
+                $mdDialog.hide();
+            };
+            $scope.cancel = function () {
+                $mdDialog.cancel();
+            };
+            $scope.check = function (test) {
+                return angular.isUndefined(test);
+            };
+            $scope.delete = function () {
+                $scope.onOK(null);
+            }
+            $scope.onOK = function (dataReturn) {
+                var result = {};
+                result.isAdd = isAdd;
+                result.key = key;
 
-        if (isAdd)
-        {
-            data.$add(dataReturn);
-        } else
-            angular.copy(dataReturn, data);
+                if (isAdd) {
+                    result.data = angular.copy(dataReturn);
 
-        HomeFactory.updateOverview(data).then(function () {
-            $mdDialog.hide(data);
-            ToastFactory.show("Save Complete");
+                } else {
+                    //  overview
+                    //  overview/-KJMFl4emRsXCrfBECyM
+                    data = angular.copy(dataReturn);
+
+                    var k = key.split('/');
+                    console.log(key);
+                    console.log(k);
+
+                    if (k.length == 1)
+                        HomeFactory.data[k[0]] = dataReturn;
+                    if (k.length == 2)
+                        HomeFactory.data[k[0]][k[1]] = dataReturn;
+                    if (k.length == 4)
+                        HomeFactory.data[k[0]][k[1]][k[2]][k[3]] = dataReturn;
+                    console.log(HomeFactory.data.experience);
+
+
+                    result.data = data;
+
+
+                }
+                $mdDialog.hide(result);
+            };
+
+            $scope.setFile = function (element, data, isLoadAtt, key) {
+                $timeout(function () {
+                    $scope.uploading = true;
+                    $scope[isLoadAtt] = true;
+                }, 1);
+                $scope.currentFile = element.files[0];
+                var result = HomeFactory.uploadImage($scope.currentFile, key);
+                result.then(function (url) {
+                    $scope.uploading = false;
+                    $scope[isLoadAtt] = false;
+                    $scope.dialogData[data] = url;
+                });
+            };
+            $scope.uploadClick = function (id) {
+                var el = document.getElementById(id);
+                el.click();
+            };
+            $scope.init = function (index) {
+                var g = {isload: false, id: 'id' + index};
+                $scope.medUp.push(g)
+                console.log($scope.medUp);
+            }
+
+
         });
 
-    };
-
-    $scope.setFile = function (element) {
-
-        $timeout(function () {
-            $scope.uploading = true;
-        }, 1);
-
-        $scope.currentFile = element.files[0];
-
-        var result = HomeFactory.uploadImage($scope.currentFile);
-        result.then(function (url) {
-
-            $timeout(function () {
-                $scope.uploading = false;
-                $scope.dialogData.img = url;
-            }, 1);
-        });
-    };
-    $scope.uploadClick = function () {
-        var el = document.getElementById('upload');
-        el.click();
-
-
-    };
-
-
-});
-
-function  showDialog(ev, title, msg, $mdDialog)
-{
+function  showDialog(ev, title, msg, $mdDialog) {
     $mdDialog.show(
             $mdDialog.alert()
             .clickOutsideToClose(true)
@@ -125,7 +267,27 @@ function  showDialog(ev, title, msg, $mdDialog)
             );
 }
 
+function checkOK(value) {
 
+    var is = !angular.isUndefined(value) && value !== null;
+    if (is)
+    {
+        if (angular.isArray(value))
+        {
+            if (value.length > 0)
+                return true;
+            else
+                return false;
+        } else {
+            if (angular.equals({}, value))
+                return false
+        }
+
+
+        return true;
+    }
+    return false;
+}
 
 
 
@@ -144,6 +306,14 @@ function getName(name) {
     return name;
 
 }
-function checkUn(value) {
-    return angular.isUndefined(value);
+
+function getkey(key) {
+    var result = {};
+    var i = key.indexOf('/');
+    if (i > 0) {
+        result.key01 = key.substring(0, i);
+        result.key02 = key.substring(i + 1, key.length);
+        return result;
+    } else
+        return null;
 }
