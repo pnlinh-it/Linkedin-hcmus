@@ -10,30 +10,6 @@ myApp.controller('homeCtl', function ($q, $scope, $mdDialog, HomeFactory, ToastF
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     self.isAuther = true;
     self.data = HomeFactory.data;
     self.showAvatar = true;
@@ -97,7 +73,7 @@ myApp.controller('homeCtl', function ($q, $scope, $mdDialog, HomeFactory, ToastF
 
     });
 
-    
+
 
 
 

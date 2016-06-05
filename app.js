@@ -51,7 +51,19 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
         }).when('/user/:id', {
             templateUrl: 'view/home/home.html',
             controller: 'userCtl',
-            controllerAs: 'homeCtl'
+            controllerAs: 'homeCtl',
+            resolve: {
+                "friendState": function (HomeFactory, $q, $route) {
+                    var defer = $q.defer();
+                    HomeFactory.getUser().then(function () {
+                        HomeFactory.checkFriend($route.current.params.id)
+                                .then(function (result) {
+                                    defer.resolve(result);
+                                })
+                    });
+                    return defer.promise;
+                }
+            }
         }).otherwise({redirectTo: '/'});
 
     }]);
@@ -73,9 +85,6 @@ app.directive('editHover', function () {
             isauther: '='
         },
         link: function (scope, element) {
-            console.log(scope.isauther);
-
-
             var child = angular.element(element[0].querySelector('.non-visible'));
             if (scope.isauther) {
                 element.on('mouseenter', function () {
@@ -103,24 +112,18 @@ app.directive('uploadfile', function () {
 });
 
 
-app.controller('Ctrl', function ($q, $timeout, AuthFactory, HomeFactory, $window) {
+app.controller('Ctrl', function ($scope, $q, $timeout, AuthFactory, HomeFactory, $window, ToastFactory) {
     var vm = this;
     vm.showSearch = false;
     vm.toggleSearch = function () {
         vm.showSearch = !vm.showSearch;
     }
-
-
     vm.simulateQuery = false;
     vm.isDisabled = false;
-
-
     vm.querySearch = querySearch;
     vm.selectedItemChange = selectedItemChange;
     vm.searchTextChange = searchTextChange;
-
     function querySearch(query) {
-        console.log(query);
         return HomeFactory.searchUser(query).then(function (result) {
             var data = [];
             var ids = Object.keys(result);
@@ -128,6 +131,8 @@ app.controller('Ctrl', function ($q, $timeout, AuthFactory, HomeFactory, $window
                 var item = {};
                 item.id = id;
                 item.data = result[id].overview;
+                item.letter = getName(item.data.name).trim();
+                item.isImg = checkImgOK(item.data.img);
                 data.push(item);
             })
             return data;
@@ -139,33 +144,8 @@ app.controller('Ctrl', function ($q, $timeout, AuthFactory, HomeFactory, $window
     }
 
     function selectedItemChange(item) {
-        
+
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -208,6 +188,17 @@ app.controller('Ctrl', function ($q, $timeout, AuthFactory, HomeFactory, $window
     });
 
 
+    $scope.$on('friendChange', function (event, data) {
+        ToastFactory.show("You and " + data.name + " now are friend");
 
+    });
 
 });
+
+function checkImgOK(value) {
+    console.log(value);
+    if (checkOK(value) && value.length > 1)
+        return true;
+    return false;
+}
+

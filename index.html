@@ -49,7 +49,6 @@
                         <span flex="5"></span>
 
                         <md-autocomplete  flex
-
                                           md-no-cache="true"
                                           md-selected-item="vm.selectedItem"
                                           md-search-text-change="vm.searchTextChange(vm.searchText)"
@@ -61,20 +60,25 @@
                                           placeholder="Pick an Angular repository"
                                           md-menu-class="autocomplete-custom-template">
                             <md-item-template>
-                                    <a href="#/user/{{item.id}}">
+                                <a href="#/user/{{item.id}}">
                                     <div layout="row">
-                                        <img class="autocomplete-rsult-img" ng-src="{{item.data.img}}">
+                                        <div ng-show="item.isImg"> <img class="autocomplete-rsult-img" ng-src="{{item.data.img}}"></div>
+                                        <div ng-show="!item.isImg" class="autocomplete-rsult-img"   style="margin-right: 10px">
+                                            <ng-letter-avatar  dynamic="true"  fontSize="20"  shape="round" data="{{item.letter}}" charCount="2" >                        
+                                            </ng-letter-avatar>
+                                        </div>
+
                                         <div layout ="column"layout-align="center start">
-                                            <span style="line-height: 25px"><strong>{{item.data.name}}</strong></span>
-                                            <span style="line-height: 25px">{{item.data.email}}</span>
-                                            
-                                            
+                                            <span style="line-height: 25px;display: block;"><strong>{{item.data.name}}</strong></span>
+                                            <span style="line-height: 25px;display: block;">{{item.data.email}}</span>
+
+
                                         </div>
 
                                     </div>
 
 
-                                    </a>
+                                </a>
                             </md-item-template>
                         </md-autocomplete>
                     </div>

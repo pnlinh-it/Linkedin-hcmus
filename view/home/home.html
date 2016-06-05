@@ -35,14 +35,35 @@
 
 
             </div>
-            <div class="main-fab">
-                <md-button ng-click="homeCtl.test()" class="md-fab md-primary md-hue-2">
-                    <md-tooltip>
-                        Add Friend
-                    </md-tooltip>
-                    <md-icon class="material-icons">&#xE7FE;</md-icon>
+            <div ng-if="!homeCtl.isAuther" class="main-fab">
+                <md-menu  md-offset="0 30">
+                    <md-button ng-click="$mdOpenMenu()"  class="md-fab md-primary md-hue-2">
+                        <md-tooltip>Add Friend</md-tooltip>
+                        <md-icon id="friendic" class="material-icons">{{homeCtl.addFriIcon}}</md-icon>
+                    </md-button>
+                    <md-menu-content>
+                        <md-menu-item ng-show="homeCtl.friendState===2"  >
+                            <md-button ng-click="homeCtl.friendHandle(3)">Confirm Request</md-button>
+                        </md-menu-item>
+                        <md-menu-item ng-if="homeCtl.friendState===2" >
+                            <md-button ng-click="homeCtl.friendHandle(null)">Delete Request</md-button>
+                        </md-menu-item>
+                        <md-menu-item ng-if="homeCtl.friendState===0" >
+                            <md-button ng-click="homeCtl.friendHandle(1)" >Add Friend</md-button>
+                        </md-menu-item>
+                        <md-menu-item ng-if="homeCtl.friendState===3" >
+                            <md-button ng-click="homeCtl.friendHandle(null)">Unfriend</md-button>
+                        </md-menu-item>
+                         <md-menu-item ng-if="homeCtl.friendState===1" >
+                            <md-button ng-click="homeCtl.friendHandle(null)">Cancel Request</md-button>
+                        </md-menu-item>
 
-                </md-button>
+                        <md-menu-divider></md-menu-divider>
+                        <md-menu-item>
+                            <md-button>Close</md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
             </div>
             <div class="main-info-UR" >
                 <md-button class="md-icon-button" aria-label="More">

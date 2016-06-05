@@ -14,9 +14,98 @@ angular.module('myApp').factory('HomeFactory', ['CONFIG', '$q', '$rootScope', fu
         var database = firebase.database();
         var storage = firebase.storage();
         var curUser = {};
-        auth.onAuthStateChanged(function (user) {
-            curUser = user;
-        });
+
+
+
+        HomeFactory.getUser = function () {
+            console.log('start get user');
+            var defer = $q.defer();
+            auth.onAuthStateChanged(function (user) {
+                curUser = user;
+                console.log('get user OK');
+                HomeFactory.uid = user.uid;
+                database.ref('friends/' + curUser.uid).on('child_changed', function (result) {
+                    HomeFactory.getDataById(result.key, 'overview').then(function (data) {
+                        data.uid = result.key;
+                        $rootScope.$broadcast('friendChange', data);
+                    })
+                });
+                database.ref('friends/' + curUser.uid).on('child_added', function (result) {
+                   console.log('add');
+                    $rootScope.$broadcast('friendAdd', result);
+                });
+                database.ref('friends/' + curUser.uid).on('child_removed', function (result) {
+                    $rootScope.$broadcast('friendRemove', result);
+                });
+                defer.resolve();
+            });
+            return defer.promise;
+        }
+
+
+
+
+//        HomeFactory.getFriend=function (){
+//            console.log(curUser.uid);
+//            var defer = $q.defer();
+//              database.ref('friends/' + curUser.uid).on('child_changed', function (data){
+//                  console.log(data);
+//              });
+//            return defer.promise;
+//        }
+
+
+        HomeFactory.checkFriend = function (friId) {
+            //0 not friend
+            //1 wait
+            //2 rep
+            //3 friend 
+            var defer = $q.defer();
+            var myFriends = {};
+            var state = 0;
+
+            if (curUser)
+            {
+                database.ref('friends/' + curUser.uid).once('value').then(function (snapshot) {
+                    myFriends = snapshot.val();
+                    if (!angular.isUndefined(myFriends) && myFriends !== null) {
+                        var ids = Object.keys(myFriends);
+                        angular.forEach(ids, function (id) {
+                            if (id.localeCompare(friId) === 0) {
+                                state = myFriends[id];
+                            }
+                        })
+                    }
+                    defer.resolve(state);
+                });
+            }
+            return defer.promise;
+        }
+
+        //null remove, decline request
+        //3 become friend
+        //1 send request
+        HomeFactory.friendHandle = function (id, friId) {
+            var defer = $q.defer();
+            if (curUser)
+            {
+                var me = {};
+                me[friId] = id;
+                var friend = {};
+                friend[curUser.uid] = id;
+
+                var updates = {};
+                updates['/friends/' + curUser.uid + '/' + friId] = id;
+                updates['friends/' + friId + '/' + curUser.uid] = id;
+                if (id !== null && id === 1)
+                    updates['friends/' + friId + '/' + curUser.uid] = 2;
+                database.ref().update(updates);
+            } else
+                defer.reject();
+            return defer.promise;
+        }
+
+
         HomeFactory.searchUser = function (searchString) {
 
             searchString = latinize(searchString).toLowerCase();
@@ -32,17 +121,14 @@ angular.module('myApp').factory('HomeFactory', ['CONFIG', '$q', '$rootScope', fu
                         angular.forEach(results, function (data) {
 
                             angular.forEach(data.val(), function (key, value) {
-                              
+
                                 user[value] = key;
                             })
 
                         });
-                      
-
-
                         var userIds = Object.keys(user);
                         angular.forEach(userIds, function (id) {
-                          
+
                             var name = user[id].overview._search_index.full_name;
                             var reversedName = user[id].overview._search_index.reversed_full_name;
                             if (!name.startsWith(searchString) && !reversedName.startsWith(searchString)) {
