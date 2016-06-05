@@ -1,22 +1,44 @@
 var myApp = angular.module('myApp');
-myApp.controller('homeCtl', function ($scope, $mdDialog, HomeFactory, ToastFactory, $timeout) {
+myApp.controller('homeCtl', function ($q, $scope, $mdDialog, HomeFactory, ToastFactory, $timeout, FacebookFactory) {
 
 
 
 
 
-    console.log("start page");
+
     var self = this;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    self.isAuther = true;
     self.data = HomeFactory.data;
-
-
-
-    self.showAvatar = false;
+    self.showAvatar = true;
     self.name = 's';
     self.showLine = "";
-
-
     self.listUn = {
         'summary': false,
         'experience': false,
@@ -25,17 +47,15 @@ myApp.controller('homeCtl', function ($scope, $mdDialog, HomeFactory, ToastFacto
         'education': false,
         'volunteer': false
     };
-
     HomeFactory.getData('overview').then(function (result)
     {
         self.data.overview = result;
-        if (self.checkUn(self.data.overview.img))
-            self.showAvatar = true;
+        if (!checkOK(self.data.overview.img) || self.data.overview.img.trim().length < 1)
+            self.showAvatar = false;
         if (!self.checkUn(self.data.overview.place) && !self.checkUn(self.data.overview.phone))
             self.showLine = "|";
         self.name = getName(self.data.overview.name).trim();
     });
-
     HomeFactory.getData('summary').then(function (result) {
 
         if (checkOK(result)) {
@@ -43,7 +63,6 @@ myApp.controller('homeCtl', function ($scope, $mdDialog, HomeFactory, ToastFacto
             self.listUn.summary = true;
         }
     });
-
     HomeFactory.getData('experience').then(function (result) {
 
         if (checkOK(result)) {
@@ -70,12 +89,17 @@ myApp.controller('homeCtl', function ($scope, $mdDialog, HomeFactory, ToastFacto
             self.listUn.education = true;
         }
     });
-     HomeFactory.getData('volunteer').then(function (result) {
+    HomeFactory.getData('volunteer').then(function (result) {
         if (checkOK(result)) {
             self.data.volunteer = result;
             self.listUn.volunteer = true;
         }
+
     });
+
+    
+
+
 
 //    $scope.$on('eventFired', function (event, data) {
 //
@@ -91,10 +115,7 @@ myApp.controller('homeCtl', function ($scope, $mdDialog, HomeFactory, ToastFacto
 //        }
 //
 //    });
-
-
-
-    console.log("after getData ");
+    console.log(FacebookFactory.token);
     self.checkUn = function (value) {
         return angular.isUndefined(value);
     }
@@ -122,7 +143,6 @@ myApp.controller('homeCtl', function ($scope, $mdDialog, HomeFactory, ToastFacto
             var data = result.data;
             var key = result.key;
             var isAdd = result.isAdd;
-
             if (isAdd) {
                 HomeFactory.addData(data, key).then(function (newKey) {
 
@@ -140,12 +160,39 @@ myApp.controller('homeCtl', function ($scope, $mdDialog, HomeFactory, ToastFacto
                         }
 
                     } else
+                    {
+
                         HomeFactory.data[key][newKey] = data;
+                    }
                     ToastFactory.show("Add Complete");
-
-
                 });
             } else {
+                console.log(key);
+                if (key.localeCompare('overview') === 0) {
+                    console.log(key);
+                    if (checkOK(self.data.overview.img) && self.data.overview.img.trim().length > 1)
+                        self.showAvatar = true;
+                    else
+                        self.showAvatar = false;
+                    if (checkOK(self.data.overview.name))
+                        self.name = getName(self.data.overview.name).trim();
+                    var searchFullName = data.name.toLowerCase();
+                    var searchReversedFullName = searchFullName.split(' ').reverse().join(' ');
+                    try {
+                        searchFullName = latinize(searchFullName);
+                        searchReversedFullName = latinize(searchReversedFullName);
+                    } catch (e) {
+                        console.error(e);
+                    }
+                    data._search_index = {
+                        full_name: searchFullName,
+                        reversed_full_name: searchReversedFullName
+                    };
+
+                }
+
+
+
 
                 HomeFactory.updateOverview(data, key).then(function () {
                     ToastFactory.show("Save Complete");
@@ -156,10 +203,9 @@ myApp.controller('homeCtl', function ($scope, $mdDialog, HomeFactory, ToastFacto
             else
                 self.listUn[key] = false;
         }, function () {
-            console.log(self.data.experience);
+
         });
     };
-
     self.deleteData = function (key) {
         HomeFactory.deleteData(key).then(function () {
             ToastFactory.show("Delete Complete");
@@ -167,13 +213,11 @@ myApp.controller('homeCtl', function ($scope, $mdDialog, HomeFactory, ToastFacto
             if (k !== null)
             {
                 delete HomeFactory.data[k.key01][k.key02];
-
                 if (!checkOK(HomeFactory.data[k.key01]))
                     self.listUn[k.key01] = false;
             }
 
         });
-
     }
 
 
@@ -190,7 +234,6 @@ myApp.controller('DialogController',
 
             {
                 $scope.dialogData = {};
-
             } else
             {
                 if (!checkOK(data))
@@ -220,35 +263,24 @@ myApp.controller('DialogController',
                 var result = {};
                 result.isAdd = isAdd;
                 result.key = key;
-
                 if (isAdd) {
                     result.data = angular.copy(dataReturn);
-
                 } else {
                     //  overview
                     //  overview/-KJMFl4emRsXCrfBECyM
+
                     data = angular.copy(dataReturn);
-
                     var k = key.split('/');
-                    console.log(key);
-                    console.log(k);
-
                     if (k.length == 1)
                         HomeFactory.data[k[0]] = dataReturn;
                     if (k.length == 2)
                         HomeFactory.data[k[0]][k[1]] = dataReturn;
                     if (k.length == 4)
                         HomeFactory.data[k[0]][k[1]][k[2]][k[3]] = dataReturn;
-                    console.log(HomeFactory.data.experience);
-
-
                     result.data = data;
-
-
                 }
                 $mdDialog.hide(result);
             };
-
             $scope.setFile = function (element, data, isLoadAtt, key) {
                 $timeout(function () {
                     $scope.uploading = true;
@@ -269,12 +301,11 @@ myApp.controller('DialogController',
             $scope.init = function (index) {
                 var g = {isload: false, id: 'id' + index};
                 $scope.medUp.push(g)
-                console.log($scope.medUp);
+
             }
 
 
         });
-
 function  showDialog(ev, title, msg, $mdDialog) {
     $mdDialog.show(
             $mdDialog.alert()
@@ -315,16 +346,13 @@ function getName(name) {
     if (!name)
         return "";
     var i = name.lastIndexOf(' ');
-
     if (i > 0)
     {
         var i2 = name.lastIndexOf(' ', i - 1);
-
         if (i2 > 0)
             return name.substring(i2, name.length);
     }
     return name;
-
 }
 
 function getkey(key) {

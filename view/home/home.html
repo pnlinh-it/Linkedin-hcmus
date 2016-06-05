@@ -4,33 +4,32 @@
 
         <div class="profile-card ">
             <div class="profile-picture ">
-                <div ng-if="!homeCtl.showAvatar" class="circle-img">
+                <div ng-show="homeCtl.showAvatar" class="circle-img">
                     <img  ng-src=" {{homeCtl.data.overview.img}}">                    
                 </div>
-                <div ng-if="homeCtl.showAvatar">
+                <div ng-hide="homeCtl.showAvatar">
                     <ng-letter-avatar dynamic="true"  fontSize="60"  shape="round" data="{{homeCtl.name}}" height="152" charCount="2" width="152">                        
                     </ng-letter-avatar>
                 </div>
             </div>
             <div class="profile-overview ">
                 <div id="name-container">
-                    <h1 edit-hover="visible">{{homeCtl.data.overview.name}} 
-                        <i ng-click="homeCtl.showEdit($event, 'overview.html', homeCtl.data.overview, false, false, 'overview')" class="material-icons non-visible">
+                    <h1 edit-hover="visible" isauther="homeCtl.isAuther" >{{homeCtl.data.overview.name}} 
+                        <i   ng-click="homeCtl.showEdit($event, 'overview.html', homeCtl.data.overview, false, false, 'overview')"  class="material-icons non-visible">
                             mode_edit  
                             <md-tooltip>Edit Overview</md-tooltip>
                         </i>
+
                     </h1>
 
                 </div>
 
-                <h2>{{homeCtl.data.overview.email}}</h2>
-                <h2>{{homeCtl.data.overview.job}}</h2>
+
+                <h2 >{{homeCtl.data.overview.job}}</h2>
                 <h3>{{homeCtl.data.overview.school}}</h3>
-                <div layout="row">
-                    <h3>{{homeCtl.data.overview.place}} </h3>
-                    <h3>&nbsp;&nbsp;{{homeCtl.showLine}}&nbsp;&nbsp;</h3>
-                    <h3>{{ homeCtl.data.overview.phone}}</h3>
-                </div>
+                <h3>{{homeCtl.data.overview.place}} </h3>
+                <h3>{{ homeCtl.data.overview.phone}}</h3>
+                <!--                <h3>&nbsp;&nbsp;{{homeCtl.showLine}}&nbsp;&nbsp;</h3>-->
 
 
 
@@ -70,12 +69,12 @@
                         <md-menu-item>
                             <md-button ng-click="homeCtl.showEdit($event, 'education.html', homeCtl.data.education, true, true, 'education')" ui-sref='settings'>Add Education</md-button>
                         </md-menu-item>
-                         <md-menu-item>
+                        <md-menu-item>
                             <md-button ng-click="homeCtl.showEdit($event, 'volunteer.html', homeCtl.data.volunteer, false, true, 'volunteer')" ui-sref='settings'>Add Volunteer</md-button>
                         </md-menu-item>
                         <md-menu-divider></md-menu-divider>
                         <md-menu-item>
-                            <md-button >Close</md-button>
+                            <md-button>Close</md-button>
                         </md-menu-item>
                     </md-menu-content>
                 </md-menu>
@@ -96,7 +95,7 @@
                         <div ng-show="homeCtl.listUn.summary" class="bg-item">
                             <div id="bg-summary">
                                 <div class="bg-item-header" >
-                                    <h1 edit-hover="visible">Summary
+                                    <h1 isauther="homeCtl.isAuther" edit-hover="visible">Summary
                                         <div class="non-visible">
                                             <i ng-click="homeCtl.showEdit($event, 'summary.html', homeCtl.data.summary, false, true, 'summary')"  class="material-icons md-24">
                                                 mode_edit
@@ -117,7 +116,7 @@
                         <div ng-show="homeCtl.listUn.experience" class="bg-item">
                             <div id="bg-experience">
                                 <div class="bg-item-header">
-                                    <h1 edit-hover="visible">Experience 
+                                    <h1 isauther="homeCtl.isAuther" edit-hover="visible">Experience 
                                         <i ng-click="homeCtl.showEdit($event, 'experience.html', homeCtl.data.experience, true, true, 'experience')" class="material-icons md-24 non-visible">
                                             add
                                             <md-tooltip>Add New Experience</md-tooltip>
@@ -129,7 +128,7 @@
                                     <div class="bg-item-body-container" ng-repeat="(key, item) in homeCtl.data.experience" >
                                         <div class="bg-item-body-header">
                                             <div>
-                                                <h2 class="upper"  edit-hover="visible">{{item.job}} 
+                                                <h2 class="upper"  edit-hover="visible" isauther="homeCtl.isAuther">{{item.job}} 
                                                     <div class="non-visible">
                                                         <i ng-click="homeCtl.showEdit($event, 'experience.html', item, false, false, 'experience/' + key)"  class="material-icons  md-18">
                                                             mode_edit
@@ -178,7 +177,7 @@
                         <div ng-show="homeCtl.listUn.project"  class="bg-item">
                             <div id="bg-project">
                                 <div class="bg-item-header">
-                                    <h1 edit-hover="visible">Project
+                                    <h1 edit-hover="visible" isauther="homeCtl.isAuther">Project
 
                                         <i ng-click="homeCtl.showEdit($event, 'project.html', homeCtl.data.project, true, true, 'project')" class="material-icons md-24 non-visible">
                                             add
@@ -192,7 +191,7 @@
                                     <div class="bg-item-body-container"  ng-repeat="(key, item) in homeCtl.data.project">
                                         <div class="bg-item-body-header ">
                                             <div >
-                                                <h2  edit-hover="visible">{{item.name}} 
+                                                <h2  edit-hover="visible" isauther="homeCtl.isAuther">{{item.name}} 
                                                     <div class="non-visible">
                                                         <i ng-click="homeCtl.showEdit($event, 'project.html', item, false, false, 'project/' + key)"  class="material-icons  md-18">
                                                             mode_edit
@@ -245,7 +244,7 @@
                         <div ng-show="homeCtl.listUn.skill" class="bg-item">
                             <div id="bg-skill" >
                                 <div class="bg-item-header" >
-                                    <h1 edit-hover="visible">Skill
+                                    <h1 edit-hover="visible" isauther="homeCtl.isAuther">Skill
                                         <div class="non-visible">
                                             <i ng-click="homeCtl.showEdit($event, 'skill.html', homeCtl.data.skill, false, true, 'skill')"  class="material-icons md-24">
                                                 mode_edit
@@ -274,7 +273,7 @@
                         <div class="bg-item" ng-show="homeCtl.listUn.education">
                             <div id="bg-education">
                                 <div class="bg-item-header">
-                                    <h1 edit-hover="visible">Education
+                                    <h1 edit-hover="visible" isauther="homeCtl.isAuther">Education
 
                                         <i ng-click="homeCtl.showEdit($event, 'education.html', homeCtl.data.education, true, true, 'education')" class="material-icons md-24 non-visible">
                                             add
@@ -288,7 +287,7 @@
                                     <div class="bg-item-body-container" >
                                         <div class="bg-item-body-header ">
                                             <div >
-                                                <h2  edit-hover="visible">
+                                                <h2  edit-hover="visible" isauther="homeCtl.isAuther">
                                                     {{item.name}}
                                                     <div class="non-visible">
                                                         <i ng-click="homeCtl.showEdit($event, 'education.html', item, false, false, 'education/' + key)"  class="material-icons  md-18">
@@ -317,7 +316,7 @@
                         <div ng-show="homeCtl.listUn.volunteer"  class="bg-item">
                             <div id="bg-volunteer">
                                 <div class="bg-item-header" >
-                                    <h1 edit-hover="visible">Volunteer
+                                    <h1 edit-hover="visible" isauther="homeCtl.isAuther">Volunteer
                                         <div class="non-visible">
                                             <i ng-click="homeCtl.showEdit($event, 'volunteer.html', homeCtl.data.volunteer, false, true, 'volunteer')"  class="material-icons md-24">
                                                 mode_edit

@@ -4,6 +4,9 @@ angular.module('myApp').factory('AuthFactory', ['CONFIG', '$q', function (CONFIG
         firebase.initializeApp(CONFIG);
         var auth = firebase.auth();
         var database = firebase.database();
+        AuthFactory.getAuth = function () {
+            return auth;
+        }
         AuthFactory.addNewUser = function (fullname) {
             var defer = $q.defer();
             var unsubscribe = auth.onAuthStateChanged(function (user) {
@@ -12,11 +15,25 @@ angular.module('myApp').factory('AuthFactory', ['CONFIG', '$q', function (CONFIG
                 {
                     if (fullname == null)
                         fullname = user.displayName;
+                    var searchFullName = fullname.toLowerCase();
+                    var searchReversedFullName = searchFullName.split(' ').reverse().join(' ');
+                    try {
+                        searchFullName = latinize(searchFullName);
+                        searchReversedFullName = latinize(searchReversedFullName);
+                    } catch (e) {
+                        console.error(e);
+                    }
+
                     var userSave = {
                         name: fullname,
                         img: user.photoURL,
-                        email: user.email
+                        email: user.email,
+                        _search_index: {
+                            full_name: searchFullName,
+                            reversed_full_name: searchReversedFullName
+                        }
                     }
+                    console.log(userSave);
                     database.ref('users/' + user.uid + '/overview').set(userSave);
                     console.log('Set new data: ' + userSave);
                     defer.resolve();
@@ -104,25 +121,32 @@ angular.module('myApp').factory('AuthFactory', ['CONFIG', '$q', function (CONFIG
         AuthFactory.loginWithPopup = function (pro) {
             var defer = $q.defer();
             var provider = {};
-            console.log(pro);
+
             if (pro.localeCompare("fb") == 0)
+            {
                 provider = new firebase.auth.FacebookAuthProvider();
-            else
+                provider.addScope('user_birthday');
+                provider.addScope('user_friends');
+            } else
                 provider = new firebase.auth.GithubAuthProvider();
             firebase.auth().signInWithPopup(provider).then(function (user) {
-                console.log(provider);
+
                 auth.fetchProvidersForEmail(user.user.email).then(function (providers) {
                     database.ref('users/' + user.user.uid + '/overview').once('value').then(function (snapshot) {
-                        console.log("Start check uid exist");
+
                         if (snapshot.val() == null) {
-                            console.log("Uid not exist. Start save");
+
                             AuthFactory.addNewUser(null).then(function () {
+
                                 defer.resolve(user);
+
                                 return defer.promise;
                             });
                         } else {
+
+
                             defer.resolve(user);
-                            console.log("Uid exist");
+
                         }
                     });
                 });

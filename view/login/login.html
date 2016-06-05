@@ -23,7 +23,10 @@
                     <md-input-container class="md-icon-float md-block">
                         <label>Password</label>
                         <md-icon class="material-icons">https</md-icon>
-                        <input ng-keyup="$event.keyCode == 13 && loginCtl.login($event)"  name="name" ng-model="loginCtl.loginPassword" type="password" required>
+                        <input ng-keyup="$event.keyCode == 13 && loginCtl.login($event)"  name="name222"  minlength="6" ng-model="loginCtl.loginPassword" type="password" required>
+                        <div ng-messages="formLogin.name222.$error" role="alert">
+                            <div ng-message="minlength">Password must be at least 6 characters</div>
+                        </div>
 
                     </md-input-container>
                     <div layout="row" layout-align="center center" >
@@ -62,12 +65,17 @@
 
                     <div style="margin: 0 0 10px 0"  layout="row" flex="30" flex-xs="100" layout-align="center stretch"  >
                         <div flex="0"  flex-xs="20" ></div>
-                        <div ng-click="" layout="row" flex="100"  flex-xs="60" id="btn-google" class="btn-social" >
+                        <div style="cursor:pointer" layout="row" flex="100"  flex-xs="60" id="btn-google" class="btn-social" >
                             <i class="btn-social-icon"></i>
                             <div layout="row"layout-align="start center" ><span>&nbsp;&nbsp;&nbsp;&nbsp;Google</span></div>
                         </div>
                         <div flex="0" flex-xs="20" ></div>
                     </div>
+
+
+                  
+
+
                 </div>
 
             </div>
@@ -88,7 +96,7 @@
                         <md-icon class="material-icons">person</md-icon>
                         <input   name="fullname" ng-model="loginCtl.fullname" minlength="4"  required>
                         <div ng-messages="Form.fullname.$error" role="alert">
-                            <div ng-message="minlength">That's too short!</div>
+                            <div ng-message="minlength">Fullname must be at least 4 characters</div>
                         </div>
                     </md-input-container>
 
@@ -106,8 +114,8 @@
                         <label>Password</label>
                         <md-icon class="material-icons">https</md-icon>
                         <input  name="pass" ng-model="loginCtl.password" type="password" minlength="6"   required>
-                          <div ng-messages="Form.pass.$error" role="alert">
-                            <div ng-message="minlength">That's too short!</div>
+                        <div ng-messages="Form.pass.$error" role="alert">
+                            <div ng-message="minlength">Password must be at least 6 characters</div>
                         </div>
                     </md-input-container>
 
@@ -117,7 +125,7 @@
                         <input ng-keyup="$event.keyCode == 13 && loginCtl.signUp($event)"  name="repass" ng-model="loginCtl.rePassword" type="password" minlength="6"   required>
                         <div ng-messages="Form.repass.$error" role="alert">
                             <div ng-hide="loginCtl.passMatch">Password does not match</div>
-                            <div ng-message="minlength">That's too short!</div>
+                            <div ng-message="minlength">Password must be at least 6 characters</div>
                         </div>
 
 

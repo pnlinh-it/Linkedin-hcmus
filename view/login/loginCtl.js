@@ -1,8 +1,9 @@
-angular.module('myApp').controller('loginCtl', ['$mdDialog', 'AuthFactory', '$window', function ($mdDialog, AuthFactory, $window) {
+angular.module('myApp').controller('loginCtl', ['$scope', '$mdDialog', 'AuthFactory', '$window', 'FacebookFactory', function ($scope, $mdDialog, AuthFactory, $window, FacebookFactory) {
 
         var self = this;
         self.showSignIn = true;
         self.passMatch = true;
+        self.data = {};
 
 
 
@@ -39,40 +40,45 @@ angular.module('myApp').controller('loginCtl', ['$mdDialog', 'AuthFactory', '$wi
 
 
         self.signUp = function (ev) {
-
-            if (self.password.localeCompare(self.rePassword) != 0)
+            if (self.password.localeCompare(self.rePassword) !== 0)
                 self.passMatch = false;
             else
             {
-                self.passMatch = true;
-                var result = AuthFactory.signup(self.fullname, self.email, self.password);
-                result.then(function (userData) {
-                    $window.location.href = "#/#";
-                }).catch(function (error) {
-                    showDialog(ev, 'Error', error.toString(), $mdDialog);
-                    console.log(error);
-                });
+                if ($scope.Form.$valid) {
+                    self.passMatch = true;
+                    var result = AuthFactory.signup(self.fullname, self.email, self.password);
+                    result.then(function (userData) {
+                        $window.location.href = "#/#";
+                    }).catch(function (error) {
+                        showDialog(ev, 'Error', error.toString(), $mdDialog);
+                        console.log(error);
+                    });
+                }
+
             }
         };
 
 
         self.login = function (ev) {
-            var result = AuthFactory.login(self.loginEmail, self.loginPassword);
-            console.log(result);
-            result.then(function (authData) {
-                $window.location.href = "#/#";
-            }).catch(function (error) {
-                console.log(error);
-                showDialog(ev, 'Error', error.toString(), $mdDialog);
-            });
+            if ($scope.formLogin.$valid) {
+                var result = AuthFactory.login(self.loginEmail, self.loginPassword);
+                console.log(result);
+                result.then(function (authData) {
+                    $window.location.href = "#/#";
+                }).catch(function (error) {
+                    console.log(error);
+                    showDialog(ev, 'Error', error.toString(), $mdDialog);
+                });
+            }
         };
+
 
 
 
         self.loginWithFacbook = function (ev) {
             var result = AuthFactory.loginWithPopup("fb");
             result.then(function (result) {
-                console.log("Login Successed");
+                FacebookFactory.token = result.credential.accessToken;
                 $window.location.href = "#/#";
             }).catch(function (error) {
                 showDialog(ev, 'Error', error.toString(), $mdDialog);

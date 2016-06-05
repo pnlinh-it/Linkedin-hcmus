@@ -112,10 +112,12 @@ h1,h2,h3,span{
 .clear{
     clear: both;
 }
-a {
+a, a:hover {
     text-decoration: none !important;
     border: none; 
+    color: black;
 }
+
 
 
 .main-nav h1 {
@@ -171,6 +173,97 @@ a {
     padding: 0 15px 0 15px;
     font-size: 14px;
 }
+
+
+ .autocomplete-custom-template li {
+  border-bottom: 1px solid #ccc;
+  height: auto;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  white-space: normal; }
+
+ .autocomplete-custom-template li:last-child {
+  border-bottom-width: 0; }
+
+ .autocomplete-custom-template .item-title,
+ .autocomplete-custom-template .item-metadata {
+  display: block;
+  line-height: 2; }
+
+ .autocomplete-custom-template .item-title md-icon {
+  height: 18px;
+  width: 18px; }
+ .autocomplete-rsult-img {
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+    height: 56px;
+    margin: 10px;
+    width: 56px;
+}
+
+
+
+
+.main-nav-menu-content{
+    height: 88px;
+    margin: 0;
+    padding: 0;
+}
+
+.c5e-account-chooser-box {
+    margin: 0;
+    background: white;
+    height: 88px;
+    max-width: 350px;
+    min-width: 100px;
+    padding-right: 18px;
+}
+.c5e-account-chooser-box img {
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+    height: 56px;
+    margin: 16px;
+    width: 56px;
+}
+.c5e-account-chooser-email {
+    color: rgba(0,0,0,0.87);
+    font-size: 14px;
+    line-height: 16px;
+    margin-top: 24px;
+    max-width: 217px;
+    min-width: 106px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.c5e-account-chooser-signout {
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: .53px;
+    line-height: 16px;
+    margin-top: 12px;
+    max-width: 217px;
+    min-width: 106px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.c5e-account-chooser-signout a {
+    color: #039be5;
+    text-decoration: none;
+}
+
+.animate-show {
+  transition: 0.75s ease-out opacity;
+  opacity: 1;
+}
+.animate-show.ng-hide {
+  height: 0;
+  min-height: 0;
+  opacity: 0;
+  overflow: hidden;
+}
+
 
 
 @media handheld and (max-width: 480px), screen and (max-device-width: 480px), screen and (max-width: 800px){
@@ -305,6 +398,7 @@ a {
 @media handheld and (max-width: 480px), screen and (max-device-width: 480px), screen and (max-width: 800px){
     .profile-card{
         display: block;
+        padding-top: 1px;
     }
 
     .profile-overview{
@@ -614,3 +708,5 @@ md-toast {
     -o-border-radius: 25px;
     border-radius: 80px;
 }
+
+
