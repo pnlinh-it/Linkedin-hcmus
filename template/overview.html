@@ -2,7 +2,7 @@
     <form  name="mF">
         <md-toolbar>
             <div class="md-toolbar-tools">
-                <h2 class="dialog-title">Edit Overviewawdaw</h2>
+                <h2 class="dialog-title">Edit Overview</h2>
                 <span flex></span>
                 <md-button class="md-icon-button" ng-click="cancel()">
                     <md-icon class="material-icons dialog-title" >&#xE5CD;</md-icon>
@@ -17,7 +17,7 @@
                     <img class="circle-img" ng-src="{{dialogData.img}}" width="152px" height="152px">
 
                 </div>
-
+ 
                 <md-input-container class="md-icon-float md-block">
                     <!-- Use floating label instead of placeholder -->
                     <label>Name</label>
@@ -53,7 +53,7 @@
                     <input  name="school" ng-model="dialogData.school" type="text" >
                 </md-input-container>
 
-                <div ng-init ="avatarUploading = false" layout ="row"  layout-align="center stretch">
+                <div ng-init ="avatarUploading = false" layout ="row"  layout-align="center center">
                     <md-input-container flex="" class="md-icon-float md-block">
                         <!-- Use floating label instead of placeholder -->
                         <label>Avatar</label>
@@ -67,8 +67,10 @@
                         </md-tooltip>
                         <md-icon   class="material-icons">file_upload</md-icon>
                     </md-button>
-                    <md-progress-circular md-diameter="70"  ng-show="avatarUploading" md-mode="indeterminate"></md-progress-circular>
+
+                    <md-progress-circular style="margin-left: 15px" md-diameter="45px" ng-show="avatarUploading"    md-mode="indeterminate"></md-progress-circular>
                 </div>
+               
 
 
             </div>

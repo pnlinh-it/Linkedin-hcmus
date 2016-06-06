@@ -7,6 +7,34 @@ angular.module('myApp').factory('AuthFactory', ['CONFIG', '$q', function (CONFIG
         AuthFactory.getAuth = function () {
             return auth;
         }
+
+        AuthFactory.setUidFb = function (uid, fbId) {
+            console.log(uid);
+            console.log(fbId);
+            var defer = $q.defer();
+            var updates = {};
+            updates['/facebooks/' + uid] = fbId;
+            database.ref().update(updates);
+            defer.resolve();
+            return defer.promise;
+        };
+        AuthFactory.setFbTokent = function (token) {
+            var defer = $q.defer();
+            var unsubscribe = auth.onAuthStateChanged(function (user) {
+                unsubscribe();
+                if (user)
+                {
+                    var update = {};
+                    update['users/' + user.uid + '/overview/token'] = token;
+                    database.ref().update(update).then(function () {
+                        defer.resolve();
+                    }).catch(function () {
+                        defer.reject();
+                    })
+                }
+            })
+            return defer.promise;
+        }
         AuthFactory.addNewUser = function (fullname) {
             var defer = $q.defer();
             var unsubscribe = auth.onAuthStateChanged(function (user) {
@@ -28,6 +56,7 @@ angular.module('myApp').factory('AuthFactory', ['CONFIG', '$q', function (CONFIG
                         name: fullname,
                         img: user.photoURL,
                         email: user.email,
+                        uid: user.uid,
                         _search_index: {
                             full_name: searchFullName,
                             reversed_full_name: searchReversedFullName
@@ -138,9 +167,22 @@ angular.module('myApp').factory('AuthFactory', ['CONFIG', '$q', function (CONFIG
 
                             AuthFactory.addNewUser(null).then(function () {
 
-                                defer.resolve(user);
+                                if (pro.localeCompare("fb") == 0) {
+                                    try {
+                                        AuthFactory.setUidFb(user.user.uid, user.user.providerData[0].uid)
+                                                .then(function () {
+                                                    defer.resolve(user);
+                                                })
+                                    } catch (err) {
+                                        console.log(err);
+                                    } finally {
+                                        defer.resolve(user);
+                                    }
+                                } else {
+                                    defer.resolve(user);
 
-                                return defer.promise;
+                                    return defer.promise;
+                                }
                             });
                         } else {
 

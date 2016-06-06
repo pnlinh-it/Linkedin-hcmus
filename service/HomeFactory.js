@@ -1,4 +1,4 @@
-angular.module('myApp').factory('HomeFactory', ['CONFIG', '$q', '$rootScope', function (CONFIG, $q, $rootScope) {
+angular.module('myApp').factory('HomeFactory', ['CONFIG', '$q', '$rootScope', '$http', function (CONFIG, $q, $rootScope, $http) {
 
 
         var HomeFactory = {};
@@ -17,6 +17,7 @@ angular.module('myApp').factory('HomeFactory', ['CONFIG', '$q', '$rootScope', fu
 
 
 
+
         HomeFactory.getUser = function () {
             console.log('start get user');
             var defer = $q.defer();
@@ -28,11 +29,20 @@ angular.module('myApp').factory('HomeFactory', ['CONFIG', '$q', '$rootScope', fu
                     HomeFactory.getDataById(result.key, 'overview').then(function (data) {
                         data.uid = result.key;
                         $rootScope.$broadcast('friendChange', data);
-                    })
+                    });
                 });
                 database.ref('friends/' + curUser.uid).on('child_added', function (result) {
-                   console.log('add');
-                    $rootScope.$broadcast('friendAdd', result);
+                    var data = {};
+                    data.uid = result.key;
+                    data.value = result.val();
+                    if (data.value == 2) {
+                        HomeFactory.getDataById(data.uid, 'overview').then(function (rs) {
+                            data.name = rs.name;
+                            $rootScope.$broadcast('friendAdd', data);
+                        });
+                    } else
+                        $rootScope.$broadcast('friendAdd', data);
+
                 });
                 database.ref('friends/' + curUser.uid).on('child_removed', function (result) {
                     $rootScope.$broadcast('friendRemove', result);
@@ -41,6 +51,61 @@ angular.module('myApp').factory('HomeFactory', ['CONFIG', '$q', '$rootScope', fu
             });
             return defer.promise;
         }
+
+        HomeFactory.getFbFriend = function () {
+            var defer = $q.defer();
+            if (curUser) {
+                HomeFactory.getData('overview').then(function (result) {
+
+                    var token = result.token;
+                    var endpoint = "https://graph.facebook.com/me/friends?access_token=";
+                    var dataResult = [];
+                    endpoint += token;
+                    $http.get(endpoint)
+                            .then(function (result) {
+                                if (result !== null) {
+                                    var fbFriend = result.data.data;
+                                    var allFbUser = {};
+                                    // console.log('friend', fbFriend);
+                                    database.ref('/facebooks').once('value').then(function (snapshot) {
+                                        allFbUser = snapshot.val();
+                                        if (allFbUser !== null) {
+                                            var ids = Object.keys(allFbUser);
+                                            angular.forEach(ids, function (id, index) {
+                                                angular.forEach(fbFriend, function (friend, index2) {
+                                                    if (allFbUser[id].localeCompare(friend.id) === 0)
+                                                        dataResult.push(id);
+                                                    if (index === ids.length - 1 && index2 === fbFriend.length - 1)
+                                                        defer.resolve(dataResult);
+                                                })
+                                            })
+                                        } else
+                                            defer.reject(null);
+                                    })
+                                } else
+                                    defer.reject(null);
+
+                            })
+                            .catch(function (error) {
+                                console.log(error);
+                            });
+                })
+            } else
+                defer.reject(null);
+            return defer.promise;
+        }
+
+        HomeFactory.getListUserFromUid = function (listUser) {
+            var promises = [];
+            angular.forEach(listUser, function (userId) {
+                var promise = HomeFactory.getDataById(userId, 'overview');
+                promises.push(promise);
+            })
+            return $q.all(promises).then(function (data) {
+                return data;
+            })
+        }
+
 
 
 
@@ -89,11 +154,6 @@ angular.module('myApp').factory('HomeFactory', ['CONFIG', '$q', '$rootScope', fu
             var defer = $q.defer();
             if (curUser)
             {
-                var me = {};
-                me[friId] = id;
-                var friend = {};
-                friend[curUser.uid] = id;
-
                 var updates = {};
                 updates['/friends/' + curUser.uid + '/' + friId] = id;
                 updates['friends/' + friId + '/' + curUser.uid] = id;

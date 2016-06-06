@@ -1,5 +1,5 @@
 var myApp = angular.module('myApp');
-myApp.controller('homeCtl', function ($q, $scope, $mdDialog, HomeFactory, ToastFactory, $timeout, FacebookFactory) {
+myApp.controller('homeCtl', function ($q, $scope, $mdDialog, HomeFactory, ToastFactory, $timeout, FacebookFactory, $location) {
 
 
 
@@ -9,12 +9,13 @@ myApp.controller('homeCtl', function ($q, $scope, $mdDialog, HomeFactory, ToastF
     var self = this;
 
 
-
+    self.canKnow = [];
     self.isAuther = true;
     self.data = HomeFactory.data;
     self.showAvatar = true;
     self.name = 's';
     self.showLine = "";
+    self.colsize = '8';
     self.listUn = {
         'summary': false,
         'experience': false,
@@ -31,7 +32,25 @@ myApp.controller('homeCtl', function ($q, $scope, $mdDialog, HomeFactory, ToastF
         if (!self.checkUn(self.data.overview.place) && !self.checkUn(self.data.overview.phone))
             self.showLine = "|";
         self.name = getName(self.data.overview.name).trim();
+
+        HomeFactory.getFbFriend().then(function (result) {
+            HomeFactory.getListUserFromUid(result).then(function (data) {
+                if (data !== null) {
+                    angular.forEach(data, function (user) {
+                        user.letter = getName(user.name).trim();
+                        user.isImg = checkImgOK(user.img);
+                        self.canKnow.push(user);
+                    })
+
+                }
+            });
+        })
     });
+    self.gotoFriend = function (id) {
+        var s = '/user/' + id.trim();
+        $location.url(s);
+    }
+
     HomeFactory.getData('summary').then(function (result) {
 
         if (checkOK(result)) {

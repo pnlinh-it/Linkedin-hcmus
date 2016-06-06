@@ -3,13 +3,14 @@ angular.module('myApp').controller('userCtl', function ($routeParams, HomeFactor
 
 
     console.log(friendState);
-
+    console.log('start ctl');
     var vm = this;
     vm.id = $routeParams.id;
     vm.showAvatar = true;
     vm.name = "L";
     vm.isAuther = false;
     vm.friendState = friendState;
+  vm.colsize = '12';
 
     vm.addFriIcon = "person_add";
     vm.test = true;
@@ -51,14 +52,14 @@ angular.module('myApp').controller('userCtl', function ($routeParams, HomeFactor
             document.getElementById('friendic').innerHTML = 'check';
         }
     });
-     $scope.$on('friendAdd', function (event, data) {
-         
-        if (data.key === vm.id) {
-            vm.friendState = data.val();
+    $scope.$on('friendAdd', function (event, data) {
+
+        if (data.uid === vm.id) {
+            vm.friendState = data.value;
             document.getElementById('friendic').innerHTML = 'more_horiz';
         }
     });
-    
+
     $scope.$on('friendRemove', function (event, data) {
         if (data.key === vm.id) {
             vm.friendState = 0;

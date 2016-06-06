@@ -31,11 +31,19 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
             controller: 'homeCtl',
             controllerAs: 'homeCtl',
             resolve: {
-                "check": ["AuthFactory", function (AuthFactory) {
-                        return AuthFactory.requireAuth();
-                    }]
-
-
+                "check": function (AuthFactory, $q, HomeFactory) {
+                    var defer = $q.defer();
+                    AuthFactory.requireAuth()
+                            .then(function () {
+                                HomeFactory.getUser().then(function () {
+                                    defer.resolve();
+                                });
+                            })
+                            .catch(function (result) {
+                                defer.reject(result);
+                            });
+                    return defer.promise;
+                }
             }
         }).when('/login', {
             templateUrl: 'view/login/login.html',
@@ -55,12 +63,10 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
             resolve: {
                 "friendState": function (HomeFactory, $q, $route) {
                     var defer = $q.defer();
-                    HomeFactory.getUser().then(function () {
-                        HomeFactory.checkFriend($route.current.params.id)
-                                .then(function (result) {
-                                    defer.resolve(result);
-                                })
-                    });
+                    HomeFactory.checkFriend($route.current.params.id)
+                            .then(function (result) {
+                                defer.resolve(result);
+                            });
                     return defer.promise;
                 }
             }
@@ -113,6 +119,8 @@ app.directive('uploadfile', function () {
 
 
 app.controller('Ctrl', function ($scope, $q, $timeout, AuthFactory, HomeFactory, $window, ToastFactory) {
+
+
     var vm = this;
     vm.showSearch = false;
     vm.toggleSearch = function () {
@@ -190,6 +198,15 @@ app.controller('Ctrl', function ($scope, $q, $timeout, AuthFactory, HomeFactory,
 
     $scope.$on('friendChange', function (event, data) {
         ToastFactory.show("You and " + data.name + " now are friend");
+
+    });
+    $scope.$on('friendAdd', function (event, data) {
+        if (data.value == 2)
+        {
+            console.log('change');
+            var content = data.name + " send you a request";
+            ToastFactory.showCustom(content, data.uid);
+        }
 
     });
 

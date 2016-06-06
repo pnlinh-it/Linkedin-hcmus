@@ -17,7 +17,7 @@
                     <img  ng-src="{{dialogData.img}}"  height="200px">
 
                 </div>
-                <div ng-init="mediaUp = false"   layout="row">
+                <div ng-init="mediaUp = false"    layout="row"  layout-align="center center">
                     <md-input-container flex="" class="md-icon-float md-block ">
                         <label>Caption</label>
                         <md-icon class="material-icons">&#xE8F8;</md-icon>
@@ -32,14 +32,14 @@
 
 
                     <input id="mediaup" onchange="angular.element(this).scope().setFile(this, 'img', 'mediaUp', 'experience')" type="file" class="ng-hide">
-                    <md-button ng-hide="mediaUp" style="margin-top: 20px;"  
+                    <md-button ng-hide="mediaUp" 
                                ng-click="uploadClick('mediaup')"  class="md-fab md-primary md-hue-2" >
                         <md-tooltip>
                             Upload Image
                         </md-tooltip>
                         <md-icon  class="material-icons">file_upload</md-icon>
                     </md-button>
-                    <md-progress-circular md-diameter="70" ng-show="mediaUp"   md-mode="indeterminate"></md-progress-circular>
+                    <md-progress-circular  md-diameter="45px" ng-show="mediaUp"    md-mode="indeterminate"></md-progress-circular>
 
                 </div>
 

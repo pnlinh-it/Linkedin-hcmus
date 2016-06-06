@@ -1,4 +1,4 @@
-<div class="col-md-8"   >
+<div class="col-md-{{homeCtl.colsize}}">
 
     <div class="profile" >
 
@@ -42,19 +42,19 @@
                         <md-icon id="friendic" class="material-icons">{{homeCtl.addFriIcon}}</md-icon>
                     </md-button>
                     <md-menu-content>
-                        <md-menu-item ng-show="homeCtl.friendState===2"  >
+                        <md-menu-item ng-show="homeCtl.friendState === 2"  >
                             <md-button ng-click="homeCtl.friendHandle(3)">Confirm Request</md-button>
                         </md-menu-item>
-                        <md-menu-item ng-if="homeCtl.friendState===2" >
+                        <md-menu-item ng-if="homeCtl.friendState === 2" >
                             <md-button ng-click="homeCtl.friendHandle(null)">Delete Request</md-button>
                         </md-menu-item>
-                        <md-menu-item ng-if="homeCtl.friendState===0" >
+                        <md-menu-item ng-if="homeCtl.friendState === 0" >
                             <md-button ng-click="homeCtl.friendHandle(1)" >Add Friend</md-button>
                         </md-menu-item>
-                        <md-menu-item ng-if="homeCtl.friendState===3" >
+                        <md-menu-item ng-if="homeCtl.friendState === 3" >
                             <md-button ng-click="homeCtl.friendHandle(null)">Unfriend</md-button>
                         </md-menu-item>
-                         <md-menu-item ng-if="homeCtl.friendState===1" >
+                        <md-menu-item ng-if="homeCtl.friendState === 1" >
                             <md-button ng-click="homeCtl.friendHandle(null)">Cancel Request</md-button>
                         </md-menu-item>
 
@@ -404,18 +404,20 @@
         </div>
     </div>
 </div>
-<div class="col-md-4" >
+<div ng-if="homeCtl.isAuther" class="col-md-4" >
 
     <md-card>
         <md-card-title>
-            <span class="right-card-head">People also viewed</span>
+            <span class="right-card-head">May be you know</span>
         </md-card-title>
         <md-card-content>
             <md-list >
-                <md-list-item class="md-3-line" ng-repeat="item in myCvCtl.cvData.alsoList" ng-click="null">
-                    <img ng-src="{{item.img}}" class="md-avatar">
+                <md-list-item class="md-3-line" ng-repeat="item in homeCtl.canKnow" ng-click="homeCtl.gotoFriend(item.uid)">
+                    <img ng-if="item.isImg" ng-src="{{item.img}}" class="md-avatar">
+                    <div ng-if="!item.isImg" style="margin-right: 10px;" ><ng-letter-avatar  dynamic="true"  fontSize="15"  shape="round" data="{{item.letter}}" charCount="1" >                        
+                        </ng-letter-avatar></div>
                     <div class="md-list-item-text" layout="column">
-                        <h3>{{item.name}}</h3>
+                        <h3><strong>{{item.name}}</strong></h3>
                         <h4>{{item.job}}</h4>
                     </div>
                     <md-divider md-inset ng-if="!$last"></md-divider>

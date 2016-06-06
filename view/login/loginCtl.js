@@ -78,8 +78,17 @@ angular.module('myApp').controller('loginCtl', ['$scope', '$mdDialog', 'AuthFact
         self.loginWithFacbook = function (ev) {
             var result = AuthFactory.loginWithPopup("fb");
             result.then(function (result) {
-                FacebookFactory.token = result.credential.accessToken;
-                $window.location.href = "#/#";
+                try {
+                    AuthFactory.setFbTokent(result.credential.accessToken)
+                            .then(function () {
+                                $window.location.href = "#/#";
+                            })
+                            .catch(function () {
+                                $window.location.href = "#/#";
+                            })
+                } catch (err) {
+                    console.log(err);
+                }
             }).catch(function (error) {
                 showDialog(ev, 'Error', error.toString(), $mdDialog);
             });

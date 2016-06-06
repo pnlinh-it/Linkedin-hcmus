@@ -1,8 +1,8 @@
-<md-dialog flex="60" aria-label="Edit Overview"  >
+<md-dialog flex="60" aria-label="Edit Education"  >
     <form  name="mF">
         <md-toolbar>
             <div class="md-toolbar-tools">
-                <h2 class="dialog-title">Edit Overview</h2>
+                <h2 class="dialog-title">Education</h2>
                 <span flex></span>
                 <md-button class="md-icon-button" ng-click="cancel()">
                     <md-icon class="material-icons dialog-title" >&#xE5CD;</md-icon>
@@ -39,7 +39,7 @@
                
 
                 
-                 <div layout="row" layout-align="center stretch" ng-init="educationUpload = false">
+                 <div layout="row" layout-align="center center" ng-init="educationUpload = false">
 
                     <md-input-container flex="" class="md-icon-float md-block ">
                         <label>Logo</label>
@@ -49,13 +49,13 @@
                     <img class="dialog-logo" ng-src="{{dialogData.img}}" width="60px" height="60px">
 
                     <input id="uploadEdu" onchange="angular.element(this).scope().setFile(this, 'img', 'educationUpload', 'education')" type="file" class="ng-hide">
-                    <md-button style="margin-top: 20px;" ng-hide="educationUpload"  ng-click="uploadClick('uploadEdu')"  class="md-fab md-primary md-hue-2" >
+                    <md-button  ng-hide="educationUpload"  ng-click="uploadClick('uploadEdu')"  class="md-fab md-primary md-hue-2" >
                         <md-tooltip>
                             Upload Image
                         </md-tooltip>
                         <md-icon  class="material-icons">file_upload</md-icon>
                     </md-button>
-                    <md-progress-circular md-diameter="70"  ng-show="educationUpload" md-mode="indeterminate"></md-progress-circular>
+                    <md-progress-circular md-diameter="45px"  ng-show="educationUpload" md-mode="indeterminate"></md-progress-circular>
 
                 </div>
                 

@@ -36,7 +36,7 @@
                 </div>
                 <!--                LOGO            -->
 
-                <div layout="row" layout-align="center stretch" ng-init="logoUploading = false">
+                <div layout="row" layout-align="center center" ng-init="logoUploading = false">
 
                     
                     
@@ -48,13 +48,13 @@
                     <img class="dialog-logo" ng-src="{{dialogData.logo}}" width="60px" height="60px">
 
                     <input id="upload" onchange="angular.element(this).scope().setFile(this, 'logo', 'logoUploading', 'experience')" type="file" class="ng-hide">
-                    <md-button style="margin-top: 20px;" ng-hide="logoUploading"  ng-click="uploadClick('upload')"  class="md-fab md-primary md-hue-2" >
+                    <md-button  ng-hide="logoUploading"  ng-click="uploadClick('upload')"  class="md-fab md-primary md-hue-2" >
                         <md-tooltip>
                             Upload Image
                         </md-tooltip>
                         <md-icon  class="material-icons">file_upload</md-icon>
                     </md-button>
-                    <md-progress-circular md-diameter="70"  ng-show="logoUploading" md-mode="indeterminate"></md-progress-circular>
+                    <md-progress-circular md-diameter="45px"  ng-show="logoUploading" md-mode="indeterminate"></md-progress-circular>
 
                 </div>
 
