@@ -70,6 +70,10 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
                     return defer.promise;
                 }
             }
+        }).when('/message', {
+            templateUrl: 'view/message/message.html',
+            controller: 'msgCtl',
+            controllerAs: 'msgCtl'
         }).otherwise({redirectTo: '/'});
 
     }]);
@@ -77,7 +81,6 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
 app.run(['$rootScope', '$location', function ($rootScope, $location) {
         $rootScope.$on('$routeChangeError', function (event, next, previous, error) {
             if (error === "AUTH_REQUIRED") {
-                console.log("Error in Auth");
                 $location.path("/login");
             }
         });
@@ -146,13 +149,9 @@ app.controller('Ctrl', function ($scope, $q, $timeout, AuthFactory, HomeFactory,
             return data;
         });
     }
-
     function searchTextChange(text) {
-
     }
-
     function selectedItemChange(item) {
-
     }
 
 
@@ -165,28 +164,18 @@ app.controller('Ctrl', function ($scope, $q, $timeout, AuthFactory, HomeFactory,
     vm.name = "";
     vm.auth.onAuthStateChanged(function (user) {
         if (user) {
-
             vm.isLogin = true;
             vm.database.ref('users/' + user.uid + '/overview').on('value', function (snapshot) {
                 var data = snapshot.val();
-
-
-
                 $timeout(function () {
-
                     vm.email = data.email;
                     vm.img = data.img;
-
                     if (angular.isUndefined(vm.img) || vm.img.trim().length < 1)
                         vm.showAvatar = false;
                     else
                         vm.showAvatar = true;
-
-
                     vm.name = getName(data.name).trim();
                 }, 2);
-
-
             });
         } else
         {
@@ -197,13 +186,12 @@ app.controller('Ctrl', function ($scope, $q, $timeout, AuthFactory, HomeFactory,
 
 
     $scope.$on('friendChange', function (event, data) {
-        ToastFactory.show("You and " + data.name + " now are friend");
-
+        console.log(data);
+        ToastFactory.showCustom("You and " + data.name + " now are friend", data.uid);
     });
     $scope.$on('friendAdd', function (event, data) {
-        if (data.value == 2)
+        if (data.value === 2)
         {
-            console.log('change');
             var content = data.name + " send you a request";
             ToastFactory.showCustom(content, data.uid);
         }

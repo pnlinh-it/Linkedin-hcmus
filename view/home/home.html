@@ -1,429 +1,431 @@
-<div class="col-md-{{homeCtl.colsize}}">
+<div class="container-fluid center-block">
+    <div class="col-md-{{homeCtl.colsize}}">
 
-    <div class="profile" >
+        <div class="profile" >
 
-        <div class="profile-card ">
-            <div class="profile-picture ">
-                <div ng-show="homeCtl.showAvatar" class="circle-img">
-                    <img  ng-src=" {{homeCtl.data.overview.img}}">                    
+            <div class="profile-card ">
+                <div class="profile-picture ">
+                    <div ng-show="homeCtl.showAvatar" class="circle-img">
+                        <img  ng-src=" {{homeCtl.data.overview.img}}">                    
+                    </div>
+                    <div ng-hide="homeCtl.showAvatar">
+                        <ng-letter-avatar dynamic="true"  fontSize="60"  shape="round" data="{{homeCtl.name}}" height="152" charCount="2" width="152">                        
+                        </ng-letter-avatar>
+                    </div>
                 </div>
-                <div ng-hide="homeCtl.showAvatar">
-                    <ng-letter-avatar dynamic="true"  fontSize="60"  shape="round" data="{{homeCtl.name}}" height="152" charCount="2" width="152">                        
-                    </ng-letter-avatar>
+                <div class="profile-overview ">
+                    <div id="name-container">
+                        <h1 edit-hover="visible" isauther="homeCtl.isAuther" >{{homeCtl.data.overview.name}} 
+                            <i   ng-click="homeCtl.showEdit($event, 'overview.html', homeCtl.data.overview, false, false, 'overview')"  class="material-icons non-visible">
+                                mode_edit  
+                                <md-tooltip>Edit Overview</md-tooltip>
+                            </i>
+
+                        </h1>
+
+                    </div>
+
+
+                    <h2 >{{homeCtl.data.overview.job}}</h2>
+                    <h3>{{homeCtl.data.overview.school}}</h3>
+                    <h3>{{homeCtl.data.overview.place}} </h3>
+                    <h3>{{ homeCtl.data.overview.phone}}</h3>
+                    <!--                <h3>&nbsp;&nbsp;{{homeCtl.showLine}}&nbsp;&nbsp;</h3>-->
+
+
+
+
                 </div>
-            </div>
-            <div class="profile-overview ">
-                <div id="name-container">
-                    <h1 edit-hover="visible" isauther="homeCtl.isAuther" >{{homeCtl.data.overview.name}} 
-                        <i   ng-click="homeCtl.showEdit($event, 'overview.html', homeCtl.data.overview, false, false, 'overview')"  class="material-icons non-visible">
-                            mode_edit  
-                            <md-tooltip>Edit Overview</md-tooltip>
-                        </i>
+                <div ng-if="!homeCtl.isAuther" class="main-fab">
+                    <md-menu  md-offset="0 30">
+                        <md-button ng-click="$mdOpenMenu()"  class="md-fab md-primary md-hue-2">
+                            <md-tooltip>Add Friend</md-tooltip>
+                            <md-icon id="friendic" class="material-icons">{{homeCtl.addFriIcon}}</md-icon>
+                        </md-button>
+                        <md-menu-content>
+                            <md-menu-item ng-show="homeCtl.friendState === 2"  >
+                                <md-button ng-click="homeCtl.friendHandle(3)">Confirm Request</md-button>
+                            </md-menu-item>
+                            <md-menu-item ng-if="homeCtl.friendState === 2" >
+                                <md-button ng-click="homeCtl.friendHandle(null)">Delete Request</md-button>
+                            </md-menu-item>
+                            <md-menu-item ng-if="homeCtl.friendState === 0" >
+                                <md-button ng-click="homeCtl.friendHandle(1)" >Add Friend</md-button>
+                            </md-menu-item>
+                            <md-menu-item ng-if="homeCtl.friendState === 3" >
+                                <md-button ng-click="homeCtl.friendHandle(null)">Unfriend</md-button>
+                            </md-menu-item>
+                            <md-menu-item ng-if="homeCtl.friendState === 1" >
+                                <md-button ng-click="homeCtl.friendHandle(null)">Cancel Request</md-button>
+                            </md-menu-item>
 
-                    </h1>
-
+                            <md-menu-divider></md-menu-divider>
+                            <md-menu-item>
+                                <md-button>Close</md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
                 </div>
+                <div class="main-info-UR" >
+                    <md-button class="md-icon-button" aria-label="More">
 
-
-                <h2 >{{homeCtl.data.overview.job}}</h2>
-                <h3>{{homeCtl.data.overview.school}}</h3>
-                <h3>{{homeCtl.data.overview.place}} </h3>
-                <h3>{{ homeCtl.data.overview.phone}}</h3>
-                <!--                <h3>&nbsp;&nbsp;{{homeCtl.showLine}}&nbsp;&nbsp;</h3>-->
-
-
-
-
-            </div>
-            <div ng-if="!homeCtl.isAuther" class="main-fab">
-                <md-menu  md-offset="0 30">
-                    <md-button ng-click="$mdOpenMenu()"  class="md-fab md-primary md-hue-2">
-                        <md-tooltip>Add Friend</md-tooltip>
-                        <md-icon id="friendic" class="material-icons">{{homeCtl.addFriIcon}}</md-icon>
+                        <md-icon class="material-icons " ng-class="md - 24">&#xE0BE;</md-icon>
                     </md-button>
-                    <md-menu-content>
-                        <md-menu-item ng-show="homeCtl.friendState === 2"  >
-                            <md-button ng-click="homeCtl.friendHandle(3)">Confirm Request</md-button>
-                        </md-menu-item>
-                        <md-menu-item ng-if="homeCtl.friendState === 2" >
-                            <md-button ng-click="homeCtl.friendHandle(null)">Delete Request</md-button>
-                        </md-menu-item>
-                        <md-menu-item ng-if="homeCtl.friendState === 0" >
-                            <md-button ng-click="homeCtl.friendHandle(1)" >Add Friend</md-button>
-                        </md-menu-item>
-                        <md-menu-item ng-if="homeCtl.friendState === 3" >
-                            <md-button ng-click="homeCtl.friendHandle(null)">Unfriend</md-button>
-                        </md-menu-item>
-                        <md-menu-item ng-if="homeCtl.friendState === 1" >
-                            <md-button ng-click="homeCtl.friendHandle(null)">Cancel Request</md-button>
-                        </md-menu-item>
-
-                        <md-menu-divider></md-menu-divider>
-                        <md-menu-item>
-                            <md-button>Close</md-button>
-                        </md-menu-item>
-                    </md-menu-content>
-                </md-menu>
+                    <md-menu ng-if="homeCtl.isAuther">
+                        <md-button  class="md-icon-button" ng-click="$mdOpenMenu()" aria-label="More">
+                            <md-icon class="material-icons " ng-class="md - 24">&#xE5D4;</md-icon>
+                        </md-button>
+                        <md-menu-content  >
+                            <md-menu-item>
+                                <md-button ng-click="homeCtl.showEdit($event, 'summary.html', homeCtl.data.summary, false, true, 'summary')" ui-sref='settings'>Add Summary</md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button ng-click="homeCtl.showEdit($event, 'experience.html', homeCtl.data.experience, true, true, 'experience')" ui-sref='settings'>Add Experience</md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button ng-click="homeCtl.showEdit($event, 'project.html', homeCtl.data.project, true, true, 'project')" ui-sref='settings'>Add Project</md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button ng-click="homeCtl.showEdit($event, 'skill.html', homeCtl.data.project, false, true, 'skill')" ui-sref='settings'>Add Skill</md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button ng-click="homeCtl.showEdit($event, 'education.html', homeCtl.data.education, true, true, 'education')" ui-sref='settings'>Add Education</md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button ng-click="homeCtl.showEdit($event, 'volunteer.html', homeCtl.data.volunteer, false, true, 'volunteer')" ui-sref='settings'>Add Volunteer</md-button>
+                            </md-menu-item>
+                            <md-menu-divider></md-menu-divider>
+                            <md-menu-item>
+                                <md-button>Close</md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+                </div>
+                <div class="main-info-LR" >
+                    <span>{{myCvCtl.cvData.info.follower}}</span><div>followers</div>
+                </div>
             </div>
-            <div class="main-info-UR" >
-                <md-button class="md-icon-button" aria-label="More">
 
-                    <md-icon class="material-icons " ng-class="md - 24">&#xE0BE;</md-icon>
-                </md-button>
-                <md-menu>
-                    <md-button class="md-icon-button" ng-click="$mdOpenMenu()" aria-label="More">
-                        <md-icon class="material-icons " ng-class="md - 24">&#xE5D4;</md-icon>
-                    </md-button>
-                    <md-menu-content>
-                        <md-menu-item>
-                            <md-button ng-click="homeCtl.showEdit($event, 'summary.html', homeCtl.data.summary, false, true, 'summary')" ui-sref='settings'>Add Summary</md-button>
-                        </md-menu-item>
-                        <md-menu-item>
-                            <md-button ng-click="homeCtl.showEdit($event, 'experience.html', homeCtl.data.experience, true, true, 'experience')" ui-sref='settings'>Add Experience</md-button>
-                        </md-menu-item>
-                        <md-menu-item>
-                            <md-button ng-click="homeCtl.showEdit($event, 'project.html', homeCtl.data.project, true, true, 'project')" ui-sref='settings'>Add Project</md-button>
-                        </md-menu-item>
-                        <md-menu-item>
-                            <md-button ng-click="homeCtl.showEdit($event, 'skill.html', homeCtl.data.project, false, true, 'skill')" ui-sref='settings'>Add Skill</md-button>
-                        </md-menu-item>
-                        <md-menu-item>
-                            <md-button ng-click="homeCtl.showEdit($event, 'education.html', homeCtl.data.education, true, true, 'education')" ui-sref='settings'>Add Education</md-button>
-                        </md-menu-item>
-                        <md-menu-item>
-                            <md-button ng-click="homeCtl.showEdit($event, 'volunteer.html', homeCtl.data.volunteer, false, true, 'volunteer')" ui-sref='settings'>Add Volunteer</md-button>
-                        </md-menu-item>
-                        <md-menu-divider></md-menu-divider>
-                        <md-menu-item>
-                            <md-button>Close</md-button>
-                        </md-menu-item>
-                    </md-menu-content>
-                </md-menu>
-            </div>
-            <div class="main-info-LR" >
-                <span>{{myCvCtl.cvData.info.follower}}</span><div>followers</div>
-            </div>
-        </div>
+            <md-divider ng-if="!$last"></md-divider>
 
-        <md-divider ng-if="!$last"></md-divider>
-
-        <div class="tab-container">
-            <md-tabs md-dynamic-height md-border-bottom >
-                <md-tab  label="Background">
-                    <md-content  class="md-padding">
+            <div class="tab-container">
+                <md-tabs md-dynamic-height md-border-bottom >
+                    <md-tab  label="Background">
+                        <md-content  class="md-padding">
 
 
-                        <div ng-show="homeCtl.listUn.summary" class="bg-item">
-                            <div id="bg-summary">
-                                <div class="bg-item-header" >
-                                    <h1 isauther="homeCtl.isAuther" edit-hover="visible">Summary
-                                        <div class="non-visible">
-                                            <i ng-click="homeCtl.showEdit($event, 'summary.html', homeCtl.data.summary, false, true, 'summary')"  class="material-icons md-24">
-                                                mode_edit
-                                                <md-tooltip>Edit Summary</md-tooltip>
-                                            </i>
-                                        </div>
-                                    </h1>
-                                </div>
-                                <div class="bg-item-body">
+                            <div ng-show="homeCtl.listUn.summary" class="bg-item">
+                                <div id="bg-summary">
+                                    <div class="bg-item-header" >
+                                        <h1 isauther="homeCtl.isAuther" edit-hover="visible">Summary
+                                            <div class="non-visible">
+                                                <i ng-click="homeCtl.showEdit($event, 'summary.html', homeCtl.data.summary, false, true, 'summary')"  class="material-icons md-24">
+                                                    mode_edit
+                                                    <md-tooltip>Edit Summary</md-tooltip>
+                                                </i>
+                                            </div>
+                                        </h1>
+                                    </div>
+                                    <div class="bg-item-body">
 
-                                    <p ng-repeat="item in homeCtl.data.summary">{{item.text}}</p>
-                                    <md-divider ng-if="!$last"></md-divider>
+                                        <p ng-repeat="item in homeCtl.data.summary">{{item.text}}</p>
+                                        <md-divider ng-if="!$last"></md-divider>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!--    Experience   -->
-                        <div ng-show="homeCtl.listUn.experience" class="bg-item">
-                            <div id="bg-experience">
-                                <div class="bg-item-header">
-                                    <h1 isauther="homeCtl.isAuther" edit-hover="visible">Experience 
-                                        <i ng-click="homeCtl.showEdit($event, 'experience.html', homeCtl.data.experience, true, true, 'experience')" class="material-icons md-24 non-visible">
-                                            add
-                                            <md-tooltip>Add New Experience</md-tooltip>
-                                        </i>
-                                    </h1>
-                                </div>
-                                <div class="bg-item-body clear" >
+                            <!--    Experience   -->
+                            <div ng-show="homeCtl.listUn.experience" class="bg-item">
+                                <div id="bg-experience">
+                                    <div class="bg-item-header">
+                                        <h1 isauther="homeCtl.isAuther" edit-hover="visible">Experience 
+                                            <i ng-click="homeCtl.showEdit($event, 'experience.html', homeCtl.data.experience, true, true, 'experience')" class="material-icons md-24 non-visible">
+                                                add
+                                                <md-tooltip>Add New Experience</md-tooltip>
+                                            </i>
+                                        </h1>
+                                    </div>
+                                    <div class="bg-item-body clear" >
 
-                                    <div class="bg-item-body-container" ng-repeat="(key, item) in homeCtl.data.experience" >
-                                        <div class="bg-item-body-header">
-                                            <div>
-                                                <h2 class="upper"  edit-hover="visible" isauther="homeCtl.isAuther">{{item.job}} 
-                                                    <div class="non-visible">
-                                                        <i ng-click="homeCtl.showEdit($event, 'experience.html', item, false, false, 'experience/' + key)"  class="material-icons  md-18">
-                                                            mode_edit
-                                                            <md-tooltip>Edit {{item.job}}</md-tooltip>
-                                                        </i>
-                                                        <i ng-click="homeCtl.deleteData('experience/' + key)" class="material-icons md-18">
-                                                            delete
-                                                            <md-tooltip>Delete {{item.job}}</md-tooltip>
-                                                        </i>
-                                                        <i ng-click="homeCtl.showEdit($event, 'upload-media.html', item.media, true, false, 'experience/' + key + '/media')"  class="material-icons  md-18">
-                                                            add
-                                                            <md-tooltip>Add new media</md-tooltip>
-                                                        </i>
-                                                    </div>
-                                                </h2>
-                                                <h3>{{item.where}} {{key}}</h3>
-                                                <h3>{{item.time}}</h3>
+                                        <div class="bg-item-body-container" ng-repeat="(key, item) in homeCtl.data.experience" >
+                                            <div class="bg-item-body-header">
+                                                <div>
+                                                    <h2 class="upper"  edit-hover="visible" isauther="homeCtl.isAuther">{{item.job}} 
+                                                        <div class="non-visible">
+                                                            <i ng-click="homeCtl.showEdit($event, 'experience.html', item, false, false, 'experience/' + key)"  class="material-icons  md-18">
+                                                                mode_edit
+                                                                <md-tooltip>Edit {{item.job}}</md-tooltip>
+                                                            </i>
+                                                            <i ng-click="homeCtl.deleteData('experience/' + key)" class="material-icons md-18">
+                                                                delete
+                                                                <md-tooltip>Delete {{item.job}}</md-tooltip>
+                                                            </i>
+                                                            <i ng-click="homeCtl.showEdit($event, 'upload-media.html', item.media, true, false, 'experience/' + key + '/media')"  class="material-icons  md-18">
+                                                                add
+                                                                <md-tooltip>Add new media</md-tooltip>
+                                                            </i>
+                                                        </div>
+                                                    </h2>
+                                                    <h3>{{item.where}}</h3>
+                                                    <h3>{{item.time}}</h3>
+
+                                                </div>
+                                                <img ng-src="{{item.logo}}">
 
                                             </div>
-                                            <img ng-src="{{item.logo}}">
+                                            <p>{{item.summary}}</p>
 
-                                        </div>
-                                        <p>{{item.summary}}</p>
+                                            <!--       media        -->
 
-                                        <!--       media        -->
-
-                                        <div  style="overflow: hidden;padding-bottom: 5px;" >
-                                            <div  ng-repeat="(key2, med) in item.media" class="media-data-fix" ng-if="med.img != '' && med.caption != '' && med !== null">
-                                                <div class="media-data-container" >
-                                                    <a href=""ng-click="homeCtl.showEdit($event, 'upload-media.html', med, false, false, 'experience/' + key + '/media/' + key2)" >
-                                                        <div class="media-image thumbnail" style="background-image: url({{med.img}});">
-                                                            <img class="thumbnail" src="{{med.img}}"/>
-                                                        </div>
-                                                        <div class="media-desc"><p class="description">{{med.caption}}</p></div>
-                                                    </a>
+                                            <div  style="overflow: hidden;padding-bottom: 5px;" >
+                                                <div  ng-repeat="(key2, med) in item.media" class="media-data-fix" ng-if="med.img != '' && med.caption != '' && med !== null">
+                                                    <div class="media-data-container" >
+                                                        <a href=""ng-click="homeCtl.showEdit($event, 'upload-media.html', med, false, false, 'experience/' + key + '/media/' + key2)" >
+                                                            <div class="media-image thumbnail" style="background-image: url({{med.img}});">
+                                                                <img class="thumbnail" src="{{med.img}}"/>
+                                                            </div>
+                                                            <div class="media-desc"><p class="description">{{med.caption}}</p></div>
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                    <md-divider ng-if="!$last"></md-divider>
                                 </div>
-                                <md-divider ng-if="!$last"></md-divider>
                             </div>
-                        </div>
 
-                        <!--        Project      -->
-                        <div ng-show="homeCtl.listUn.project"  class="bg-item">
-                            <div id="bg-project">
-                                <div class="bg-item-header">
-                                    <h1 edit-hover="visible" isauther="homeCtl.isAuther">Project
+                            <!--        Project      -->
+                            <div ng-show="homeCtl.listUn.project"  class="bg-item">
+                                <div id="bg-project">
+                                    <div class="bg-item-header">
+                                        <h1 edit-hover="visible" isauther="homeCtl.isAuther">Project
 
-                                        <i ng-click="homeCtl.showEdit($event, 'project.html', homeCtl.data.project, true, true, 'project')" class="material-icons md-24 non-visible">
-                                            add
-                                            <md-tooltip>Add New Project</md-tooltip>
-                                        </i>
-
-                                    </h1>
-                                </div>
-                                <div class="bg-item-body clear" >
-
-                                    <div class="bg-item-body-container"  ng-repeat="(key, item) in homeCtl.data.project">
-                                        <div class="bg-item-body-header ">
-                                            <div >
-                                                <h2  edit-hover="visible" isauther="homeCtl.isAuther">{{item.name}} 
-                                                    <div class="non-visible">
-                                                        <i ng-click="homeCtl.showEdit($event, 'project.html', item, false, false, 'project/' + key)"  class="material-icons  md-18">
-                                                            mode_edit
-                                                            <md-tooltip>Edit {{item.job}}</md-tooltip>
-                                                        </i>
-                                                        <i ng-click="homeCtl.deleteData('project/' + key)" class="material-icons md-18">
-                                                            delete
-                                                            <md-tooltip>Delete {{item.job}}</md-tooltip>
-                                                        </i>
-                                                        <i ng-click="homeCtl.showEdit($event, 'add-member.html', item.media, true, false, 'project/' + key + '/member')"  class="material-icons  md-18">
-                                                            add
-                                                            <md-tooltip>Add new media</md-tooltip>
-                                                        </i>
-                                                    </div>
-                                                </h2>
-                                                <h3>{{item.time}}</h3>
-
-
-                                            </div>
-
-
-                                        </div>
-                                        <p>{{item.desc}}</p>
-
-                                        <div ng-show="item.member !== null && !item.member === undefined"> <p> <i >{{item.member}} members, including:</i></p></div>
-                                        <div style="overflow: hidden;  padding: 0px 15px;" class="row" >
-                                            <div ng-if="mem !== null"  class=" col-xs-6 col-sm-4" ng-repeat="(key2,mem) in item.member">
-
-                                                <div  layout="row" >
-                                                    <img ng-click="homeCtl.showEdit($event, 'add-member.html', mem, false, false, 'project/' + key + '/member/' + key2)" class="circle-img" style="align-items: center; margin: auto 10px auto 0;" ng-src="{{mem.img}}" height="50px" width="50px">
-                                                    <div layout="column" style="margin: auto 0;" >
-                                                        <div style="line-height: 16px; font-size: 16px; font-weight: bold">{{mem.name}}</div>
-                                                        <div style="line-height: 16px; font-size: 15px;">{{mem.job}}</div>
-                                                    </div>
-                                                </div> 
-                                            </div>
-
-
-                                        </div>
-
-
-                                    </div>
-                                </div>
-                                <md-divider ng-if="!$last"></md-divider>
-                            </div>
-                        </div>
-
-
-
-                        <div ng-show="homeCtl.listUn.skill" class="bg-item">
-                            <div id="bg-skill" >
-                                <div class="bg-item-header" >
-                                    <h1 edit-hover="visible" isauther="homeCtl.isAuther">Skill
-                                        <div class="non-visible">
-                                            <i ng-click="homeCtl.showEdit($event, 'skill.html', homeCtl.data.skill, false, true, 'skill')"  class="material-icons md-24">
-                                                mode_edit
-                                                <md-tooltip>Edit Skill</md-tooltip>
+                                            <i ng-click="homeCtl.showEdit($event, 'project.html', homeCtl.data.project, true, true, 'project')" class="material-icons md-24 non-visible">
+                                                add
+                                                <md-tooltip>Add New Project</md-tooltip>
                                             </i>
-                                        </div>
-                                    </h1>
-                                </div>
-                                <div class="bg-item-body clear">
-                                    <div ng-repeat="item in homeCtl.data.skill" class="skill-btn-container l-left">
-                                        <div class="skill-btn-left">{{item.count}}</div>
-                                        <div class="skill-btn-right">{{item.desc}}</div>
+
+                                        </h1>
                                     </div>
-                                </div>
+                                    <div class="bg-item-body clear" >
 
-                                <p><br/></p>
-                                <md-divider ng-if="!$last"></md-divider>
-                            </div>
-                        </div>
+                                        <div class="bg-item-body-container"  ng-repeat="(key, item) in homeCtl.data.project">
+                                            <div class="bg-item-body-header ">
+                                                <div >
+                                                    <h2  edit-hover="visible" isauther="homeCtl.isAuther">{{item.name}} 
+                                                        <div class="non-visible">
+                                                            <i ng-click="homeCtl.showEdit($event, 'project.html', item, false, false, 'project/' + key)"  class="material-icons  md-18">
+                                                                mode_edit
+                                                                <md-tooltip>Edit {{item.job}}</md-tooltip>
+                                                            </i>
+                                                            <i ng-click="homeCtl.deleteData('project/' + key)" class="material-icons md-18">
+                                                                delete
+                                                                <md-tooltip>Delete {{item.job}}</md-tooltip>
+                                                            </i>
+                                                            <i ng-click="homeCtl.showEdit($event, 'add-member.html', item.media, true, false, 'project/' + key + '/member')"  class="material-icons  md-18">
+                                                                add
+                                                                <md-tooltip>Add new media</md-tooltip>
+                                                            </i>
+                                                        </div>
+                                                    </h2>
+                                                    <h3>{{item.time}}</h3>
 
 
+                                                </div>
 
-
-
-
-                        <div class="bg-item" ng-show="homeCtl.listUn.education">
-                            <div id="bg-education">
-                                <div class="bg-item-header">
-                                    <h1 edit-hover="visible" isauther="homeCtl.isAuther">Education
-
-                                        <i ng-click="homeCtl.showEdit($event, 'education.html', homeCtl.data.education, true, true, 'education')" class="material-icons md-24 non-visible">
-                                            add
-                                            <md-tooltip>Add New Education</md-tooltip>
-                                        </i>
-
-                                    </h1>
-                                </div>
-                                <div class="bg-item-body clear" ng-repeat="(key, item)  in homeCtl.data.education">
-
-                                    <div class="bg-item-body-container" >
-                                        <div class="bg-item-body-header ">
-                                            <div >
-                                                <h2  edit-hover="visible" isauther="homeCtl.isAuther">
-                                                    {{item.name}}
-                                                    <div class="non-visible">
-                                                        <i ng-click="homeCtl.showEdit($event, 'education.html', item, false, false, 'education/' + key)"  class="material-icons  md-18">
-                                                            mode_edit
-                                                            <md-tooltip>Edit {{item.name}}</md-tooltip>
-                                                        </i>
-                                                        <i ng-click="homeCtl.deleteData('education/' + key)" class="material-icons md-18">
-                                                            delete
-                                                            <md-tooltip>Delete {{item.name}}</md-tooltip>
-                                                        </i>
-                                                    </div>
-                                                </h2>
-                                                <h3>{{item.subject}}</h3>
-                                                <h3>{{item.time}}</h3>
 
                                             </div>
-                                            <img ng-src="{{item.img}}">
+                                            <p>{{item.desc}}</p>
+
+                                            <div ng-show="item.member !== null && !item.member === undefined"> <p> <i >{{item.member}} members, including:</i></p></div>
+                                            <div style="overflow: hidden;  padding: 0px 15px;" class="row" >
+                                                <div ng-if="mem !== null"  class=" col-xs-6 col-sm-4" ng-repeat="(key2,mem) in item.member">
+
+                                                    <div  layout="row" >
+                                                        <img ng-click="homeCtl.showEdit($event, 'add-member.html', mem, false, false, 'project/' + key + '/member/' + key2)" class="circle-img" style="align-items: center; margin: auto 10px auto 0;" ng-src="{{mem.img}}" height="50px" width="50px">
+                                                        <div layout="column" style="margin: auto 0;" >
+                                                            <div style="line-height: 16px; font-size: 16px; font-weight: bold">{{mem.name}}</div>
+                                                            <div style="line-height: 16px; font-size: 15px;">{{mem.job}}</div>
+                                                        </div>
+                                                    </div> 
+                                                </div>
+
+
+                                            </div>
+
 
                                         </div>
                                     </div>
+                                    <md-divider ng-if="!$last"></md-divider>
                                 </div>
-                                <md-divider ng-if="!$last"></md-divider>
                             </div>
-                        </div>
 
-                        <div ng-show="homeCtl.listUn.volunteer"  class="bg-item">
-                            <div id="bg-volunteer">
-                                <div class="bg-item-header" >
-                                    <h1 edit-hover="visible" isauther="homeCtl.isAuther">Volunteer
-                                        <div class="non-visible">
-                                            <i ng-click="homeCtl.showEdit($event, 'volunteer.html', homeCtl.data.volunteer, false, true, 'volunteer')"  class="material-icons md-24">
-                                                mode_edit
-                                                <md-tooltip>Edit Volunteer</md-tooltip>
-                                            </i>
+
+
+                            <div ng-show="homeCtl.listUn.skill" class="bg-item">
+                                <div id="bg-skill" >
+                                    <div class="bg-item-header" >
+                                        <h1 edit-hover="visible" isauther="homeCtl.isAuther">Skill
+                                            <div class="non-visible">
+                                                <i ng-click="homeCtl.showEdit($event, 'skill.html', homeCtl.data.skill, false, true, 'skill')"  class="material-icons md-24">
+                                                    mode_edit
+                                                    <md-tooltip>Edit Skill</md-tooltip>
+                                                </i>
+                                            </div>
+                                        </h1>
+                                    </div>
+                                    <div class="bg-item-body clear">
+                                        <div ng-repeat="item in homeCtl.data.skill" class="skill-btn-container l-left">
+                                            <div class="skill-btn-left">{{item.count}}</div>
+                                            <div class="skill-btn-right">{{item.desc}}</div>
                                         </div>
-                                    </h1>
-                                </div>
-                                <div class="bg-item-body clear">
-                                    <ul>
-                                        <li ng-repeat="item in homeCtl.data.volunteer">{{item.text}}</li>
-                                    </ul> 
+                                    </div>
 
+                                    <p><br/></p>
+                                    <md-divider ng-if="!$last"></md-divider>
                                 </div>
                             </div>
-                        </div>
-
-
-                    </md-content>
-                </md-tab>
-                <md-tab label="Connections">
-                    <md-content class="md-padding">
-                        <h1 class="md-display-2">Tab Two</h1>
 
 
 
-                        <div layout="row">
-                            <img ng-src="imgs/exp_logo.png" height="100px" width="100px">
-                            <div layout="column">
-                                <h1>Title</h1>
-                                <h2>SubTitle</h2>
+
+
+
+                            <div class="bg-item" ng-show="homeCtl.listUn.education">
+                                <div id="bg-education">
+                                    <div class="bg-item-header">
+                                        <h1 edit-hover="visible" isauther="homeCtl.isAuther">Education
+
+                                            <i ng-click="homeCtl.showEdit($event, 'education.html', homeCtl.data.education, true, true, 'education')" class="material-icons md-24 non-visible">
+                                                add
+                                                <md-tooltip>Add New Education</md-tooltip>
+                                            </i>
+
+                                        </h1>
+                                    </div>
+                                    <div class="bg-item-body clear" ng-repeat="(key, item)  in homeCtl.data.education">
+
+                                        <div class="bg-item-body-container" >
+                                            <div class="bg-item-body-header ">
+                                                <div >
+                                                    <h2  edit-hover="visible" isauther="homeCtl.isAuther">
+                                                        {{item.name}}
+                                                        <div class="non-visible">
+                                                            <i ng-click="homeCtl.showEdit($event, 'education.html', item, false, false, 'education/' + key)"  class="material-icons  md-18">
+                                                                mode_edit
+                                                                <md-tooltip>Edit {{item.name}}</md-tooltip>
+                                                            </i>
+                                                            <i ng-click="homeCtl.deleteData('education/' + key)" class="material-icons md-18">
+                                                                delete
+                                                                <md-tooltip>Delete {{item.name}}</md-tooltip>
+                                                            </i>
+                                                        </div>
+                                                    </h2>
+                                                    <h3>{{item.subject}}</h3>
+                                                    <h3>{{item.time}}</h3>
+
+                                                </div>
+                                                <img ng-src="{{item.img}}">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <md-divider ng-if="!$last"></md-divider>
+                                </div>
                             </div>
-                        </div>
+
+                            <div ng-show="homeCtl.listUn.volunteer"  class="bg-item">
+                                <div id="bg-volunteer">
+                                    <div class="bg-item-header" >
+                                        <h1 edit-hover="visible" isauther="homeCtl.isAuther">Volunteer
+                                            <div class="non-visible">
+                                                <i ng-click="homeCtl.showEdit($event, 'volunteer.html', homeCtl.data.volunteer, false, true, 'volunteer')"  class="material-icons md-24">
+                                                    mode_edit
+                                                    <md-tooltip>Edit Volunteer</md-tooltip>
+                                                </i>
+                                            </div>
+                                        </h1>
+                                    </div>
+                                    <div class="bg-item-body clear">
+                                        <ul>
+                                            <li ng-repeat="item in homeCtl.data.volunteer">{{item.text}}</li>
+                                        </ul> 
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </md-content>
+                    </md-tab>
+                    <md-tab label="Connections">
+                        <md-content class="md-padding">
+                            <h1 class="md-display-2">Tab Two</h1>
 
 
 
-                    </md-content>
-                </md-tab>
-                <md-tab label="Recomendations">
-                    <md-content class="md-padding">
-                        <h1 class="md-display-2">Recomendations</h1>
+                            <div layout="row">
+                                <img ng-src="imgs/exp_logo.png" height="100px" width="100px">
+                                <div layout="column">
+                                    <h1>Title</h1>
+                                    <h2>SubTitle</h2>
+                                </div>
+                            </div>
 
-                    </md-content>
-                </md-tab>
-                <md-tab label="Groups">
-                    <md-content class="md-padding">
-                        <h1 class="md-display-2">Groups</h1>
 
-                    </md-content>
-                </md-tab>
-                <md-tab label="Following">
-                    <md-content class="md-padding">
-                        <h1 class="md-display-2">Following</h1>
 
-                    </md-content>
-                </md-tab>
-                <md-tab label="Recent Actitity">
-                    <md-content class="md-padding">
-                        <h1 class="md-display-2">Recent Actitity</h1>
+                        </md-content>
+                    </md-tab>
+                    <md-tab label="Recomendations">
+                        <md-content class="md-padding">
+                            <h1 class="md-display-2">Recomendations</h1>
 
-                    </md-content>
-                </md-tab>
-            </md-tabs>
+                        </md-content>
+                    </md-tab>
+                    <md-tab label="Groups">
+                        <md-content class="md-padding">
+                            <h1 class="md-display-2">Groups</h1>
+
+                        </md-content>
+                    </md-tab>
+                    <md-tab label="Following">
+                        <md-content class="md-padding">
+                            <h1 class="md-display-2">Following</h1>
+
+                        </md-content>
+                    </md-tab>
+                    <md-tab label="Recent Actitity">
+                        <md-content class="md-padding">
+                            <h1 class="md-display-2">Recent Actitity</h1>
+
+                        </md-content>
+                    </md-tab>
+                </md-tabs>
+            </div>
         </div>
     </div>
-</div>
-<div ng-if="homeCtl.isAuther" class="col-md-4" >
+    <div ng-if="homeCtl.isAuther" class="col-md-4" >
 
-    <md-card>
-        <md-card-title>
-            <span class="right-card-head">May be you know</span>
-        </md-card-title>
-        <md-card-content>
-            <md-list >
-                <md-list-item class="md-3-line" ng-repeat="item in homeCtl.canKnow" ng-click="homeCtl.gotoFriend(item.uid)">
-                    <img ng-if="item.isImg" ng-src="{{item.img}}" class="md-avatar">
-                    <div ng-if="!item.isImg" style="margin-right: 10px;" ><ng-letter-avatar  dynamic="true"  fontSize="15"  shape="round" data="{{item.letter}}" charCount="1" >                        
-                        </ng-letter-avatar></div>
-                    <div class="md-list-item-text" layout="column">
-                        <h3><strong>{{item.name}}</strong></h3>
-                        <h4>{{item.job}}</h4>
-                    </div>
-                    <md-divider md-inset ng-if="!$last"></md-divider>
-                </md-list-item>
-            </md-list>
-        </md-card-content>
+        <md-card>
+            <md-card-title>
+                <span class="right-card-head">May be you know</span>
+            </md-card-title>
+            <md-card-content>
+                <md-list >
+                    <md-list-item class="md-3-line" ng-repeat="item in homeCtl.canKnow" ng-click="homeCtl.gotoFriend(item.uid)">
+                        <img ng-if="item.isImg" ng-src="{{item.img}}" class="md-avatar">
+                        <div ng-if="!item.isImg" style="margin-right: 10px;" ><ng-letter-avatar  dynamic="true"  fontSize="15"  shape="round" data="{{item.letter}}" charCount="1" >                        
+                            </ng-letter-avatar></div>
+                        <div class="md-list-item-text" layout="column">
+                            <h3><strong>{{item.name}}</strong></h3>
+                            <h4>{{item.job}}</h4>
+                        </div>
+                        <md-divider md-inset ng-if="!$last"></md-divider>
+                    </md-list-item>
+                </md-list>
+            </md-card-content>
 
-    </md-card>
+        </md-card>
+    </div>
 </div>

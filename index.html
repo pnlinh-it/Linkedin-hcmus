@@ -40,7 +40,7 @@
 
 
                 <md-toolbar ng-show="vm.showSearch" style="background: white"   class=" animate-show   md-whiteframe-z1  l-pinned-top l-layer-5">
-                    <div class="md-toolbar-tools">
+                    <div class="md-toolbar-tools" >
 
                         <md-button class="md-icon-button" ng-click="vm.showSearch = !vm.showSearch" aria-label="Menu">
                             <md-icon class="material-icons">arrow_back</md-icon>
@@ -165,6 +165,15 @@
                             </md-button>
                             </li>
 
+                            </li>
+                            <li class="l-right nav-icon">
+                                <a href="#/message">
+                                    <md-button class="md-icon-button" aria-label="More">
+                                        <img src="imgs/message.svg"/>
+                                    </md-button>
+                                </a>
+                            </li>
+
 
 
 
@@ -215,7 +224,7 @@
 
             <md-content id="content">
                 <div class="wrapper" >
-                    <div class="container-fluid" id="main" >
+                    <div  id="main" >
 
 
                         <ng-view></ng-view>
@@ -257,6 +266,7 @@
     <script src="service/HomeFactory.js"></script>
     <script src='view/home/homeCtl.js'></script>
     <script src='view/user/userCtl.js'></script>
+    <script src='view/message/msgCtl.js'></script>
     <script src="service/ToastFactory.js"></script>
     <script src="service/FacebookFactory.js"></script>
 

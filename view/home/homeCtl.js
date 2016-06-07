@@ -8,7 +8,7 @@ myApp.controller('homeCtl', function ($q, $scope, $mdDialog, HomeFactory, ToastF
 
     var self = this;
 
-
+  self.isCanAddFriend = false;
     self.canKnow = [];
     self.isAuther = true;
     self.data = HomeFactory.data;

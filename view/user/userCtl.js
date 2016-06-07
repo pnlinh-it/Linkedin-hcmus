@@ -1,16 +1,17 @@
 angular.module('myApp').controller('userCtl', function ($routeParams, HomeFactory, friendState, $scope, $timeout) {
 
-
-
-    console.log(friendState);
-    console.log('start ctl');
     var vm = this;
     vm.id = $routeParams.id;
+
     vm.showAvatar = true;
     vm.name = "L";
     vm.isAuther = false;
     vm.friendState = friendState;
-  vm.colsize = '12';
+    vm.colsize = '12';
+    vm.isCanAddFriend = true;
+    if (HomeFactory.uid === vm.id)
+        vm.isCanAddFriend = false;
+
 
     vm.addFriIcon = "person_add";
     vm.test = true;

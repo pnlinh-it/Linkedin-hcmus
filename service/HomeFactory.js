@@ -15,6 +15,80 @@ angular.module('myApp').factory('HomeFactory', ['CONFIG', '$q', '$rootScope', '$
         var storage = firebase.storage();
         var curUser = {};
 
+        HomeFactory.getDatabase = function () {
+            return database;
+        }
+        HomeFactory.getListFriend = function () {
+            var defer = $q.defer();
+            var listFriend = {};
+            var dataReturn = [];
+            var unsubscribe = auth.onAuthStateChanged(function (curUser) {
+                unsubscribe();
+                if (curUser)
+                {
+                    database.ref('friends/' + curUser.uid).once('value').then(function (snapshot) {
+                        if (snapshot.val() !== null) {
+                            listFriend = snapshot.val();
+                            var ids = Object.keys(listFriend);
+                            angular.forEach(ids, function (key, index) {
+                                if (listFriend[key] === 3)
+                                    dataReturn.push(key);
+                                if (index === ids.length - 1)
+                                    defer.resolve(dataReturn);
+                            })
+                        } else
+                            defer.reject(null);
+                    })
+                }
+            });
+            return defer.promise;
+        }
+
+
+        HomeFactory.sendMessage = function (message, id) {
+            var defer = $q.defer();
+
+
+            var unsubscribe = auth.onAuthStateChanged(function (curUser) {
+                unsubscribe();
+                if (curUser)
+                {
+                    var data = {};
+                    data.message = message;
+                    data.time = Date.now();
+                    data.isFromMe = true;
+                    var path = 'users/' + curUser.uid + '/messages/' + id;
+                    var path2 = 'users/' + id + '/messages/' + curUser.uid;
+                    var newkey = database.ref(path).push().key;
+                    var newkey2 = database.ref(path2).push().key;
+                    database.ref(path + '/' + newkey).set(data);
+                    data.isFromMe = false;
+                    data.uid=
+                    database.ref(path2 + '/' + newkey2).set(data);
+                    defer.resolve();
+                }
+            });
+
+            return defer.promise;
+        }
+
+
+
+
+        HomeFactory.getCurentUser = function () {
+            var defer = $q.defer();
+            var unsubscribe = auth.onAuthStateChanged(function (curUser) {
+                unsubscribe();
+                if (curUser)
+                {
+                    HomeFactory.getDataById(curUser.uid, 'overview').then(function (data) {
+                        defer.resolve(data);
+                    })
+                }
+            });
+            return defer.promise;
+        }
+
 
 
 
@@ -118,6 +192,7 @@ angular.module('myApp').factory('HomeFactory', ['CONFIG', '$q', '$rootScope', '$
 //              });
 //            return defer.promise;
 //        }
+
 
 
         HomeFactory.checkFriend = function (friId) {
