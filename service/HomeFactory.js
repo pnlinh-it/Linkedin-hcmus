@@ -47,8 +47,6 @@ angular.module('myApp').factory('HomeFactory', ['CONFIG', '$q', '$rootScope', '$
 
         HomeFactory.sendMessage = function (message, id) {
             var defer = $q.defer();
-
-
             var unsubscribe = auth.onAuthStateChanged(function (curUser) {
                 unsubscribe();
                 if (curUser)
@@ -63,8 +61,8 @@ angular.module('myApp').factory('HomeFactory', ['CONFIG', '$q', '$rootScope', '$
                     var newkey2 = database.ref(path2).push().key;
                     database.ref(path + '/' + newkey).set(data);
                     data.isFromMe = false;
-                    data.uid=
-                    database.ref(path2 + '/' + newkey2).set(data);
+                    data.uid =
+                            database.ref(path2 + '/' + newkey2).set(data);
                     defer.resolve();
                 }
             });
@@ -93,34 +91,10 @@ angular.module('myApp').factory('HomeFactory', ['CONFIG', '$q', '$rootScope', '$
 
 
         HomeFactory.getUser = function () {
-            console.log('start get user');
             var defer = $q.defer();
             auth.onAuthStateChanged(function (user) {
                 curUser = user;
-                console.log('get user OK');
                 HomeFactory.uid = user.uid;
-                database.ref('friends/' + curUser.uid).on('child_changed', function (result) {
-                    HomeFactory.getDataById(result.key, 'overview').then(function (data) {
-                        data.uid = result.key;
-                        $rootScope.$broadcast('friendChange', data);
-                    });
-                });
-                database.ref('friends/' + curUser.uid).on('child_added', function (result) {
-                    var data = {};
-                    data.uid = result.key;
-                    data.value = result.val();
-                    if (data.value == 2) {
-                        HomeFactory.getDataById(data.uid, 'overview').then(function (rs) {
-                            data.name = rs.name;
-                            $rootScope.$broadcast('friendAdd', data);
-                        });
-                    } else
-                        $rootScope.$broadcast('friendAdd', data);
-
-                });
-                database.ref('friends/' + curUser.uid).on('child_removed', function (result) {
-                    $rootScope.$broadcast('friendRemove', result);
-                });
                 defer.resolve();
             });
             return defer.promise;
@@ -180,21 +154,6 @@ angular.module('myApp').factory('HomeFactory', ['CONFIG', '$q', '$rootScope', '$
             })
         }
 
-
-
-
-
-//        HomeFactory.getFriend=function (){
-//            console.log(curUser.uid);
-//            var defer = $q.defer();
-//              database.ref('friends/' + curUser.uid).on('child_changed', function (data){
-//                  console.log(data);
-//              });
-//            return defer.promise;
-//        }
-
-
-
         HomeFactory.checkFriend = function (friId) {
             //0 not friend
             //1 wait
@@ -204,21 +163,25 @@ angular.module('myApp').factory('HomeFactory', ['CONFIG', '$q', '$rootScope', '$
             var myFriends = {};
             var state = 0;
 
-            if (curUser)
-            {
-                database.ref('friends/' + curUser.uid).once('value').then(function (snapshot) {
-                    myFriends = snapshot.val();
-                    if (!angular.isUndefined(myFriends) && myFriends !== null) {
-                        var ids = Object.keys(myFriends);
-                        angular.forEach(ids, function (id) {
-                            if (id.localeCompare(friId) === 0) {
-                                state = myFriends[id];
-                            }
-                        })
-                    }
-                    defer.resolve(state);
-                });
-            }
+            var unsubscribe = auth.onAuthStateChanged(function (curUser) {
+                unsubscribe();
+                if (curUser)
+                {
+                    database.ref('friends/' + curUser.uid).once('value').then(function (snapshot) {
+                        myFriends = snapshot.val();
+                        if (!angular.isUndefined(myFriends) && myFriends !== null) {
+                            var ids = Object.keys(myFriends);
+                            angular.forEach(ids, function (id) {
+                                if (id.localeCompare(friId) === 0) {
+                                    state = myFriends[id];
+                                }
+                            })
+                        }
+                        defer.resolve(state);
+                    });
+                }
+
+            });
             return defer.promise;
         }
 
@@ -226,18 +189,24 @@ angular.module('myApp').factory('HomeFactory', ['CONFIG', '$q', '$rootScope', '$
         //3 become friend
         //1 send request
         HomeFactory.friendHandle = function (id, friId) {
+
+            var unsubscribe = auth.onAuthStateChanged(function (curUser) {
+                unsubscribe();
+                if (curUser) {
+                    var updates = {};
+                    updates['/friends/' + curUser.uid + '/' + friId] = id;
+                    updates['friends/' + friId + '/' + curUser.uid] = id;
+                    if (id !== null && id === 1)
+                        updates['friends/' + friId + '/' + curUser.uid] = 2;
+                    database.ref().update(updates).then(function () {
+                        defer.resolve();
+                    })
+                } else
+                    defer.reject();
+                return defer.promise;
+            });
             var defer = $q.defer();
-            if (curUser)
-            {
-                var updates = {};
-                updates['/friends/' + curUser.uid + '/' + friId] = id;
-                updates['friends/' + friId + '/' + curUser.uid] = id;
-                if (id !== null && id === 1)
-                    updates['friends/' + friId + '/' + curUser.uid] = 2;
-                database.ref().update(updates);
-            } else
-                defer.reject();
-            return defer.promise;
+
         }
 
 

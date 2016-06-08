@@ -1,14 +1,10 @@
 var myApp = angular.module('myApp');
 myApp.controller('homeCtl', function ($q, $scope, $mdDialog, HomeFactory, ToastFactory, $timeout, FacebookFactory, $location) {
 
-
-
-
-
-
     var self = this;
 
-  self.isCanAddFriend = false;
+    self.isCanAddFriend = false;
+    self.canSendMessage = false;
     self.canKnow = [];
     self.isAuther = true;
     self.data = HomeFactory.data;
@@ -140,11 +136,6 @@ myApp.controller('homeCtl', function ($q, $scope, $mdDialog, HomeFactory, ToastF
             var isAdd = result.isAdd;
             if (isAdd) {
                 HomeFactory.addData(data, key).then(function (newKey) {
-
-
-
-
-
                     if (key.indexOf('/') > 0) {
                         var k = key.split('/');
                         if (k.length == 3)
@@ -164,7 +155,6 @@ myApp.controller('homeCtl', function ($q, $scope, $mdDialog, HomeFactory, ToastF
             } else {
                 console.log(key);
                 if (key.localeCompare('overview') === 0) {
-                    console.log(key);
                     if (checkOK(self.data.overview.img) && self.data.overview.img.trim().length > 1)
                         self.showAvatar = true;
                     else
@@ -185,10 +175,6 @@ myApp.controller('homeCtl', function ($q, $scope, $mdDialog, HomeFactory, ToastF
                     };
 
                 }
-
-
-
-
                 HomeFactory.updateOverview(data, key).then(function () {
                     ToastFactory.show("Save Complete");
                 });
@@ -197,6 +183,7 @@ myApp.controller('homeCtl', function ($q, $scope, $mdDialog, HomeFactory, ToastF
                 self.listUn[key] = true;
             else
                 self.listUn[key] = false;
+            console.log(self.listUn)
         }, function () {
 
         });

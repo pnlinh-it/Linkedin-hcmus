@@ -35,6 +35,9 @@
 .material-icons.md-36 { font-size: 36px; }
 .material-icons.md-48 { font-size: 48px; }
 
+.inline{
+    line-height: 23px !important;
+}
 
 
 
@@ -707,6 +710,13 @@ md-toast {
     -ms-border-radius: 25px;
     -o-border-radius: 25px;
     border-radius: 80px;
+}
+
+.col-center-block {
+    float: none;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 

@@ -1,4 +1,4 @@
-angular.module('myApp').controller('msgCtl', function (HomeFactory, $scope, $timeout) {
+angular.module('myApp').controller('msgCtl', function (HomeFactory, $scope, $timeout, $routeParams) {
     var vm = this;
     vm.friendList = [];
     vm.messages = {};
@@ -6,7 +6,8 @@ angular.module('myApp').controller('msgCtl', function (HomeFactory, $scope, $tim
     vm.curFri = {};
     vm.msgSend = '';
     vm.database = HomeFactory.getDatabase();
-
+    vm.id = $routeParams.id;
+    console.log(vm.id);
 
     HomeFactory.getCurentUser().then(function (data) {
         vm.curUser = data;
@@ -19,6 +20,19 @@ angular.module('myApp').controller('msgCtl', function (HomeFactory, $scope, $tim
                     user.letter = getName(user.name).trim();
                     user.isImg = checkImgOK(user.img);
                     vm.friendList.push(user);
+                    if (!angular.isUndefined(vm.id)) {
+                        var keepGoing = true;
+                        angular.forEach(vm.friendList, function (fri) {
+                            if (keepGoing) {
+                                if (fri.uid === vm.id)
+                                {
+                                    vm.getConversation(fri);
+                                    keepGoing = false;
+                                }
+                            }
+                        })
+
+                    }
                 })
             })
         }

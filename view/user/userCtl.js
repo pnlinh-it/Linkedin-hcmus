@@ -1,14 +1,19 @@
-angular.module('myApp').controller('userCtl', function ($routeParams, HomeFactory, friendState, $scope, $timeout) {
+angular.module('myApp').controller('userCtl', function ($routeParams, HomeFactory, friendState, $scope, $timeout, $location) {
 
     var vm = this;
     vm.id = $routeParams.id;
-
+    vm.canSendMessage = false;
     vm.showAvatar = true;
     vm.name = "L";
     vm.isAuther = false;
     vm.friendState = friendState;
-    vm.colsize = '12';
+    vm.colsize = '8';
     vm.isCanAddFriend = true;
+    if (vm.friendState === 3)
+        vm.canSendMessage = true;
+
+    console.log(friendState)
+
     if (HomeFactory.uid === vm.id)
         vm.isCanAddFriend = false;
 
@@ -28,11 +33,16 @@ angular.module('myApp').controller('userCtl', function ($routeParams, HomeFactor
             break;
 
     }
+    vm.goMessage = function () {
+        var s = '/message/' + vm.id;
+        $location.url(s);
+    }
     vm.friendHandle = function (id) {
         if (id === null)
         {
             vm.addFriIcon = "person_add";
             vm.friendState = 0;
+
         }
         if (id == 3)
         {
@@ -44,38 +54,37 @@ angular.module('myApp').controller('userCtl', function ($routeParams, HomeFactor
             vm.addFriIcon = "more_horiz";
             vm.friendState = 1;
         }
+        console.log(vm.id);
+        console.log(id);
         HomeFactory.friendHandle(id, vm.id);
+
     }
 
-    $scope.$on('friendChange', function (event, data) {
-        if (data.uid === vm.id) {
+    $scope.$on('friendChanged', function (event, data) {
+        console.log('friendChanged');
+        if (data.key === vm.id) {
             vm.friendState = 3;
             document.getElementById('friendic').innerHTML = 'check';
         }
     });
     $scope.$on('friendAdd', function (event, data) {
-
-        if (data.uid === vm.id) {
-            vm.friendState = data.value;
+        console.log('friendAdd');
+        if (data.key === vm.id) {
+            vm.friendState = data.val();
             document.getElementById('friendic').innerHTML = 'more_horiz';
         }
     });
 
     $scope.$on('friendRemove', function (event, data) {
+        console.log('friendRemove');
         if (data.key === vm.id) {
             vm.friendState = 0;
             document.getElementById('friendic').innerHTML = 'person_add';
         }
     });
-    vm.data = {};
-//    vm.data.overview={};
-//    vm.data.summary = [{}];
-//    vm.data.experience = {};
-//    vm.data.project = {};
-//    vm.data.skill = {};
-//    vm.data.education = {};
-//    vm.data.volunteer = {};
 
+
+    vm.data = {};
     vm.listUn = {
         'summary': false,
         'experience': false,

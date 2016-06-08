@@ -5,7 +5,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" id="viewport" content="width=device-width, initial-scale=1">
         <meta name="google-signin-client_id" content="756227301628-v5pagfiq69uj64lid9ai54hfm1iv7omr.apps.googleusercontent.com">
-        <title>Phạm Ngọc Linh - 1212202</title>
+        <title>LinkedIn - Hcmus</title>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
         <link rel='stylesheet prefetch' href='https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc4/angular-material.min.css'>
         <link rel='stylesheet prefetch' href='css/bootstrap.min.css'>
@@ -35,10 +35,6 @@
     <md-content>
         <div  class="toolbardemoBasicUsage"  ng-cloak>
             <div ng-controller="Ctrl as vm">
-
-
-
-
                 <md-toolbar ng-show="vm.showSearch" style="background: white"   class=" animate-show   md-whiteframe-z1  l-pinned-top l-layer-5">
                     <div class="md-toolbar-tools" >
 
@@ -71,13 +67,8 @@
                                         <div layout ="column"layout-align="center start">
                                             <span style="line-height: 25px;display: block;"><strong>{{item.data.name}}</strong></span>
                                             <span style="line-height: 25px;display: block;">{{item.data.email}}</span>
-
-
                                         </div>
-
                                     </div>
-
-
                                 </a>
                             </md-item-template>
                         </md-autocomplete>
@@ -100,33 +91,29 @@
                         </button>
                         <ul ng-class="showDocsNav ? 'visible' : ''">
                             <li class="l-left">
-                                <a class="main-nav-button md-button md-ink-ripple" ng-transclude="" href="#" md-button="">
+                                <a class="main-nav-button md-button md-ink-ripple" ng-transclude="" href="" md-button="">
                                     <span class="ng-scope">Features</span>
                                     <div class="md-ripple-container"></div>
                                 </a>
                             </li>
                             <li class="l-left">
-                                <a class="main-nav-button md-button md-ink-ripple" ng-transclude="" href="#" md-button="">
+                                <a class="main-nav-button md-button md-ink-ripple" ng-transclude="" href="" md-button="">
                                     <span class="ng-scope">Profile</span>
                                     <div class="md-ripple-container"></div>
                                 </a>
                             </li>
                             <li class="l-left">
-                                <a class="main-nav-button md-button md-ink-ripple" ng-transclude="" href="#" md-button="">
+                                <a class="main-nav-button md-button md-ink-ripple" ng-transclude="" href="" md-button="">
                                     <span class="ng-scope">Connection</span>
                                     <div class="md-ripple-container"></div>
                                 </a>
                             </li>
                             <li class="l-left">
-                                <a class="main-nav-button md-button md-ink-ripple" ng-transclude="" href="#" md-button="">
+                                <a class="main-nav-button md-button md-ink-ripple" ng-transclude="" href="" md-button="">
                                     <span class="ng-scope">Job</span>
                                     <div class="md-ripple-container"></div>
                                 </a>
                             </li>
-
-
-
-
 
                             <li class="l-right nav-icon">
                             <md-menu ng-if="vm.isLogin">
@@ -143,7 +130,7 @@
                                                     </ng-letter-avatar>
                                                 </div>
                                                 <div layout="column" class="layout-column">
-                                                    <div class="c5e-account-chooser-email">
+                                                    <div ng-cloak class="c5e-account-chooser-email">
                                                         {{vm.email}}
 
                                                     </div>
@@ -159,79 +146,29 @@
                             </md-menu>
                             </li>
 
-                            <li ng-click="vm.showSearch = !vm.showSearch" class="l-right nav-icon">
+                            <li  ng-if="vm.isLogin" ng-click="vm.showSearch = !vm.showSearch" class="l-right nav-icon">
                             <md-button class="md-icon-button" aria-label="More">
                                 <img src="imgs/search.svg"/>
                             </md-button>
                             </li>
 
                             </li>
-                            <li class="l-right nav-icon">
+                            <li  ng-if="vm.isLogin" class="l-right nav-icon">
                                 <a href="#/message">
                                     <md-button class="md-icon-button" aria-label="More">
                                         <img src="imgs/message.svg"/>
                                     </md-button>
                                 </a>
                             </li>
-
-
-
-
-
-
-                            <!--                        <li class="l-right nav-icon">
-                                                        <a style="color: white" href="#/logout">
-                                                            <md-button  class="md-icon-button" aria-label="More">
-                                                                <i class="material-icons">power_settings_new</i>
-                                                                <md-tooltip>
-                                                                    Logout
-                                                                </md-tooltip>
-                            
-                                                            </md-button>
-                                                        </a>
-                                                    </li>-->
-                            <!--                        <li class="l-right nav-icon">
-                                                    <md-button class="md-icon-button" aria-label="More">
-                                                        <img src="imgs/person.svg"/>
-                                                    </md-button>
-                                                    </li>
-                                                    <li class="l-right nav-icon">
-                                                    <md-button class="md-icon-button" aria-label="More">
-                                                        <img src="imgs/message.svg"/>
-                                                    </md-button>
-                                                    </li>
-                                                    <li class="l-right nav-icon">
-                                                    <md-button class="md-icon-button" aria-label="More">
-                                                        <img src="imgs/search.svg"/>
-                                                    </md-button>
-                                                    </li>-->
                         </ul> 
                     </nav>
                 </md-toolbar>
-
-
-
             </div>
-
-
-
-
-
-
-
-
-
-
             <md-content id="content">
                 <div class="wrapper" >
                     <div  id="main" >
-
-
                         <ng-view></ng-view>
                     </div>
-
-
-
                 </div>
             </md-content> 
         </div>
@@ -239,26 +176,12 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>        
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.5/angular-animate.min.js"></script> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.5/angular-aria.min.js"></script> 
-    <!--    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>-->
-    <!--    <script src="component/bootstrap.min.js"></script>-->
     <script src='https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc4/angular-material.min.js'></script>
     <script src="component/ngletteravatar.min.js"></script>
     <script src="component/latinize.js"></script>
-
-
-
     <script src='https://code.angularjs.org/1.5.5/angular-route.min.js'></script>
     <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js'></script>
     <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
-    <script src="component/angular-translate.min.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-file-upload/2.3.3/angular-file-upload.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
-
-
-
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate-loader-static-files/2.11.0/angular-translate-loader-static-files.min.js"></script>
 
     <script src="app.js"></script>
     <script src="service/AuthFactory.js"></script>

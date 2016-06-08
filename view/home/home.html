@@ -1,5 +1,6 @@
-<div class="container-fluid center-block">
-    <div class="col-md-{{homeCtl.colsize}}">
+<div class="container-fluid ">
+
+    <div  ng-class="homeCtl.isAuther ? 'col-md-8' : 'col-md-8  col-center-block'" >
 
         <div class="profile" >
 
@@ -67,7 +68,7 @@
                     </md-menu>
                 </div>
                 <div class="main-info-UR" >
-                    <md-button class="md-icon-button" aria-label="More">
+                    <md-button  ng-if="homeCtl.friendState === 3" ng-click="homeCtl.goMessage()" class="md-icon-button" aria-label="More">
 
                         <md-icon class="material-icons " ng-class="md - 24">&#xE0BE;</md-icon>
                     </md-button>
@@ -102,7 +103,7 @@
                     </md-menu>
                 </div>
                 <div class="main-info-LR" >
-                    <span>{{myCvCtl.cvData.info.follower}}</span><div>followers</div>
+                    <span></span><div></div>
                 </div>
             </div>
 
@@ -359,45 +360,10 @@
 
                         </md-content>
                     </md-tab>
-                    <md-tab label="Connections">
+
+                    <md-tab ng-if="homeCtl.isAuther" label="Help">
                         <md-content class="md-padding">
-                            <h1 class="md-display-2">Tab Two</h1>
-
-
-
-                            <div layout="row">
-                                <img ng-src="imgs/exp_logo.png" height="100px" width="100px">
-                                <div layout="column">
-                                    <h1>Title</h1>
-                                    <h2>SubTitle</h2>
-                                </div>
-                            </div>
-
-
-
-                        </md-content>
-                    </md-tab>
-                    <md-tab label="Recomendations">
-                        <md-content class="md-padding">
-                            <h1 class="md-display-2">Recomendations</h1>
-
-                        </md-content>
-                    </md-tab>
-                    <md-tab label="Groups">
-                        <md-content class="md-padding">
-                            <h1 class="md-display-2">Groups</h1>
-
-                        </md-content>
-                    </md-tab>
-                    <md-tab label="Following">
-                        <md-content class="md-padding">
-                            <h1 class="md-display-2">Following</h1>
-
-                        </md-content>
-                    </md-tab>
-                    <md-tab label="Recent Actitity">
-                        <md-content class="md-padding">
-                            <h1 class="md-display-2">Recent Actitity</h1>
+                            <div  style="font-size: 30px; padding: 20px 0 ">Click <md-icon  class="material-icons md-36 inline">&#xE5D4;</md-icon>&nbsp;&nbsp;to add background item </div>
 
                         </md-content>
                     </md-tab>
@@ -405,7 +371,9 @@
             </div>
         </div>
     </div>
-    <div ng-if="homeCtl.isAuther" class="col-md-4" >
+
+
+    <div ng-if="homeCtl.isAuther"  class="col-md-4  " >
 
         <md-card>
             <md-card-title>
@@ -415,7 +383,7 @@
                 <md-list >
                     <md-list-item class="md-3-line" ng-repeat="item in homeCtl.canKnow" ng-click="homeCtl.gotoFriend(item.uid)">
                         <img ng-if="item.isImg" ng-src="{{item.img}}" class="md-avatar">
-                        <div ng-if="!item.isImg" style="margin-right: 10px;" ><ng-letter-avatar  dynamic="true"  fontSize="15"  shape="round" data="{{item.letter}}" charCount="1" >                        
+                        <div ng-if="!item.isImg" style="margin-right: 10px;" ><ng-letter-avatar height="40px" width="40px"   dynamic="true"  fontSize="15"  shape="round" data="{{item.letter}}" charCount="2" >                        
                             </ng-letter-avatar></div>
                         <div class="md-list-item-text" layout="column">
                             <h3><strong>{{item.name}}</strong></h3>
@@ -428,4 +396,5 @@
 
         </md-card>
     </div>
+
 </div>

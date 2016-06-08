@@ -1,14 +1,10 @@
-var app = angular.module('myApp', ['ngMaterial', 'ngRoute', 'ngMessages', 'ngLetterAvatar', 'pascalprecht.translate', 'angularFileUpload']);
+var app = angular.module('myApp', ['ngMaterial', 'ngRoute', 'ngMessages', 'ngLetterAvatar']);
+
 app.constant('CONFIG', {
     apiKey: "AIzaSyA3gbSfQMhKENkz2m5xNgmUgxSwu91wS1I",
     authDomain: "linkedin-hcmus-b38e0.firebaseapp.com",
     databaseURL: "https://linkedin-hcmus-b38e0.firebaseio.com",
     storageBucket: "linkedin-hcmus-b38e0.appspot.com"
-
-//    apiKey: "AIzaSyA0ReqsTDTj-ElTOcb0DKUOh32bPs9nUCc",
-//    authDomain: "testauth-327b7.firebaseapp.com",
-//    databaseURL: "https://testauth-327b7.firebaseio.com",
-//    storageBucket: ""
 });
 
 app.config(function ($mdThemingProvider) {
@@ -17,13 +13,7 @@ app.config(function ($mdThemingProvider) {
             .accentPalette('red');
 });
 
-app.config(['$translateProvider', function ($translateProvider) {
-        $translateProvider.useStaticFilesLoader({
-            prefix: 'data/language/locale-',
-            suffix: '.json'
-        });
-        $translateProvider.preferredLanguage('vi');
-    }]);
+
 
 app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
         $routeProvider.when('/', {
@@ -70,6 +60,10 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
                     return defer.promise;
                 }
             }
+        }).when('/message/:id', {
+            templateUrl: 'view/message/message.html',
+            controller: 'msgCtl',
+            controllerAs: 'msgCtl'
         }).when('/message', {
             templateUrl: 'view/message/message.html',
             controller: 'msgCtl',
@@ -121,10 +115,11 @@ app.directive('uploadfile', function () {
 });
 
 
-app.controller('Ctrl', function ($scope, $q, $timeout, AuthFactory, HomeFactory, $window, ToastFactory) {
+app.controller('Ctrl', function ($scope, $q, $timeout, AuthFactory, HomeFactory, $window, ToastFactory, $location, $rootScope) {
 
 
     var vm = this;
+
     vm.showSearch = false;
     vm.toggleSearch = function () {
         vm.showSearch = !vm.showSearch;
@@ -153,15 +148,13 @@ app.controller('Ctrl', function ($scope, $q, $timeout, AuthFactory, HomeFactory,
     }
     function selectedItemChange(item) {
     }
-
-
-
     vm.auth = AuthFactory.getAuth();
     vm.database = HomeFactory.getDatabase();
     vm.email = "";
     vm.img = "";
     vm.showAvatar = true;
     vm.name = "";
+
     vm.auth.onAuthStateChanged(function (user) {
         if (user) {
             vm.isLogin = true;
@@ -177,6 +170,56 @@ app.controller('Ctrl', function ($scope, $q, $timeout, AuthFactory, HomeFactory,
                     vm.name = getName(data.name).trim();
                 }, 2);
             });
+
+
+            var newItems = false;
+            vm.database.ref('users/' + user.uid + '/messages').once('value', function (result) {
+                newItems = true;
+            });
+            vm.database.ref('users/' + user.uid + '/messages').on('child_added', function (result) {
+                if (newItems)
+                    vm.receivedMessage(result, user);
+            });
+
+            vm.database.ref('users/' + user.uid + '/messages').on('child_changed', function (result) {
+                if (newItems)
+                    vm.receivedMessage(result, user);
+            });
+
+
+            var newAddFriend = false;
+            vm.database.ref('friends/' + user.uid).once('value', function (result) {
+                newAddFriend = true;
+            });
+
+            vm.database.ref('friends/' + user.uid).on('child_added', function (result) {
+                if (newAddFriend)
+                {
+                    if (result.val() === 2) {
+                        HomeFactory.getDataById(result.key, 'overview').then(function (data) {
+                            ToastFactory.showCustom(data.name + " send you a request!", result.key, 'user');
+                        })
+                    }
+                    $rootScope.$broadcast('friendAdd', result);
+                }
+            });
+            vm.database.ref('friends/' + user.uid).on('child_changed', function (result) {
+                if (newAddFriend)
+                {
+                    HomeFactory.getDataById(result.key, 'overview').then(function (data) {
+                        ToastFactory.showCustom("You and " + data.name + " now are friend", result.key, 'user');
+                        $rootScope.$broadcast('friendChanged', result);
+                    })
+
+                }
+            });
+             vm.database.ref('friends/' + user.uid).on('child_removed', function (result) {
+                if (newAddFriend)
+                {
+                   $rootScope.$broadcast('friendRemove', result);
+
+                }
+            });
         } else
         {
             vm.isLogin = false;
@@ -184,24 +227,31 @@ app.controller('Ctrl', function ($scope, $q, $timeout, AuthFactory, HomeFactory,
         }
     });
 
+   
 
-    $scope.$on('friendChange', function (event, data) {
-        console.log(data);
-        ToastFactory.showCustom("You and " + data.name + " now are friend", data.uid);
-    });
-    $scope.$on('friendAdd', function (event, data) {
-        if (data.value === 2)
-        {
-            var content = data.name + " send you a request";
-            ToastFactory.showCustom(content, data.uid);
-        }
 
-    });
+
+    vm.receivedMessage = function (result, user) {
+        var userKey = result.key;
+        vm.database.ref('users/' + user.uid + '/messages/' + userKey).limitToLast(1).once('value', function (result) {
+
+            for (var key in result.val())
+            {
+                var mes = result.val()[key];
+                HomeFactory.getDataById(userKey, 'overview').then(function (data) {
+                    var path = $location.path();
+                    var index = path.indexOf('/message')
+                    if (index < 0)
+                        ToastFactory.showCustom(data.name + ": " + mes.message, userKey, 'message');
+                })
+                break;
+            }
+        });
+    }
 
 });
 
 function checkImgOK(value) {
-    console.log(value);
     if (checkOK(value) && value.length > 1)
         return true;
     return false;
