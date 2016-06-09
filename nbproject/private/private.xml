@@ -3,11 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/xampp/htdocs/LinkedIn/index.html</file>
+            <file>file:/C:/xampp/htdocs/LinkedIn/view/message/message.html</file>
             <file>file:/C:/xampp/htdocs/LinkedIn/view/home/homeCtl.js</file>
+            <file>file:/C:/xampp/htdocs/LinkedIn/view/message/msgCtl.js</file>
             <file>file:/C:/xampp/htdocs/LinkedIn/app.js</file>
             <file>file:/C:/xampp/htdocs/LinkedIn/view/user/userCtl.js</file>
             <file>file:/C:/xampp/htdocs/LinkedIn/view/home/home.html</file>
-            <file>file:/C:/xampp/htdocs/LinkedIn/css/style.css</file>
+            <file>file:/C:/xampp/htdocs/LinkedIn/service/HomeFactory.js</file>
         </group>
     </open-files>
 </project-private>

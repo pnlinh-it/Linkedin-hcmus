@@ -20,6 +20,7 @@ myApp.controller('homeCtl', function ($q, $scope, $mdDialog, HomeFactory, ToastF
         'education': false,
         'volunteer': false
     };
+    self.listFriend = [];
     HomeFactory.getData('overview').then(function (result)
     {
         self.data.overview = result;
@@ -86,6 +87,21 @@ myApp.controller('homeCtl', function ($q, $scope, $mdDialog, HomeFactory, ToastF
             self.listUn.volunteer = true;
         }
 
+    });
+
+
+    HomeFactory.getListFriend().then(function (result) {
+        if (result != null) {
+            HomeFactory.getListUserFromUid(result).then(function (listFri) {
+                angular.forEach(listFri, function (user) {
+                    user.letter = getName(user.name).trim();
+                    user.isImg = checkImgOK(user.img);
+                    self.listFriend.push(user);
+                })
+            })
+        }
+    }).catch(function (data) {
+        console.log(data);
     });
 
 

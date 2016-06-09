@@ -27,6 +27,7 @@
                     </div>
 
 
+
                     <h2 >{{homeCtl.data.overview.job}}</h2>
                     <h3>{{homeCtl.data.overview.school}}</h3>
                     <h3>{{homeCtl.data.overview.place}} </h3>
@@ -87,7 +88,7 @@
                                 <md-button ng-click="homeCtl.showEdit($event, 'project.html', homeCtl.data.project, true, true, 'project')" ui-sref='settings'>Add Project</md-button>
                             </md-menu-item>
                             <md-menu-item>
-                                <md-button ng-click="homeCtl.showEdit($event, 'skill.html', homeCtl.data.project, false, true, 'skill')" ui-sref='settings'>Add Skill</md-button>
+                                <md-button ng-click="homeCtl.showEdit($event, 'skill.html', homeCtl.data.skill, false, true, 'skill')" ui-sref='settings'>Add Skill</md-button>
                             </md-menu-item>
                             <md-menu-item>
                                 <md-button ng-click="homeCtl.showEdit($event, 'education.html', homeCtl.data.education, true, true, 'education')" ui-sref='settings'>Add Education</md-button>
@@ -361,12 +362,31 @@
                         </md-content>
                     </md-tab>
 
+                    <md-tab label="Friend">
+                        <md-content  style=" padding: 20px 0 " class="md-padding">
+
+
+                            <div ng-repeat="item in homeCtl.listFriend"   class=" col-xs-6 col-sm-4" >
+
+                                <md-content class="md-padding">   <div  layout="row" >
+                                        <img ng-if="item.isImg" ng-src="{{item.img}}"  class="circle-img" style="align-items: center; margin: auto 10px auto 0;" ng-src="awd" height="50px" width="50px">
+                                        <div ng-if="!item.isImg" style="margin-right: 20px"  >
+                                            <ng-letter-avatar height="50px" width="50px"  dynamic="true" class="md-avatar"  fontSize="20"  shape="round" data="{{item.letter}}" charCount="2" >                        
+                                            </ng-letter-avatar></div>
+                                        <div layout="column" style="margin: auto 0;" >
+                                            <div style="line-height: 16px; font-size: 16px; font-weight: bold"><a href="#/user/{{item.uid}}">{{item.name}}</a></div>
+                                            <div style="line-height: 16px; font-size: 15px;">{{item.job}}</div>
+                                        </div>
+                                    </div> </md-content>
+                            </div>
+                        </md-content>
+                    </md-tab>
                     <md-tab ng-if="homeCtl.isAuther" label="Help">
                         <md-content class="md-padding">
                             <div  style="font-size: 30px; padding: 20px 0 ">Click <md-icon  class="material-icons md-36 inline">&#xE5D4;</md-icon>&nbsp;&nbsp;to add background item </div>
-
                         </md-content>
                     </md-tab>
+
                 </md-tabs>
             </div>
         </div>

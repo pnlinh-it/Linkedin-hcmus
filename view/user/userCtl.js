@@ -9,6 +9,9 @@ angular.module('myApp').controller('userCtl', function ($routeParams, HomeFactor
     vm.friendState = friendState;
     vm.colsize = '8';
     vm.isCanAddFriend = true;
+    vm.listFriend = [];
+
+
     if (vm.friendState === 3)
         vm.canSendMessage = true;
 
@@ -101,8 +104,7 @@ angular.module('myApp').controller('userCtl', function ($routeParams, HomeFactor
     vm.checkUn = function (value) {
         return angular.isUndefined(value);
     }
-    HomeFactory.getDataById(vm.id, 'overview').then(function (result)
-    {
+    HomeFactory.getDataById(vm.id, 'overview').then(function (result) {
         vm.data.overview = result;
         if (!checkOK(vm.data.overview.img) || vm.data.overview.img.trim().length < 1)
             vm.showAvatar = false;
@@ -119,6 +121,24 @@ angular.module('myApp').controller('userCtl', function ($routeParams, HomeFactor
             }
         });
     });
+
+
+    if (!angular.isUndefined(vm.id)) {
+        HomeFactory.getListFriendFromId(vm.id).then(function (result) {
+            if (result != null) {
+                HomeFactory.getListUserFromUid(result).then(function (listFri) {
+                    angular.forEach(listFri, function (user) {
+                        user.letter = getName(user.name).trim();
+                        user.isImg = checkImgOK(user.img);
+                        vm.listFriend.push(user);
+                    })
+                })
+            }
+        });
+    }
+    ;
+
+
 
 });
 

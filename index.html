@@ -146,20 +146,123 @@
                             </md-menu>
                             </li>
 
+                            <!--        Notifications       -->
+                            <li ng-if="vm.isLogin" class="l-right nav-icon">
+                            <md-menu md-offset="0 60" scroll-count="4"  value="'scrollable'">
+                                <md-button aria-label="Open" class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+                                    <md-icon class="material-icons " ng-class="md - 24">public</md-icon>
+
+                                </md-button>
+                                <md-menu-content width="6"  style="padding: 8px 0 0 0 !important">
+                                    <md-content>
+                                        <md-list style="padding: 0px !important" >
+                                            <md-list-item ng-click="vm.gotoMessage(msg.uid)" ng-repeat="msg in vm.listMessage| orderBy:'-time'" class="md-2-line"  ng-click="null">
+                                                <img  ng-if="msg.isImg"  ng-src="{{msg.img}}" class="md-avatar"  />
+                                                <div ng-if="!msg.isImg" style="margin-right: 20px;"  class="md-avatar" >
+                                                    <ng-letter-avatar  height="40px" width="40px"  dynamic="true" class="md-avatar"  fontSize="18"  shape="round" data="{{msg.letter}}" charCount="2" >                        
+                                                    </ng-letter-avatar>
+                                                </div>
+                                                <div class="md-list-item-text">
+                                                    <h3><strong>{{msg.name}} </strong></h3>
+                                                    <p>{{msg.message}}</p>
+                                                </div>
+                                                <md-divider ></md-divider>
+                                            </md-list-item>   
+
+
+                                        </md-list>
+                                    </md-content>
+                                    <md-button ng-click="vm.gotoMessage('')" >See All Message</md-button>
+                                </md-menu-content>
+                            </md-menu>
+                            </li> 
+
+                            <!--        Messages       -->
+                            <li ng-if="vm.isLogin" class="l-right nav-icon">
+                            <md-menu md-offset="0 60" scroll-count="4"  value="'scrollable'">
+                                <!--                                $mdOpenMenu($event)-->
+                                <md-button aria-label="Open" class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+                                    <md-icon class="material-icons " ng-class="md - 24">message</md-icon>
+                                </md-button>
+                                <md-menu-content width="6"  style="padding: 8px 0 0 0 !important">
+                                    <md-content>
+                                        <md-list style="padding: 0px !important" >
+                                            <md-list-item ng-click="vm.gotoMessage(msg.uid)" ng-repeat="msg in vm.listMessage| orderBy:'-time'" class="md-2-line"  ng-click="null">
+                                                <img  ng-if="msg.isImg"  ng-src="{{msg.img}}" class="md-avatar"  />
+                                                <div ng-if="!msg.isImg" style="margin-right: 20px;"  class="md-avatar" >
+                                                    <ng-letter-avatar  height="40px" width="40px"  dynamic="true" class="md-avatar"  fontSize="18"  shape="round" data="{{msg.letter}}" charCount="2" >                        
+                                                    </ng-letter-avatar>
+                                                </div>
+                                                <div class="md-list-item-text">
+                                                    <h3><strong>{{msg.name}} </strong></h3>
+                                                    <p>{{msg.message}}</p>
+                                                </div>
+                                                <md-divider ></md-divider>
+                                            </md-list-item>   
+
+
+                                        </md-list>
+                                    </md-content>
+                                    <md-button ng-click="vm.gotoMessage('')" >See All Message</md-button>
+                                </md-menu-content>
+                            </md-menu>
+                            </li> 
+
+
+
+
+
+
+
+
+
+                            <!--        People       -->
+                            <li ng-if="vm.isLogin" class="l-right nav-icon">
+                            <md-menu md-offset="0 60" scroll-count="4"  value="'scrollable'">
+                                <md-button aria-label="Open" class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+                                    <md-icon class="material-icons ">people</md-icon>
+
+                                </md-button>
+                                <md-menu-content width="6"  style="padding: 8px 0 0 0 !important">
+                                    <md-content>
+                                        <md-list style="padding: 0px !important" >
+                                            <md-list-item ng-click="vm.gotoMessage(msg.uid)" ng-repeat="msg in vm.listMessage| orderBy:'-time'" class="md-2-line"  ng-click="null">
+                                                <img  ng-if="msg.isImg"  ng-src="{{msg.img}}" class="md-avatar"  />
+                                                <div ng-if="!msg.isImg" style="margin-right: 20px;"  class="md-avatar" >
+                                                    <ng-letter-avatar  height="40px" width="40px"  dynamic="true" class="md-avatar"  fontSize="18"  shape="round" data="{{msg.letter}}" charCount="2" >                        
+                                                    </ng-letter-avatar>
+                                                </div>
+                                                <div class="md-list-item-text">
+                                                    <h3><strong>{{msg.name}} </strong></h3>
+                                                    <p>{{msg.message}}</p>
+                                                </div>
+                                                <md-divider ></md-divider>
+                                            </md-list-item>   
+
+
+                                        </md-list>
+                                    </md-content>
+                                    <md-button ng-click="vm.gotoMessage('')" >See All Message</md-button>
+                                </md-menu-content>
+                            </md-menu>
+                            </li> 
+
+                            <!--        Search       -->
                             <li  ng-if="vm.isLogin" ng-click="vm.showSearch = !vm.showSearch" class="l-right nav-icon">
                             <md-button class="md-icon-button" aria-label="More">
-                                <img src="imgs/search.svg"/>
+                                <md-icon class="material-icons ">search</md-icon>
                             </md-button>
                             </li>
 
-                            </li>
-                            <li  ng-if="vm.isLogin" class="l-right nav-icon">
-                                <a href="#/message">
-                                    <md-button class="md-icon-button" aria-label="More">
-                                        <img src="imgs/message.svg"/>
-                                    </md-button>
-                                </a>
-                            </li>
+
+
+                            <!--                            <li  ng-if="vm.isLogin" class="l-right nav-icon">
+                                                            <a href="#/message">
+                                                                <md-button class="md-icon-button" aria-label="More">
+                                                                    <img src="imgs/message.svg"/>
+                                                                </md-button>
+                                                            </a>
+                                                        </li>-->
                         </ul> 
                     </nav>
                 </md-toolbar>
@@ -167,6 +270,7 @@
             <md-content id="content">
                 <div class="wrapper" >
                     <div  id="main" >
+
                         <ng-view></ng-view>
                     </div>
                 </div>

@@ -213,10 +213,10 @@ app.controller('Ctrl', function ($scope, $q, $timeout, AuthFactory, HomeFactory,
 
                 }
             });
-             vm.database.ref('friends/' + user.uid).on('child_removed', function (result) {
+            vm.database.ref('friends/' + user.uid).on('child_removed', function (result) {
                 if (newAddFriend)
                 {
-                   $rootScope.$broadcast('friendRemove', result);
+                    $rootScope.$broadcast('friendRemove', result);
 
                 }
             });
@@ -227,8 +227,13 @@ app.controller('Ctrl', function ($scope, $q, $timeout, AuthFactory, HomeFactory,
         }
     });
 
-   
 
+    vm.openMenu = function ($mdOpenMenu, ev) {
+        $mdOpenMenu(ev);
+        HomeFactory.getListMessage().then(function (data) {
+            vm.listMessage = data;
+        })
+    };
 
 
     vm.receivedMessage = function (result, user) {
@@ -247,6 +252,13 @@ app.controller('Ctrl', function ($scope, $q, $timeout, AuthFactory, HomeFactory,
                 break;
             }
         });
+    }
+    vm.listMessage = [];
+
+
+    vm.gotoMessage = function (id) {
+        var s = '/message/' + id.trim();
+        $location.url(s);
     }
 
 });

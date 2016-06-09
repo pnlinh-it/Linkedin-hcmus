@@ -44,6 +44,84 @@ angular.module('myApp').factory('HomeFactory', ['CONFIG', '$q', '$rootScope', '$
             return defer.promise;
         }
 
+        HomeFactory.getListMessage = function () {
+            var defer = $q.defer();
+            var unsubscribe = auth.onAuthStateChanged(function (curUser) {
+                unsubscribe();
+                if (curUser)
+                {
+                    HomeFactory.getListFriendFromId(curUser.uid).then(function (result) {
+                        if (result != null) {
+                            HomeFactory.getListUserFromUid(result).then(function (listFri) {
+
+                                var promises = [];
+                                angular.forEach(listFri, function (friend) {
+                                    var promise = HomeFactory.getLastMessage(curUser.uid, friend.uid);
+                                    promises.push(promise);
+                                })
+                                return $q.all(promises).then(function (data) {
+                                    var returnData = [];
+                                    if (data != null) {
+                                        angular.forEach(data, function (message, index) {
+                                            if (message != null) {
+                                                angular.forEach(listFri, function (friend) {
+                                                    if (message.uid === friend.uid) {
+                                                        friend.message = message[Object.keys(message)[0]].message;
+                                                        friend.letter = getName(friend.name).trim();
+                                                        friend.isImg = checkImgOK(friend.img);
+                                                        friend.time = message[Object.keys(message)[0]].time;
+                                                        
+                                                        returnData.push(friend);
+                                                    }
+                                                })
+                                            }
+                                        })
+                                    }
+                                    defer.resolve(returnData);
+                                })
+                            })
+                        }
+                    });
+                }
+            });
+            return defer.promise;
+        }
+
+        HomeFactory.getLastMessage = function (userID, friendID) {
+            var defer = $q.defer();
+            database.ref('users/' + userID + '/messages/' + friendID).limitToLast(1).once('value').then(function (snapshot) {
+                var rs = null;
+                if (snapshot.val() != null) {
+                    rs = snapshot.val();
+                    rs.uid = friendID;
+                }
+                defer.resolve(rs);
+            });
+            return defer.promise;
+        }
+
+
+
+        HomeFactory.getListFriendFromId = function (id) {
+            var defer = $q.defer();
+            var listFriend = {};
+            var dataReturn = [];
+            database.ref('friends/' + id).once('value').then(function (snapshot) {
+                if (snapshot.val() !== null) {
+                    listFriend = snapshot.val();
+                    var ids = Object.keys(listFriend);
+                    angular.forEach(ids, function (key, index) {
+                        if (listFriend[key] === 3)
+                            dataReturn.push(key);
+                        if (index === ids.length - 1)
+                            defer.resolve(dataReturn);
+                    })
+                } else
+                    defer.reject(null);
+            })
+            return defer.promise;
+        }
+
 
         HomeFactory.sendMessage = function (message, id) {
             var defer = $q.defer();
@@ -69,9 +147,6 @@ angular.module('myApp').factory('HomeFactory', ['CONFIG', '$q', '$rootScope', '$
 
             return defer.promise;
         }
-
-
-
 
         HomeFactory.getCurentUser = function () {
             var defer = $q.defer();
@@ -150,6 +225,7 @@ angular.module('myApp').factory('HomeFactory', ['CONFIG', '$q', '$rootScope', '$
                 promises.push(promise);
             })
             return $q.all(promises).then(function (data) {
+
                 return data;
             })
         }
@@ -225,7 +301,6 @@ angular.module('myApp').factory('HomeFactory', ['CONFIG', '$q', '$rootScope', '$
                         angular.forEach(results, function (data) {
 
                             angular.forEach(data.val(), function (key, value) {
-
                                 user[value] = key;
                             })
 
