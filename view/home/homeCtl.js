@@ -21,8 +21,15 @@ myApp.controller('homeCtl', function ($q, $scope, $mdDialog, HomeFactory, ToastF
         'volunteer': false
     };
     self.listFriend = [];
+
+    self.getTime = function (time) {
+        return getTimeText(time);
+    }
+    self.posts = [];
+    self.cmt = {};
     HomeFactory.getData('overview').then(function (result)
     {
+
         self.data.overview = result;
         if (!checkOK(self.data.overview.img) || self.data.overview.img.trim().length < 1)
             self.showAvatar = false;
@@ -43,6 +50,10 @@ myApp.controller('homeCtl', function ($q, $scope, $mdDialog, HomeFactory, ToastF
             });
         })
     });
+
+    self.showPost = function () {
+        console.log('show post');
+    }
     self.gotoFriend = function (id) {
         var s = '/user/' + id.trim();
         $location.url(s);
@@ -90,7 +101,7 @@ myApp.controller('homeCtl', function ($q, $scope, $mdDialog, HomeFactory, ToastF
     });
 
 
-    HomeFactory.getListFriend().then(function (result) {
+    HomeFactory.getListFriend(3).then(function (result) {
         if (result != null) {
             HomeFactory.getListUserFromUid(result).then(function (listFri) {
                 angular.forEach(listFri, function (user) {
@@ -105,24 +116,6 @@ myApp.controller('homeCtl', function ($q, $scope, $mdDialog, HomeFactory, ToastF
     });
 
 
-
-
-
-//    $scope.$on('eventFired', function (event, data) {
-//
-//
-//        $timeout(function () {
-//            self.data.summary = data;
-//        }, 1);
-//
-//        if (checkOK(data)) {
-//            self.listUn.summary = true;
-//        } else {
-//            self.listUn.summary = false;
-//        }
-//
-//    });
-    console.log(FacebookFactory.token);
     self.checkUn = function (value) {
         return angular.isUndefined(value);
     }
@@ -130,7 +123,52 @@ myApp.controller('homeCtl', function ($q, $scope, $mdDialog, HomeFactory, ToastF
     self.checkSummary = function () {
         return self.checkUn(self.data.summary)
     }
+    //HomeFactory.addComment('-KJplXZHwXdBGktxLt6e', 'Test Comment 02');
+    // HomeFactory.addComment('-KJqEvXZDyh84NfOxoX8', 'Test Comment 01');
+    //  HomeFactory.addComment('-KJqEvXZDyh84NfOxoX8', 'Test Comment 02');
 
+
+    HomeFactory.getCurrentUserPost().then(function (listPost) {
+
+        if (listPost !== null) {
+
+            var ids = Object.keys(listPost);
+            angular.forEach(ids, function (id) {
+                var post = listPost[id];
+                post.pid = id;
+                self.posts.push(post);
+            })
+            console.log(self.posts);
+            console.log(listPost);
+        }
+    })
+    self.addComment = function (postId, text, index) {
+        console.log(text);
+        if (!angular.isUndefined(text) && text.length > 0) {
+            HomeFactory.addComment(postId, text);
+
+        }
+
+        self.cmt['id' + index] = "";
+    }
+
+
+    self.addNewPost = function (ev) {
+        var parentEl = angular.element(document.body);
+        $mdDialog.show({
+            controller: 'postCtl',
+            templateUrl: 'template/add-post.html',
+            parent: parentEl,
+            targetEvent: ev,
+        }).then(function (data) {
+            HomeFactory.addNewPost(data).then(function (result) {
+                self.posts.push(result);
+                console.log(result);
+            })
+        }, function () {
+
+        });
+    }
 
     self.showEdit = function (ev, template, data, isAdd, isArray, key) {
         var templatePath = "template/" + template;
@@ -217,9 +255,95 @@ myApp.controller('homeCtl', function ($q, $scope, $mdDialog, HomeFactory, ToastF
 
         });
     }
+    self.deletePost = function (pid, index) {
+        HomeFactory.deletePost(pid).then(function () {
+            console.log('delete completed');
+            console.log(index);
+            var i = -1;
+            var isloop = true;
+            angular.forEach(self.posts, function (post, index) {
+                if (isloop) {
+                    if (post.pid === pid) {
+                        i = index;
+                        isloop = false;
+                    }
+                }
+            })
+            $timeout(function () {
+                if (i >= 0) {
+                    self.posts.splice(i, 1);
+                }
+
+            }, 1);
+        });
+    };
+
+    self.database = HomeFactory.getDatabase();
+    var newItems = false;
+    self.database.ref('comments/').once('value', function (result) {
+        newItems = true;
+    });
+    self.database.ref('comments/').on('child_changed', function (result) {
+        if (newItems)
+            self.addcmt(result);
+    });
+
+    self.database.ref('comments/').on('child_added', function (result) {
+        if (newItems)
+            self.addcmt(result);
+    });
+
+    self.addcmt = function (result) {
+        var isloop = true;
+        angular.forEach(self.posts, function (post, index) {
+            if (isloop) {
+                if (post.pid === result.key) {
+                    self.database.ref('comments/' + result.key).limitToLast(1).once('value').then(function (cmt) {
+                        var cm = cmt.val();
+                        $timeout(function () {
+                            self.posts[index].comments[Object.keys(cm)[0]] = cm[Object.keys(cm)[0]];
+                        }, 1);
+                    })
+                }
+            }
+
+        })
+    }
+
+
 
 
 });
+myApp.controller('postCtl', function ($timeout, $scope, $mdDialog, HomeFactory) {
+
+    $scope.post = {};
+    $scope.hide = function () {
+        $mdDialog.hide();
+    };
+    $scope.cancel = function () {
+        $mdDialog.cancel();
+    };
+    $scope.addPost = function (data) {
+        $mdDialog.hide(data);
+    }
+
+
+    $scope.setFile = function (element, data, isLoadAtt, key) {
+        $timeout(function () {
+            $scope[isLoadAtt] = true;
+        }, 1);
+        $scope.currentFile = element.files[0];
+        var result = HomeFactory.uploadImage($scope.currentFile, key);
+        result.then(function (url) {
+            $scope[isLoadAtt] = false;
+            $scope.post[data] = url;
+        });
+    };
+    $scope.uploadClick = function (id) {
+        var el = document.getElementById(id);
+        el.click();
+    };
+})
 myApp.controller('DialogController',
         function ($scope, $mdDialog, HomeFactory, $timeout,
                 data, isAdd, isArray, key) {
@@ -366,4 +490,27 @@ function getkey(key) {
 
 function getLength(obj) {
     return Object.keys(obj).length;
+}
+
+function  getTimeText(postCreationTimestamp) {
+    var millis = Date.now() - postCreationTimestamp;
+    var ms = millis % 1000;
+    millis = (millis - ms) / 1000;
+    var secs = millis % 60;
+    millis = (millis - secs) / 60;
+    var mins = millis % 60;
+    millis = (millis - mins) / 60;
+    var hrs = millis % 24;
+    var days = (millis - hrs) / 24;
+    var timeSinceCreation = [days, hrs, mins, secs, ms];
+
+    var timeText = 'Now';
+    if (timeSinceCreation[0] !== 0) {
+        timeText = timeSinceCreation[0] + 'd';
+    } else if (timeSinceCreation[1] !== 0) {
+        timeText = timeSinceCreation[1] + 'h';
+    } else if (timeSinceCreation[2] !== 0) {
+        timeText = timeSinceCreation[2] + 'm';
+    }
+    return timeText;
 }

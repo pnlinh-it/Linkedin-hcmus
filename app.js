@@ -154,6 +154,11 @@ app.controller('Ctrl', function ($scope, $q, $timeout, AuthFactory, HomeFactory,
     vm.img = "";
     vm.showAvatar = true;
     vm.name = "";
+    vm.listMessage = [];
+    vm.listRequestFriend = [];
+
+    vm.isShowListFriend = false;
+    vm.isShowListMessage = false;
 
     vm.auth.onAuthStateChanged(function (user) {
         if (user) {
@@ -229,12 +234,55 @@ app.controller('Ctrl', function ($scope, $q, $timeout, AuthFactory, HomeFactory,
 
 
     vm.openMenu = function ($mdOpenMenu, ev) {
+        vm.listMessage = [];
         $mdOpenMenu(ev);
+        vm.isShowListMessage = false;
         HomeFactory.getListMessage().then(function (data) {
-            vm.listMessage = data;
-        })
+            if (data !== null && data.length > 0)
+            {
+                vm.isShowListMessage = true;
+                vm.listMessage = data;
+            } else
+                vm.isShowListMessage = true;
+
+        });
     };
 
+    vm.openMenuFriend = function ($mdOpenMenu, ev) {
+        vm.listRequestFriend = [];
+        $mdOpenMenu(ev);
+        vm.isShowListFriend = false;
+        HomeFactory.getListFriend(2).then(function (result) {
+            if (result !== null) {
+                HomeFactory.getListUserFromUid(result).then(function (listFri) {
+
+                    if (listFri !== null) {
+                        vm.isShowListFriend = true;
+                        angular.forEach(listFri, function (user) {
+                            user.letter = getName(user.name).trim();
+                            user.isImg = checkImgOK(user.img);
+                            user.isFriend = false;
+                            vm.listRequestFriend.push(user);
+                        })
+                    }
+
+                })
+            } else
+                vm.isShowListFriend = true;
+
+        }).catch(function (data) {
+            console.log(data);
+        });
+    };
+
+    vm.addFriend = function (user) {
+        if (user.isFriend)
+            HomeFactory.friendHandle(3, user.uid);
+        else
+            HomeFactory.friendHandle(null, user.uid);
+
+
+    }
 
     vm.receivedMessage = function (result, user) {
         var userKey = result.key;
@@ -253,11 +301,15 @@ app.controller('Ctrl', function ($scope, $q, $timeout, AuthFactory, HomeFactory,
             }
         });
     }
-    vm.listMessage = [];
+
 
 
     vm.gotoMessage = function (id) {
         var s = '/message/' + id.trim();
+        $location.url(s);
+    }
+    vm.gotoUser = function (id) {
+        var s = '/user/' + id.trim();
         $location.url(s);
     }
 

@@ -14,11 +14,167 @@ angular.module('myApp').factory('HomeFactory', ['CONFIG', '$q', '$rootScope', '$
         var database = firebase.database();
         var storage = firebase.storage();
         var curUser = {};
-
         HomeFactory.getDatabase = function () {
             return database;
         }
-        HomeFactory.getListFriend = function () {
+
+
+        HomeFactory.addNewPost = function (post) {
+            var defer = $q.defer();
+            var unsubscribe = auth.onAuthStateChanged(function (curUser) {
+                unsubscribe();
+                if (curUser)
+                {
+                    HomeFactory.getDataById(curUser.uid, 'overview').then(function (user) {
+                        var newPostKey = database.ref('/posts').push().key;
+                        var update = {};
+                        var newPost = {
+                            img: post.img,
+                            caption: post.caption,
+                            timestamp: firebase.database.ServerValue.TIMESTAMP,
+                            author: {
+                                uid: user.uid,
+                                name: user.name,
+                                img: user.img,
+                                letter: getName(user.name).trim(),
+                                isImg: checkImgOK(user.img)
+                            }
+                        };
+                        update['/posts/' + newPostKey] = newPost;
+                        update['users/' + curUser.uid + '/posts/' + newPostKey] = true;
+                        database.ref().update(update).then(function () {
+                            newPost.pid=newPostKey;
+                            newPost.comments={};
+                            defer.resolve(newPost);
+                        })
+
+                    })
+
+                }
+            });
+            return defer.promise;
+        }
+
+        HomeFactory.addComment = function (postId, conmentText) {
+            var defer = $q.defer();
+            var unsubscribe = auth.onAuthStateChanged(function (curUser) {
+                unsubscribe();
+                if (curUser)
+                {
+                    HomeFactory.getDataById(curUser.uid, 'overview').then(function (user) {
+                        var commentObject = {
+                            text: conmentText,
+                            timestamp: Date.now(),
+                            author: {
+                                uid: user.uid,
+                                name: user.name,
+                                img: user.img,
+                                letter: getName(user.name).trim(),
+                                isImg: checkImgOK(user.img)
+                            }
+                        };
+
+                        database.ref('comments/' + postId).push(commentObject).then(function () {
+                            console.log('add comment completed')
+                            defer.resolve();
+                        })
+                    })
+
+                }
+            });
+            return defer.promise;
+        }
+
+        HomeFactory.getCurrentUserPost = function () {
+            var defer = $q.defer();
+            var unsubscribe = auth.onAuthStateChanged(function (curUser) {
+                unsubscribe();
+                if (curUser)
+                {
+                    HomeFactory.getUserPost(curUser.uid).then(function (data) {
+                        defer.resolve(data);
+                    });
+                }
+            });
+            return defer.promise;
+        }
+        HomeFactory.deletePost = function (pid) {
+            var defer = $q.defer();
+            var unsubscribe = auth.onAuthStateChanged(function (curUser) {
+                unsubscribe();
+                if (curUser)
+                {
+                    var updateObj = {};
+                    updateObj['users/' + curUser.uid + '/posts/' + pid] = null;
+                    updateObj['comments/' + pid] = null;
+                    updateObj['posts/' + pid] = null;
+                    database.ref().update(updateObj).then(function () {
+                        defer.resolve();
+                    })
+                }
+            });
+            return defer.promise;
+        }
+
+        HomeFactory.getUserPost = function (userId) {
+            var defer = $q.defer();
+            database.ref('users/' + userId + '/posts').once('value').then(function (snapshot) {
+                var result = {};
+                if (snapshot.val() === null)
+                    result = {};
+                else
+                    result = snapshot.val();
+
+                var ids = Object.keys(result);
+                var promises = [];
+                angular.forEach(ids, function (id) {
+                    var promise = HomeFactory.getPostData(id);
+                    promises.push(promise);
+                })
+                $q.all(promises).then(function (data) {
+                    angular.forEach(data, function (post) {
+                        result[post.key] = post.val();
+                    })
+
+                    promises = [];
+                    angular.forEach(ids, function (id) {
+                        var promise = HomeFactory.getPostComment(id);
+                        promises.push(promise);
+                    })
+                    $q.all(promises).then(function (cmtPro) {
+                        angular.forEach(cmtPro, function (comment) {
+                            result[comment.key]['comments'] = comment.val();
+                        })
+
+                        defer.resolve(result);
+                    })
+
+
+
+
+                })
+            })
+            return defer.promise;
+        }
+        HomeFactory.getPostData = function (postId) {
+            return database.ref('/posts/' + postId).once('value');
+        }
+        HomeFactory.getPostComment = function (postId) {
+            return database.ref('/comments/' + postId).once('value');
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+        HomeFactory.getListFriend = function (state) {
             var defer = $q.defer();
             var listFriend = {};
             var dataReturn = [];
@@ -31,21 +187,42 @@ angular.module('myApp').factory('HomeFactory', ['CONFIG', '$q', '$rootScope', '$
                             listFriend = snapshot.val();
                             var ids = Object.keys(listFriend);
                             angular.forEach(ids, function (key, index) {
-                                if (listFriend[key] === 3)
+                                if (listFriend[key] === state)
                                     dataReturn.push(key);
                                 if (index === ids.length - 1)
                                     defer.resolve(dataReturn);
                             })
                         } else
-                            defer.reject(null);
+                            defer.resolve(null);
                     })
                 }
             });
             return defer.promise;
         }
 
+        HomeFactory.getListFriendFromId = function (id) {
+            var defer = $q.defer();
+            var listFriend = {};
+            var dataReturn = [];
+            database.ref('friends/' + id).once('value').then(function (snapshot) {
+                if (snapshot.val() !== null) {
+                    listFriend = snapshot.val();
+                    var ids = Object.keys(listFriend);
+                    angular.forEach(ids, function (key, index) {
+                        if (listFriend[key] === 3)
+                            dataReturn.push(key);
+                        if (index === ids.length - 1)
+                            defer.resolve(dataReturn);
+                    })
+                } else
+                    defer.resolve(null);
+            })
+            return defer.promise;
+        }
+
         HomeFactory.getListMessage = function () {
             var defer = $q.defer();
+            var returnData = [];
             var unsubscribe = auth.onAuthStateChanged(function (curUser) {
                 unsubscribe();
                 if (curUser)
@@ -54,33 +231,36 @@ angular.module('myApp').factory('HomeFactory', ['CONFIG', '$q', '$rootScope', '$
                         if (result != null) {
                             HomeFactory.getListUserFromUid(result).then(function (listFri) {
 
-                                var promises = [];
-                                angular.forEach(listFri, function (friend) {
-                                    var promise = HomeFactory.getLastMessage(curUser.uid, friend.uid);
-                                    promises.push(promise);
-                                })
-                                return $q.all(promises).then(function (data) {
-                                    var returnData = [];
-                                    if (data != null) {
-                                        angular.forEach(data, function (message, index) {
-                                            if (message != null) {
-                                                angular.forEach(listFri, function (friend) {
-                                                    if (message.uid === friend.uid) {
-                                                        friend.message = message[Object.keys(message)[0]].message;
-                                                        friend.letter = getName(friend.name).trim();
-                                                        friend.isImg = checkImgOK(friend.img);
-                                                        friend.time = message[Object.keys(message)[0]].time;
-                                                        
-                                                        returnData.push(friend);
-                                                    }
-                                                })
-                                            }
-                                        })
-                                    }
+                                if (listFri !== null) {
+                                    var promises = [];
+                                    angular.forEach(listFri, function (friend) {
+                                        var promise = HomeFactory.getLastMessage(curUser.uid, friend.uid);
+                                        promises.push(promise);
+                                    })
+                                    return $q.all(promises).then(function (data) {
+
+                                        if (data != null) {
+                                            angular.forEach(data, function (message, index) {
+                                                if (message != null) {
+                                                    angular.forEach(listFri, function (friend) {
+                                                        if (message.uid === friend.uid) {
+                                                            friend.message = message[Object.keys(message)[0]].message;
+                                                            friend.letter = getName(friend.name).trim();
+                                                            friend.isImg = checkImgOK(friend.img);
+                                                            friend.time = message[Object.keys(message)[0]].time;
+                                                            returnData.push(friend);
+                                                        }
+                                                    })
+                                                }
+                                            })
+                                        }
+                                        defer.resolve(returnData);
+                                    })
+                                } else
                                     defer.resolve(returnData);
-                                })
                             })
-                        }
+                        } else
+                            defer.resolve(returnData);
                     });
                 }
             });
@@ -99,29 +279,6 @@ angular.module('myApp').factory('HomeFactory', ['CONFIG', '$q', '$rootScope', '$
             });
             return defer.promise;
         }
-
-
-
-        HomeFactory.getListFriendFromId = function (id) {
-            var defer = $q.defer();
-            var listFriend = {};
-            var dataReturn = [];
-            database.ref('friends/' + id).once('value').then(function (snapshot) {
-                if (snapshot.val() !== null) {
-                    listFriend = snapshot.val();
-                    var ids = Object.keys(listFriend);
-                    angular.forEach(ids, function (key, index) {
-                        if (listFriend[key] === 3)
-                            dataReturn.push(key);
-                        if (index === ids.length - 1)
-                            defer.resolve(dataReturn);
-                    })
-                } else
-                    defer.reject(null);
-            })
-            return defer.promise;
-        }
-
 
         HomeFactory.sendMessage = function (message, id) {
             var defer = $q.defer();
@@ -144,7 +301,6 @@ angular.module('myApp').factory('HomeFactory', ['CONFIG', '$q', '$rootScope', '$
                     defer.resolve();
                 }
             });
-
             return defer.promise;
         }
 
@@ -161,9 +317,6 @@ angular.module('myApp').factory('HomeFactory', ['CONFIG', '$q', '$rootScope', '$
             });
             return defer.promise;
         }
-
-
-
 
         HomeFactory.getUser = function () {
             var defer = $q.defer();
@@ -207,7 +360,6 @@ angular.module('myApp').factory('HomeFactory', ['CONFIG', '$q', '$rootScope', '$
                                     })
                                 } else
                                     defer.reject(null);
-
                             })
                             .catch(function (error) {
                                 console.log(error);
@@ -231,14 +383,13 @@ angular.module('myApp').factory('HomeFactory', ['CONFIG', '$q', '$rootScope', '$
         }
 
         HomeFactory.checkFriend = function (friId) {
-            //0 not friend
-            //1 wait
-            //2 rep
-            //3 friend 
+//0 not friend
+//1 wait
+//2 rep
+//3 friend 
             var defer = $q.defer();
             var myFriends = {};
             var state = 0;
-
             var unsubscribe = auth.onAuthStateChanged(function (curUser) {
                 unsubscribe();
                 if (curUser)
@@ -261,9 +412,9 @@ angular.module('myApp').factory('HomeFactory', ['CONFIG', '$q', '$rootScope', '$
             return defer.promise;
         }
 
-        //null remove, decline request
-        //3 become friend
-        //1 send request
+//null remove, decline request
+//3 become friend
+//1 send request
         HomeFactory.friendHandle = function (id, friId) {
 
             var unsubscribe = auth.onAuthStateChanged(function (curUser) {
@@ -282,7 +433,6 @@ angular.module('myApp').factory('HomeFactory', ['CONFIG', '$q', '$rootScope', '$
                 return defer.promise;
             });
             var defer = $q.defer();
-
         }
 
 
@@ -346,25 +496,6 @@ angular.module('myApp').factory('HomeFactory', ['CONFIG', '$q', '$rootScope', '$
             });
             return defer.promise;
         };
-//        HomeFactory.getSummary = function () {
-//            console.log('start get data');
-//            var defer = $q.defer();
-//            var unsubscribe = auth.onAuthStateChanged(function (user) {
-//                unsubscribe();
-//                if (user)
-//                {
-//                    database.ref('users/' + user.uid + '/' + 'summary').on('child_added', function (snapshot, prevChildKey) {
-//                        console.log(prevChildKey);
-//                        $rootScope.$broadcast('eventFired', snapshot.val());
-//                    });
-//
-//
-//                }
-//            });
-//            console.log('get datat end');
-//            return defer.promise;
-//        };
-
         HomeFactory.updateOverview = function (data, key) {
             var defer = $q.defer();
             if (curUser)
@@ -398,7 +529,7 @@ angular.module('myApp').factory('HomeFactory', ['CONFIG', '$q', '$rootScope', '$
                 defer.reject();
             return defer.promise;
         }
-//HomeFactory.getSummary();
+
         HomeFactory.uploadImage = function (file, key) {
             var defer = $q.defer();
             console.log(file.name);

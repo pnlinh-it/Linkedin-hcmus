@@ -11,6 +11,10 @@ angular.module('myApp').controller('userCtl', function ($routeParams, HomeFactor
     vm.isCanAddFriend = true;
     vm.listFriend = [];
 
+    vm.posts = [];
+    vm.cmt = {};
+
+
 
     if (vm.friendState === 3)
         vm.canSendMessage = true;
@@ -138,6 +142,62 @@ angular.module('myApp').controller('userCtl', function ($routeParams, HomeFactor
     }
     ;
 
+    HomeFactory.getUserPost(vm.id).then(function (listPost) {
+
+        if (listPost !== null) {
+
+            var ids = Object.keys(listPost);
+            angular.forEach(ids, function (id) {
+                var post = listPost[id];
+                post.pid = id;
+                vm.posts.push(post);
+            })
+        }
+    })
+    vm.addComment = function (postId, text, index) {
+        if (!angular.isUndefined(text) && text.length > 0) {
+            HomeFactory.addComment(postId, text);
+        }
+        vm.cmt['id' + index] = "";
+    }
+
+    vm.database = HomeFactory.getDatabase();
+    var newItems = false;
+    vm.database.ref('comments/').once('value', function (result) {
+        newItems = true;
+    });
+    vm.database.ref('comments/').on('child_changed', function (result) {
+        console.log('change');
+        if (newItems)
+            vm.addcmt(result);
+    });
+    vm.database.ref('comments/').on('child_added', function (result) {
+        console.log('add');
+        if (newItems)
+            vm.addcmt(result);
+    });
+
+    vm.getTime = function (time) {
+        return getTimeText(time);
+    }
+    vm.addcmt = function (result) {
+        var isloop = true;
+        angular.forEach(vm.posts, function (post, index) {
+            if (isloop) {
+                if (post.pid === result.key) {
+                    vm.database.ref('comments/' + result.key).limitToLast(1).once('value').then(function (cmt) {
+                        var cm = cmt.val();
+                        $timeout(function () {
+                            if (vm.posts[index].comments == null)
+                                vm.posts[index].comments = {};
+                            vm.posts[index].comments[Object.keys(cm)[0]] = cm[Object.keys(cm)[0]];
+                        }, 1);
+                    })
+                }
+            }
+
+        })
+    }
 
 
 });

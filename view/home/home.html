@@ -98,6 +98,11 @@
                             </md-menu-item>
                             <md-menu-divider></md-menu-divider>
                             <md-menu-item>
+                                <md-button ng-click="homeCtl.addNewPost($event)" >Add Post</md-button>
+                            </md-menu-item>
+
+                            <md-menu-divider></md-menu-divider>
+                            <md-menu-item>
                                 <md-button>Close</md-button>
                             </md-menu-item>
                         </md-menu-content>
@@ -381,11 +386,104 @@
                             </div>
                         </md-content>
                     </md-tab>
+
+                    <md-tab ng-click="homeCtl.showPost()"  label="Post">
+                        <div class="md-padding">
+                            <md-content style="padding: 20px 0" ng-repeat="post in homeCtl.posts| orderBy:'-timestamp' "  class="col-center-block col-sm-8">
+                                <md-card>
+                                    <md-card-header>
+                                        <md-card-avatar>
+                                            <img ng-if="post.author.isImg"  class="md-user-avatar" src="{{post.author.img}}"/>
+                                            <div ng-if="!post.author.isImg"   >
+                                                <ng-letter-avatar height="50px" width="50px"  dynamic="true" class="md-avatar"  fontSize="15"  shape="round" data="{{post.author.letter}}" charCount="2" >                        
+                                                </ng-letter-avatar></div>
+                                        </md-card-avatar>
+                                        <md-card-header-text>
+                                            <span class="md-title">{{post.author.name}}</span>
+                                            <span class="md-subhead">{{homeCtl.getTime(post.timestamp)}}</span>
+                                        </md-card-header-text>
+                                    </md-card-header>
+
+
+                                    <div class="post-image" style="background-image: url(&quot;{{post.img}}&quot;);"></div>
+                                    <!--                                    <md-card-title>
+                                                                            <md-card-title-text>
+                                                                                <span class="md-headline">Card header</span>
+                                                                            </md-card-title-text>
+                                                                        </md-card-title>-->
+
+
+
+                                    <div class="main-info-UR-card" >
+                                        <md-menu ng-if="homeCtl.isAuther">
+                                            <md-button  class="md-icon-button" ng-click="$mdOpenMenu()" aria-label="More">
+                                                <md-icon class="material-icons " ng-class="md - 24">&#xE5D4;</md-icon>
+                                            </md-button>
+                                            <md-menu-content  >
+                                                <md-menu-item>
+                                                    <md-button ng-click="homeCtl.deletePost(post.pid, $index)" ui-sref='settings'>Delete</md-button>
+                                                </md-menu-item>
+                                            </md-menu-content>
+                                        </md-menu>
+                                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+                                    <md-card-content>
+                                        <p>
+                                            {{post.caption}}
+                                        </p>
+                                        <md-list >
+
+
+                                            <md-list-item ng-repeat="(key, comment) in post.comments" class="md-2-line">
+                                                <img ng-if="comment.author.isImg" ng-src="{{comment.author.img}}" class="md-avatar" />
+                                                <div ng-if="!comment.author.isImg" style="margin-top: 15px;"   >
+                                                    <ng-letter-avatar height="40px" width="40px"  dynamic="true" class="md-avatar"  fontSize="15"  shape="round" data="{{comment.author.letter}}" charCount="2" >                        
+                                                    </ng-letter-avatar></div>
+                                                <div class="md-list-item-text">
+                                                    <h3><strong><a href="#/user/{{comment.author.uid}}"> {{comment.author.name}}</a></strong></h3>
+                                                    <p>{{comment.text}}</p>
+                                                </div>
+                                            </md-list-item>
+                                        </md-list>
+                                        <div layout ="row"   >
+                                            <!--                                            <md-button style="margin-top: 8px" class="md-icon-button" aria-label="More">
+                                                                                            <md-icon style="color: red" class="material-icons " ng-class="md - 24">favorite</md-icon>
+                                                                                        </md-button>-->
+                                            <md-input-container style="padding: 0px;margin: 10px 0;" flex="" md-detect-hidden  class="md-icon-float md-block">
+                                                <label>Comment</label>
+                                                <input ng-model="homeCtl.cmt['id' + $index]" ng-keyup="$event.keyCode == 13 && homeCtl.addComment(post.pid, homeCtl.cmt['id' + $index], $index)"   type="text" required>
+
+                                            </md-input-container>
+
+                                        </div>
+                                    </md-card-content>
+                                </md-card>
+                            </md-content>
+
+
+                        </div>
+
+
+                    </md-tab>
+
                     <md-tab ng-if="homeCtl.isAuther" label="Help">
                         <md-content class="md-padding">
                             <div  style="font-size: 30px; padding: 20px 0 ">Click <md-icon  class="material-icons md-36 inline">&#xE5D4;</md-icon>&nbsp;&nbsp;to add background item </div>
                         </md-content>
                     </md-tab>
+
+
 
                 </md-tabs>
             </div>

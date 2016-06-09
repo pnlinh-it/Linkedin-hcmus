@@ -156,7 +156,7 @@
                                 <md-menu-content width="6"  style="padding: 8px 0 0 0 !important">
                                     <md-content>
                                         <md-list style="padding: 0px !important" >
-                                            <md-list-item ng-click="vm.gotoMessage(msg.uid)" ng-repeat="msg in vm.listMessage| orderBy:'-time'" class="md-2-line"  ng-click="null">
+                                            <md-list-item ng-click="vm.gotoMessage(msg.uid)" ng-repeat="msg in vm.listMessage| orderBy:'-time'" class="md-2-line"  >
                                                 <img  ng-if="msg.isImg"  ng-src="{{msg.img}}" class="md-avatar"  />
                                                 <div ng-if="!msg.isImg" style="margin-right: 20px;"  class="md-avatar" >
                                                     <ng-letter-avatar  height="40px" width="40px"  dynamic="true" class="md-avatar"  fontSize="18"  shape="round" data="{{msg.letter}}" charCount="2" >                        
@@ -185,9 +185,13 @@
                                     <md-icon class="material-icons " ng-class="md - 24">message</md-icon>
                                 </md-button>
                                 <md-menu-content width="6"  style="padding: 8px 0 0 0 !important">
-                                    <md-content>
+                                    <md-content  class="md-padding md-subhead"  style="text-align: center" ng-if="vm.isShowListMessage && vm.listMessage.length < 1 "    class="md-2-line"  >
+                                        List Message Empty
+                                    </md-content >   
+
+                                    <md-content ng-if="vm.listMessage.length > 0 && vm.isShowListMessage"  >
                                         <md-list style="padding: 0px !important" >
-                                            <md-list-item ng-click="vm.gotoMessage(msg.uid)" ng-repeat="msg in vm.listMessage| orderBy:'-time'" class="md-2-line"  ng-click="null">
+                                            <md-list-item ng-click="vm.gotoMessage(msg.uid)" ng-repeat="msg in vm.listMessage| orderBy:'-time'" class="md-2-line"  >
                                                 <img  ng-if="msg.isImg"  ng-src="{{msg.img}}" class="md-avatar"  />
                                                 <div ng-if="!msg.isImg" style="margin-right: 20px;"  class="md-avatar" >
                                                     <ng-letter-avatar  height="40px" width="40px"  dynamic="true" class="md-avatar"  fontSize="18"  shape="round" data="{{msg.letter}}" charCount="2" >                        
@@ -219,22 +223,29 @@
                             <!--        People       -->
                             <li ng-if="vm.isLogin" class="l-right nav-icon">
                             <md-menu md-offset="0 60" scroll-count="4"  value="'scrollable'">
-                                <md-button aria-label="Open" class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+                                <md-button aria-label="Open" class="md-icon-button" ng-click="vm.openMenuFriend($mdOpenMenu, $event)">
                                     <md-icon class="material-icons ">people</md-icon>
 
                                 </md-button>
                                 <md-menu-content width="6"  style="padding: 8px 0 0 0 !important">
-                                    <md-content>
-                                        <md-list style="padding: 0px !important" >
-                                            <md-list-item ng-click="vm.gotoMessage(msg.uid)" ng-repeat="msg in vm.listMessage| orderBy:'-time'" class="md-2-line"  ng-click="null">
+
+
+                                    <md-content  class="md-padding md-subhead" ng-if="vm.listRequestFriend.length < 1 && vm.isShowListFriend" style="text-align: center"    class="md-2-line"  >
+                                        List Friend Request Empty
+                                    </md-content >   
+
+                                    <md-content  >
+                                        <md-list style="padding: 0px !important" ng-if="vm.listRequestFriend.length > 0 && vm.isShowListFriend" >
+                                            <md-list-item  ng-click="vm.gotoUser(msg.uid)" ng-repeat="msg in vm.listRequestFriend" class="md-2-line" >
                                                 <img  ng-if="msg.isImg"  ng-src="{{msg.img}}" class="md-avatar"  />
                                                 <div ng-if="!msg.isImg" style="margin-right: 20px;"  class="md-avatar" >
                                                     <ng-letter-avatar  height="40px" width="40px"  dynamic="true" class="md-avatar"  fontSize="18"  shape="round" data="{{msg.letter}}" charCount="2" >                        
                                                     </ng-letter-avatar>
                                                 </div>
+                                                <md-switch ng-model="msg.isFriend" ng-change="vm.addFriend(msg)" class="md-secondary" ></md-switch>
                                                 <div class="md-list-item-text">
                                                     <h3><strong>{{msg.name}} </strong></h3>
-                                                    <p>{{msg.message}}</p>
+                                                    <p>{{msg.job}}</p>
                                                 </div>
                                                 <md-divider ></md-divider>
                                             </md-list-item>   
@@ -242,7 +253,8 @@
 
                                         </md-list>
                                     </md-content>
-                                    <md-button ng-click="vm.gotoMessage('')" >See All Message</md-button>
+
+
                                 </md-menu-content>
                             </md-menu>
                             </li> 
@@ -253,16 +265,6 @@
                                 <md-icon class="material-icons ">search</md-icon>
                             </md-button>
                             </li>
-
-
-
-                            <!--                            <li  ng-if="vm.isLogin" class="l-right nav-icon">
-                                                            <a href="#/message">
-                                                                <md-button class="md-icon-button" aria-label="More">
-                                                                    <img src="imgs/message.svg"/>
-                                                                </md-button>
-                                                            </a>
-                                                        </li>-->
                         </ul> 
                     </nav>
                 </md-toolbar>
@@ -277,16 +279,15 @@
             </md-content> 
         </div>
     </md-content>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>        
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.5/angular-animate.min.js"></script> 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.5/angular-aria.min.js"></script> 
-    <script src='https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc4/angular-material.min.js'></script>
+    <script src="component/angular.min.js"></script>        
+    <script src="component/angular-animate.min.js"></script> 
+    <script src="component/angular-aria.min.js"></script> 
+    <script src='component/angular-material.min.js'></script>
     <script src="component/ngletteravatar.min.js"></script>
     <script src="component/latinize.js"></script>
-    <script src='https://code.angularjs.org/1.5.5/angular-route.min.js'></script>
-    <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js'></script>
+    <script src='component/angular-route.min.js'></script>
+    <script src='component/angular-messages.min.js'></script>
     <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
-
     <script src="app.js"></script>
     <script src="service/AuthFactory.js"></script>
     <script src='view/login/loginCtl.js'></script>

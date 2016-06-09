@@ -4,7 +4,7 @@ angular.module('myApp').factory('ToastFactory', ['$mdToast', '$window', '$locati
             $mdToast.show(
                     $mdToast.simple()
                     .content(content)
-                    .position('top right')
+                    .position('bottom left')
                     .hideDelay(5000)
                     );
         };
@@ -15,7 +15,7 @@ angular.module('myApp').factory('ToastFactory', ['$mdToast', '$window', '$locati
                     .action('See More')
                     .highlightAction(true)
                     .highlightClass('md-accent')// Accent is used by default, this just demonstrates the usage.
-                    .position('top right')
+                    .position('bottom left')
                     .hideDelay(5000);
             $mdToast.show(toast).then(function (response) {
                 if (response === 'ok') {

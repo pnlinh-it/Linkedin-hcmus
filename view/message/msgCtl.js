@@ -13,7 +13,7 @@ angular.module('myApp').controller('msgCtl', function (HomeFactory, $scope, $tim
         vm.curUser = data;
     })
 
-    HomeFactory.getListFriend().then(function (result) {
+    HomeFactory.getListFriend(3).then(function (result) {
         if (result != null) {
             HomeFactory.getListUserFromUid(result).then(function (listFri) {
                 angular.forEach(listFri, function (user) {
